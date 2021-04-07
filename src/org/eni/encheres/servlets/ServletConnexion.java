@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.eni.encheres.bll.BusinessException;
 import org.eni.encheres.bll.utilistaeurs.UtilisateurManager;
 import org.eni.encheres.bll.utilistaeurs.UtilisateurManagerSingl;
 import org.eni.encheres.bo.Utilisateur;
@@ -49,7 +48,7 @@ public class ServletConnexion extends HttpServlet {
 			} else {
 				request.setAttribute("error", "Something went wrong...");
 			}
-		} catch (BusinessException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());
 		}
