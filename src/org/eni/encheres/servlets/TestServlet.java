@@ -1,4 +1,4 @@
-package org.eni.encheres.dal;
+package org.eni.encheres.servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

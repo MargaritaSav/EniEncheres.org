@@ -15,7 +15,7 @@ public class Utilisateur {
 	private String ville;
 	private String motDePasse;
 	private int credit;
-	private boolean administrateur;
+	private boolean administrateur = false;
 	private ArrayList<Enchere> encheres;
 	private ArrayList<ArticleVendu> articlesAchetes;
 	private ArrayList<ArticleVendu> articlesVendus;
