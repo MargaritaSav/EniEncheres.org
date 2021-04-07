@@ -8,5 +8,9 @@ public interface EncheresDAO {
 	public Utilisateur selectUtilisateurByLogin(String login);
 	
 	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	
+	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	
+	public void deleteUtilisateur(int noUtilisateur);
 
 }
