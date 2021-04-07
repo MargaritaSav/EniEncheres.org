@@ -33,26 +33,25 @@ public class ServletConnexion extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getParameter("login"));
-		System.out.println(request.getParameter("password"));
+		String login = request.getParameter("login");
+		String mdp = request.getParameter("password");
 		try {
-			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
-			String login = request.getParameter("login");
-			String mdp = request.getParameter("password");
-			Utilisateur utilisateur = um.login(login, mdp);
-			if(utilisateur != null) {
-				HttpSession session = request.getSession();
-				session.setAttribute("session", "on");
-				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
-				rd.forward(request, response);
-			} else {
-				request.setAttribute("error", "Something went wrong...");
+			if(login.isEmpty() || mdp.isEmpty()) {
+				throw new ServletException("Les champs ne peuvent pas etre vide");
 			}
+			
+			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
+			Utilisateur utilisateur = um.login(login, mdp);
+			HttpSession session = request.getSession();
+			session.setAttribute("session", "on");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
+			rd.forward(request, response);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());
+			doGet(request, response);
 		}
-		doGet(request, response);
 	}
 
 }
