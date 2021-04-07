@@ -21,45 +21,45 @@
 		  	<div class="col">
 			  <div class="mb-3">
 			    <label for="pseudo" class="form-label">Pseudo :</label>
-			    <input type="text" class="form-control" id="pseudo" name="pseudo" aria-describedby="login">
+			    <input type="text" class="form-control" id="pseudo" name="pseudo" aria-describedby="pseudo" value="${param.pseudo}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="prenom" class="form-label">Prénom :</label>
-			    <input type="text" class="form-control" id="prenom" name="prenom" aria-describedby="login">
+			    <input type="text" class="form-control" id="prenom" name="prenom" aria-describedby="prenom" value="${param.prenom}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="tel" class="form-label">Téléphone :</label>
-			    <input type="text" class="form-control" id="tel" name="tel" aria-describedby="login">
+			    <input type="number" class="form-control" id="tel" name="tel" aria-describedby="tel" value="${param.tel}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="cp" class="form-label">Code postal :</label>
-			    <input type="text" class="form-control" id="cp" name="cp" aria-describedby="login">
+			    <input type="number" class="form-control" id="cp" name="cp" aria-describedby="cp" value="${param.cp}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="password" class="form-label">Mot de passe</label>
-			    <input type="password" class="form-control" id="password" name="password" >
+			    <input type="password" class="form-control" id="password" name="password" value="${param.password}">
 			  </div>
 			</div>
 			<div class="col">
 			  <div class="mb-3">
 			    <label for="nom" class="form-label">Nom :</label>
-			    <input type="text" class="form-control" id="nom" name="nom" aria-describedby="login">
+			    <input type="text" class="form-control" id="nom" name="nom" aria-describedby="nom" value="${param.nom}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="email" class="form-label">Email :</label>
-			    <input type="email" class="form-control" id="email" name="email" aria-describedby="login">
+			    <input type="email" class="form-control" id="email" name="email" aria-describedby="email" value="${param.email}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="rue" class="form-label">Rue :</label>
-			    <input type="text" class="form-control" id="rue" name="rue" aria-describedby="login">
+			    <input type="text" class="form-control" id="rue" name="rue" aria-describedby="rue" value="${param.rue}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="ville" class="form-label">Ville :</label>
-			    <input type="text" class="form-control" id="ville" name="ville" aria-describedby="login">
+			    <input type="text" class="form-control" id="ville" name="ville" aria-describedby="ville" value="${param.ville}">
 			  </div>
 			  <div class="mb-3">
 			    <label for="confirmation" class="form-label">Confirmation :</label>
-			    <input type="password" class="form-control" id="confirmation" name="confirmation" >
+			    <input type="password" class="form-control" id="confirmation" name="confirmation" value="${param.confirmation}">
 			  </div>
 			</div>
 		</div>
