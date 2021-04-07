@@ -21,7 +21,7 @@ public class ServletAccueil extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil/accueil.jsp");
 		rd.forward(request, response);
 	}
 
