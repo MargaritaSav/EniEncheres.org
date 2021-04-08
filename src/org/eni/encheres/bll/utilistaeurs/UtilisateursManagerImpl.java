@@ -100,4 +100,16 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		}
 }
 
+
+	@Override
+	public boolean checkMotDePasse(String login, String password) throws BusinessException {
+		Utilisateur u = dao.selectUtilisateurByLogin(login, login);
+		
+		if(u.getMotDePasse().equals(password)){
+			return true;
+		}
+		return false;
+		
+	}
+
 }

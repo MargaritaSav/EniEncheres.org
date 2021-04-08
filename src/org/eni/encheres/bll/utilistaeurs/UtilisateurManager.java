@@ -14,5 +14,7 @@ public interface UtilisateurManager {
 	
 	public void deleteUtilisateur(int numUtilisateur) throws BusinessException;
 	
+	public boolean checkMotDePasse(String login, String password) throws BusinessException;
+	
 	
 }

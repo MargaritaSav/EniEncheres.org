@@ -8,26 +8,27 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class ServletAccueil
+ * Servlet implementation class ServletProfilUtilisateur
  */
-@WebServlet("/accueil")
-public class ServletAccueil extends HttpServlet {
+@WebServlet("/profil")
+public class ServletProfilUtilisateur extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ServletProfilUtilisateur() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		if(request.getParameter("deconnexion") != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("session", "off");
-			session.removeAttribute("user");
-		}
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil/accueil.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/profilUtilisateur/userProfile.jsp");
 		rd.forward(request, response);
 	}
 

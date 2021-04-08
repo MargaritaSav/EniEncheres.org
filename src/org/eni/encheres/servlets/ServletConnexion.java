@@ -42,9 +42,13 @@ public class ServletConnexion extends HttpServlet {
 			
 			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
 			Utilisateur utilisateur = um.login(login, mdp);
-			HttpSession session = request.getSession();
-			session.setAttribute("session", "on");
-			response.sendRedirect(request.getContextPath() + "/accueil");
+			if(utilisateur!= null) {
+				HttpSession session = request.getSession();
+				session.setAttribute("session", "on");
+				session.setAttribute("user", utilisateur);
+				response.sendRedirect(request.getContextPath() + "/accueil");
+			}
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
