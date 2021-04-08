@@ -113,7 +113,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	}
 
 	@Override
-	public void deleteUtilisateur(int noUtilisateur) {
+	public void deleteUtilisateur(int noUtilisateur) throws BusinessException  {
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(DELETE_UTILISATEUR);
 			stmt.setInt(1, noUtilisateur);
@@ -123,6 +123,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			e.printStackTrace();
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.DELETE_ECHEC);
+			throw businessException;
 		}	
 		
 	}

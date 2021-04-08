@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="col-12 col-md-6 d-flex align-items-end">
-            <div class="form-group m-0">
+            <div class="form-group m-0 w-100">
                 <label for="exampleFormControlSelect1">Example select</label>
                 <select class="form-control" id="exampleFormControlSelect1">
                     <option>1</option>

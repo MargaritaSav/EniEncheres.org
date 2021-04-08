@@ -11,6 +11,6 @@ public interface EncheresDAO {
 	
 	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
-	public void deleteUtilisateur(int noUtilisateur);
+	public void deleteUtilisateur(int noUtilisateur) throws BusinessException;
 
 }
