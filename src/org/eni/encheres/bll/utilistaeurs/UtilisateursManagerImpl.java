@@ -1,8 +1,23 @@
 package org.eni.encheres.bll.utilistaeurs;
 
+import org.eni.encheres.BusinessException;
 import org.eni.encheres.bo.Utilisateur;
+import org.eni.encheres.dal.CodesResultatDAL;
+import org.eni.encheres.dal.DAOFactory;
+import org.eni.encheres.dal.EncheresDAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eni.encheres.*;
+
 
 public class UtilisateursManagerImpl implements UtilisateurManager {
+	private EncheresDAO dao = DAOFactory.getInstace();
+	List<Utilisateur> utilisateurs = new ArrayList<>();
+
 
 	@Override
 	/**
@@ -10,7 +25,23 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 	 * corresponds au mdp rentré par utilisateur
 	 * Retourner erreur si non, et si tout va bien on retourne Utilisateur.
 	 */
-	public Utilisateur login(String login, String password) {
+	public Utilisateur login(String login, String password) throws BusinessException {
+	
+		Utilisateur user = dao.selectUtilisateurByLogin(login);
+		BusinessException businessException;
+		if (user != null) 
+		{
+			if (user.getMotDePasse().equals(password))
+			{
+				return user;
+			   }
+
+		} else {
+			businessException = new BusinessException();
+		businessException.ajouterErreur(CodesResultatBLL.LOGIN_ECHEC);		
+		throw businessException;
+		}
+		
 		return null;
 		// TODO Implement method
 		
@@ -18,12 +49,47 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 
 	@Override
 	/**
-	 * Verifier si les données entrés par utilisateurs sont corrects (par ex. code postal inclus 5 chiffres) et que login n'esiste pas dans la base des données
+	 * Verifier si les données entrés par utilisateurs sont corrects (par ex. code postal inclus 5 chiffres) et que login n'existe pas dans la base des données
 	 * throw exception si erreur de vérification, persister Utilisateur dans la base des données et return Utilisateur si tout s'est bien passé
 	 */
 	public Utilisateur addUtilisateur(Utilisateur utilisateur) {
+		Utilisateur user = dao.selectUtilisateurByLogin(utilisateur.getPseudo());
+		BusinessException businessException;
+
+		if (user == null)
+		{
+			if (utilisateur.getCodePostal().length() == 5)
+				try {
+					dao.insertUtilisateur(utilisateur);
+				} catch (BusinessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		else {
+			utilisateur = null;
+			businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatBLL.ADD_ECHEC);
+		}
+		
+		// TODO Auto-generated method stub
+		return utilisateur;
+	}
+
+	@Override
+	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
+		Utilisateur user = dao;
+
+		PreparedStatement pst = 
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Boolean deleteUtilisateur(Utilisateur utilisateur) {
+		Utilisateur user = dao.selectUtilisateurByLogin(utilisateur.getPseudo());
+		return utilisateurs.remove(utilisateur);
+		// TODO Auto-generated method stub
 	}
 
 }

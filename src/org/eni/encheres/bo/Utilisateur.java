@@ -23,9 +23,7 @@ public class Utilisateur {
 	public Utilisateur() {}
 	
 	public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone,
-			String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur,
-			ArrayList<Enchere> encheres, ArrayList<ArticleVendu> articlesAchetes,
-			ArrayList<ArticleVendu> articlesVendus) {
+			String rue, String codePostal, String ville, String motDePasse, int credit ) {
 		super();
 		this.noUtilisateur = noUtilisateur;
 		this.pseudo = pseudo;
@@ -38,10 +36,6 @@ public class Utilisateur {
 		this.ville = ville;
 		this.motDePasse = motDePasse;
 		this.credit = credit;
-		this.administrateur = administrateur;
-		this.encheres = encheres;
-		this.articlesAchetes = articlesAchetes;
-		this.articlesVendus = articlesVendus;
 	}
 	public int getNoUtilisateur() {
 		return noUtilisateur;
