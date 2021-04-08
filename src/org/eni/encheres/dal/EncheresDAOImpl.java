@@ -3,17 +3,24 @@ package org.eni.encheres.dal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+
 import org.eni.encheres.BusinessException;
+import org.eni.encheres.bo.ArticleVendu;
 import org.eni.encheres.bo.Utilisateur;
 
 
 public class EncheresDAOImpl implements EncheresDAO{
 	
-	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur FROM utilisateurs WHERE pseudo = ?";
+	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur FROM utilisateurs WHERE pseudo = ? OR email = ?";
 	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
-	
+	private final String SELECT_ARTICLE_BY_ID = "SELECT no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus WHERE no_article = ?";
+	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?  WHERE no_article = ?";
+	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
+	private final String SELECT_ARTICLES = "SELECT no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus";
 
 	@Override
 	public Utilisateur selectUtilisateurByLogin(String login) {
@@ -113,7 +120,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	}
 
 	@Override
-	public void deleteUtilisateur(int noUtilisateur) {
+	public void deleteUtilisateur(int noUtilisateur) throws BusinessException {
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(DELETE_UTILISATEUR);
 			stmt.setInt(1, noUtilisateur);
@@ -123,8 +130,62 @@ public class EncheresDAOImpl implements EncheresDAO{
 			e.printStackTrace();
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.DELETE_ECHEC);
+			throw businessException;
 		}	
 		
+	}
+
+	@Override
+	public ArticleVendu selectArticleById(int noArticle) throws BusinessException {
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLE_BY_ID);
+			stmt.setInt(1, noArticle);
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next())
+			{
+				ArticleVendu article = new ArticleVendu();
+				article.setNoArticle(noArticle);
+				article.setNomArticle(rs.getString("nom_article"));
+				article.setDescription(rs.getString("description"));
+				article.setDateDebutEncheres(rs.getDate("date_debut_encheres"));
+				article.setDateFinEncheres(rs.getDate("date_fin_encheres"));
+				article.setMiseAPrix(rs.getInt("prix_initial"));
+				article.setPrixVente(rs.getInt("prix_vente"));
+				article.set
+				article.setCategorieArticle(rs.getInt("no_categorie"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_ECHEC);
+		}	
+		
+		return null;
+	}
+
+	@Override
+	public ArticleVendu insertArticle(ArticleVendu article) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteArticle(int noArticle) throws BusinessException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ArrayList<ArticleVendu> selectAllArticles() throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

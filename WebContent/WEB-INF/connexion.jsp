@@ -14,7 +14,6 @@
 <body>
 
 <div class="container min-vh-100 d-flex align-items-center">
-	
 	<div class="row m-auto" style="max-width: 70%">
 		<div class="col-12">
 			<c:if test="${!empty error}">
@@ -23,37 +22,36 @@
 		</div>
 		<div class="col-12">
 			<form action="${pageContext.request.contextPath}/connexion" method="POST">
-			 
 			  <div class="mb-3">
 			    <label for="login" class="form-label">Email ou pseudo</label>
 			    <input type="text" class="form-control" id="login" name="login" aria-describedby="login" value="${param.login}">
 			  </div>
-			  <div class="mb-3">
+			  <div>
 			    <label for="password" class="form-label">Mot de passe</label>
 			    <input type="password" class="form-control" id="password" name="password" value="${param.password}">
 			  </div>
+			  <div class="row mb-3">
+		    	<div class="col-6 mt-2">
+		    		<a class="link-primary" href="${pageContext.request.contextPath}/motDePasseOublie">Mot de passe oublié</a>
+		    	</div>
+			  </div>
+			  <div class="row mb-3">
+		    	<div class="col-12">
+		    		<div class="form-check">
+				    <input type="checkbox" class="form-check-input" id="resterConnecte">
+				    <label class="form-check-label" for="resterConnecte">Se souvenir de moi</label>
+				  </div>
+		    	</div>
+			  </div>
 			  <div class="row">
-			    <div class="col-12 col-md-4 d-flex align-items-center">
-			      <button type="submit" class="btn btn-primary">Connexion</button>
+			    <div class="col-12">
+			      <button type="submit" class="btn btn-primary w-100">Connexion</button>
 			    </div>
-			    <div class="col-12 col-md-8">
-			    	<div class="row mt-sm-2">
-				    	<div class="col-6 d-flex align-items-center ">
-				    		<div class="form-check">
-						    <input type="checkbox" class="form-check-input" id="resterConnecte">
-						    <label class="form-check-label" for="resterConnecte">Se souvenir de moi</label>
-						  </div>
-				    	</div>
-				    	<div class="col-6 mt-2">
-				    		<a class="btn" href="${pageContext.request.contextPath}/motDePasseOublie">Mot de passe oublié</a>
-				    	</div>
-					</div>
-			    </div> 
 			  </div>
 			</form>
 		</div>
 		<div class="col-12 d-flex justify-content-center mt-3">
-	  		<a href="${pageContext.request.contextPath}/inscription" class="btn btn-primary w-100">Créer un compte</a>
+	  		<a href="${pageContext.request.contextPath}/inscription" class="btn btn-light w-100">Créer un compte</a>
 	  	</div>
 	</div>
 </div>
