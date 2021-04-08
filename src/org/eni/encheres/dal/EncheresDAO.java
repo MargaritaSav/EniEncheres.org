@@ -3,8 +3,7 @@ package org.eni.encheres.dal;
 import java.util.ArrayList;
 
 import org.eni.encheres.BusinessException;
-import org.eni.encheres.bo.ArticleVendu;
-import org.eni.encheres.bo.Utilisateur;
+import org.eni.encheres.bo.*;
 
 public interface EncheresDAO {
 	
@@ -25,5 +24,7 @@ public interface EncheresDAO {
 	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException;
 	
 	public void deleteArticle(int noArticle) throws BusinessException;
+	
+	public Retrait insertRetrait (Retrait retrait, int noArticle) throws BusinessException;
 
 }
