@@ -54,20 +54,21 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 	/**
 	 * Verifier si les données entrés par utilisateurs sont corrects (par ex. code postal inclus 5 chiffres) et que login n'existe pas dans la base des données
 	 * throw exception si erreur de vérification, persister Utilisateur dans la base des données et return Utilisateur si tout s'est bien passé
+	 * @throws BusinessException 
 	 */
-	public Utilisateur addUtilisateur(Utilisateur utilisateur) {
+	public Utilisateur addUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		Utilisateur user = dao.selectUtilisateurByLogin(utilisateur.getPseudo());
 		BusinessException businessException;
 
-		if (user == null)
+		if (user != null)
 		{
-			if (checkCodePostal(user.getCodePostal()))
+			if (checkCodePostal(user.getCodePostal())) {
 				try {
 					dao.insertUtilisateur(utilisateur);
 				} catch (BusinessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new BusinessException("Problème avec l'ajout de l'utilisateur");
 				}
+			}
 		}
 		else {
 			utilisateur = null;
@@ -75,7 +76,6 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 			businessException.ajouterErreur(CodesResultatBLL.ADD_ECHEC);
 		}
 		
-		// TODO Auto-generated method stub
 		return utilisateur;
 	}
 
