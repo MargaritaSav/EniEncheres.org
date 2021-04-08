@@ -1,10 +1,13 @@
 package org.eni.encheres.bll.utilistaeurs;
 
 import org.eni.encheres.BusinessException;
+import org.eni.encheres.bll.utilistaeurs.CodesResultatBLL;
 import org.eni.encheres.bo.Utilisateur;
 import org.eni.encheres.dal.CodesResultatDAL;
 import org.eni.encheres.dal.DAOFactory;
 import org.eni.encheres.dal.EncheresDAO;
+import org.eni.encheres.bo.*;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,7 +50,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		
 	}
 
-	@Override
+	
 	/**
 	 * Verifier si les données entrés par utilisateurs sont corrects (par ex. code postal inclus 5 chiffres) et que login n'existe pas dans la base des données
 	 * throw exception si erreur de vérification, persister Utilisateur dans la base des données et return Utilisateur si tout s'est bien passé
@@ -58,7 +61,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 
 		if (user == null)
 		{
-			if (utilisateur.getCodePostal().length() == 5)
+			if (checkCodePostal(user.getCodePostal()))
 				try {
 					dao.insertUtilisateur(utilisateur);
 				} catch (BusinessException e) {
@@ -76,20 +79,28 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		return utilisateur;
 	}
 
-	@Override
-	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
-		Utilisateur user = dao;
+	public  void updateUtilisateur(Utilisateur utilisateur) {
+		 dao.updateUtilisateur(utilisateur);
 
-		PreparedStatement pst = 
-		// TODO Auto-generated method stub
-		return null;
+	}
+	
+	public Boolean checkCodePostal (String cp)
+	{
+		if (cp.length() == 5)
+		{
+			return true;
+		}
 	}
 
-	@Override
-	public Boolean deleteUtilisateur(Utilisateur utilisateur) {
-		Utilisateur user = dao.selectUtilisateurByLogin(utilisateur.getPseudo());
-		return utilisateurs.remove(utilisateur);
-		// TODO Auto-generated method stub
-	}
+	public Boolean deleteUtilisateur(int numUtilisateur) throws BusinessException {
 
+		if (numUtilisateur > 0)
+		{
+			dao.deleteUtilisateur(numUtilisateur);
+
+		}
+		else {
+			throw new BusinessException("Probleme suppression utilisateur");
+		}
+}
 }

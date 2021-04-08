@@ -10,7 +10,7 @@ public interface UtilisateurManager {
 	
 	public Utilisateur addUtilisateur(Utilisateur utilisateur);
 	
-	public Utilisateur updateUtilisateur(Utilisateur utilisateur);
+	public void updateUtilisateur(Utilisateur utilisateur);
 	
 	public Boolean deleteUtilisateur(Utilisateur utilisateur);
 	
