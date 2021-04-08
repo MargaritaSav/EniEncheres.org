@@ -15,6 +15,7 @@ public interface EncheresDAO {
 	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	public void deleteUtilisateur(int noUtilisateur) throws BusinessException;
+<<<<<<< HEAD
 	
 	public ArrayList<ArticleVendu> selectAllArticles() throws BusinessException;
 	
@@ -25,5 +26,7 @@ public interface EncheresDAO {
 	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException;
 	
 	public void deleteArticle(int noArticle) throws BusinessException;
+=======
+>>>>>>> master
 
 }

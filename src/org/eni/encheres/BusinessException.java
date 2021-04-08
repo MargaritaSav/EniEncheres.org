@@ -12,6 +12,9 @@ public class BusinessException extends Exception{
 		super();
 		this.listeCodesErreur = new ArrayList<Integer>();
 	}
+	public BusinessException(String message) {
+		super(message);
+	}
 	
 	public void ajouterErreur(int code)
 	{
