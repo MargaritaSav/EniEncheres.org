@@ -79,8 +79,13 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		return utilisateur;
 	}
 
-	public  void updateUtilisateur(Utilisateur utilisateur) {
-		 dao.updateUtilisateur(utilisateur);
+	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException {
+		try {
+			 dao.updateUtilisateur(utilisateur);
+		}catch(BusinessException e) {
+			throw new BusinessException("Problème avec la mise à jour de l'utilisateur");
+		}
+		
 
 	}
 	
@@ -90,9 +95,10 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		{
 			return true;
 		}
+		return false;
 	}
 
-	public Boolean deleteUtilisateur(int numUtilisateur) throws BusinessException {
+	public void deleteUtilisateur(int numUtilisateur) throws BusinessException {
 
 		if (numUtilisateur > 0)
 		{
@@ -103,4 +109,5 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 			throw new BusinessException("Probleme suppression utilisateur");
 		}
 }
+
 }

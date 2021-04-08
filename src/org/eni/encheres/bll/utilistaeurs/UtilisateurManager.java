@@ -10,9 +10,9 @@ public interface UtilisateurManager {
 	
 	public Utilisateur addUtilisateur(Utilisateur utilisateur);
 	
-	public void updateUtilisateur(Utilisateur utilisateur);
+	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
-	public Boolean deleteUtilisateur(Utilisateur utilisateur);
+	public void deleteUtilisateur(int numUtilisateur) throws BusinessException;
 	
 	
 }

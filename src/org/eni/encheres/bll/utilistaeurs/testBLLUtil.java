@@ -1,7 +1,6 @@
 package org.eni.encheres.bll.utilistaeurs;
 
 import java.io.IOException;
-import java.lang.invoke.ClassSpecializer.Factory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eni.encheres.BusinessException;
 import org.eni.encheres.bo.Utilisateur;
 import org.eni.encheres.dal.DAOFactory;
 import org.eni.encheres.dal.EncheresDAO;
@@ -35,9 +35,19 @@ public class testBLLUtil extends HttpServlet {
 		// TODO Auto-generated method stub
 		Utilisateur u = new Utilisateur(1, "toto", "antoine", "le bot", "toto56@gmail.cil", "0645568923", "2 rue des lilas", "25120", "Arras", "toto56", 0);
 		EncheresDAO dao = DAOFactory.getInstace();
-		dao.insertUtilisateur(u);
+		try {
+			dao.insertUtilisateur(u);
+		} catch (BusinessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		UtilisateurManager mng = new UtilisateursManagerImpl();
-		mng.login("toto", "fail");
+		try {
+			mng.login("toto", "fail");
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
