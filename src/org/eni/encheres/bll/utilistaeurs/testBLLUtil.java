@@ -34,7 +34,7 @@ public class testBLLUtil extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Utilisateur u = new Utilisateur(1, "toto", "antoine", "le bot", "toto56@gmail.cil", "0645568923", "2 rue des lilas", "25120", "Arras", "toto56", 0);
-		EncheresDAO dao = DAOFactory.getInstace();
+		EncheresDAO dao = DAOFactory.getInstance();
 		try {
 			dao.insertUtilisateur(u);
 		} catch (BusinessException e1) {

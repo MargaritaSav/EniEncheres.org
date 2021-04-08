@@ -8,17 +8,12 @@ import org.eni.encheres.dal.DAOFactory;
 import org.eni.encheres.dal.EncheresDAO;
 import org.eni.encheres.bo.*;
 
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eni.encheres.*;
-
 
 public class UtilisateursManagerImpl implements UtilisateurManager {
-	private EncheresDAO dao = DAOFactory.getInstace();
+	private EncheresDAO dao = DAOFactory.getInstance();
 	List<Utilisateur> utilisateurs = new ArrayList<>();
 
 
