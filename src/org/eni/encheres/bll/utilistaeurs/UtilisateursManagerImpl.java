@@ -30,23 +30,14 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 	 */
 	public Utilisateur login(String login, String password) throws BusinessException {
 	
-		Utilisateur user = dao.selectUtilisateurByLogin(login);
-		BusinessException businessException;
-		if (user != null) 
-		{
-			if (user.getMotDePasse().equals(password))
-			{
-				return user;
-			   }
+		Utilisateur user = dao.selectUtilisateurByLogin(login, login);
 
-		} else {
-			businessException = new BusinessException();
-		businessException.ajouterErreur(CodesResultatBLL.LOGIN_ECHEC);		
-		throw businessException;
+		if (user != null && user.getMotDePasse().equals(password))
+		{
+			return user;
 		}
 		
-		return null;
-		// TODO Implement method
+		throw new BusinessException("Login ou mot de passe invalide");
 		
 	}
 
@@ -57,12 +48,12 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 	 * @throws BusinessException 
 	 */
 	public Utilisateur addUtilisateur(Utilisateur utilisateur) throws BusinessException {
-		Utilisateur user = dao.selectUtilisateurByLogin(utilisateur.getPseudo());
+		Utilisateur user = dao.selectUtilisateurByLogin(utilisateur.getPseudo(), utilisateur.getEmail());
 		BusinessException businessException;
 
-		if (user != null)
+		if (user == null)
 		{
-			if (checkCodePostal(user.getCodePostal())) {
+			if (checkCodePostal(utilisateur.getCodePostal())) {
 				try {
 					dao.insertUtilisateur(utilisateur);
 				} catch (BusinessException e) {
@@ -72,8 +63,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		}
 		else {
 			utilisateur = null;
-			businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatBLL.ADD_ECHEC);
+			throw new BusinessException("Login ou email existe deja");
 		}
 		
 		return utilisateur;

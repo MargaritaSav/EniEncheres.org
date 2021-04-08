@@ -61,8 +61,8 @@ public class ServletInscription extends HttpServlet {
 				throw new ServletException("Le nombre de telephone est trop longue ou contient autrechose que des chiffres");
 			}
 			
-			if(codePostal.length() > 6 || !onlyDigits(codePostal)) {
-				throw new ServletException("Le code postal est trop longue ou contient autrechose que des chiffres");
+			if(codePostal.length() < 5 || codePostal.length() > 6 || !onlyDigits(codePostal)) {
+				throw new ServletException("Le code postal est invalid ou contient autrechose que des chiffres");
 			}
 			
 			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
@@ -79,8 +79,7 @@ public class ServletInscription extends HttpServlet {
 			um.addUtilisateur(utilisateur);
 			HttpSession session = request.getSession();
 			session.setAttribute("session", "on");
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
-			rd.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());

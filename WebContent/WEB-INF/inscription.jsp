@@ -13,13 +13,11 @@
 <body>
 
 <div class="container min-vh-100 d-flex align-items-center">
-	<div class="row m-auto mt-3 mb-3" style="max-width: 70%;">
+	<div class="row m-auto" style="max-width: 70%;">
 		<div class="col-12">
 			<c:if test="${!empty error}">
 				<p style="color:red;">${error}</p>
 			</c:if>
-		</div>
-		<div class="col-12">
 			<form  action="${pageContext.request.contextPath}/inscription" method="POST">
 			  	<div class="row">
 				  	<div class="col-md-6">

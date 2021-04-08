@@ -23,10 +23,12 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String SELECT_ARTICLES = "SELECT no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie FROM articles_vendus";
 
 	@Override
-	public Utilisateur selectUtilisateurByLogin(String login) {
+	public Utilisateur selectUtilisateurByLogin(String login, String email) throws BusinessException {
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(SELECT_UTILISATEUR_BY_LOGIN);
 			stmt.setString(1, login);
+			stmt.setString(2, email);
+
 			ResultSet rs = stmt.executeQuery();
 			
 			while(rs.next())
@@ -48,8 +50,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_ECHEC);
+			throw new BusinessException("Echec dans select_user_by_login");
 		}	
 		
 		return null;
@@ -58,9 +59,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	@Override
 	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		if(utilisateur == null) {
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
-			throw businessException;
+			throw new BusinessException("Utilisateur est null");
 		}
 		
 		try(Connection cnx = ConnectionProvider.getConnection()) {
@@ -84,8 +83,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_UTILISATEUR_ECHEC);
+			throw new BusinessException("Echec rajout nouvel utilisateur");
 		}
 		
 	}
@@ -93,9 +91,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	@Override
 	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		if(utilisateur == null) {
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
-			throw businessException;
+			throw new BusinessException("Utilisateur est null");
 		}
 		
 		try(Connection cnx = ConnectionProvider.getConnection()) {
@@ -113,18 +109,13 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.UPDATE_OBJET_ECHEC);
+			throw new BusinessException("Echec modification d'utilisateur");
 		}
 		
 	}
 
 	@Override
-<<<<<<< HEAD
-	public void deleteUtilisateur(int noUtilisateur) throws BusinessException {
-=======
 	public void deleteUtilisateur(int noUtilisateur) throws BusinessException  {
->>>>>>> master
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(DELETE_UTILISATEUR);
 			stmt.setInt(1, noUtilisateur);
@@ -132,10 +123,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			
 		} catch(Exception e) {
 			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.DELETE_ECHEC);
-			throw businessException;
-<<<<<<< HEAD
+			throw new BusinessException("Echec suppression d'utilisateur");
 		}	
 		
 	}
@@ -153,19 +141,15 @@ public class EncheresDAOImpl implements EncheresDAO{
 				article.setNoArticle(noArticle);
 				article.setNomArticle(rs.getString("nom_article"));
 				article.setDescription(rs.getString("description"));
-				article.setDateDebutEncheres(rs.getDate("date_debut_encheres"));
-				article.setDateFinEncheres(rs.getDate("date_fin_encheres"));
+//				article.setDateDebutEncheres(rs.getDate("date_debut_encheres"));
+//				article.setDateFinEncheres(rs.getDate("date_fin_encheres"));
 				article.setMiseAPrix(rs.getInt("prix_initial"));
 				article.setPrixVente(rs.getInt("prix_vente"));
-				article.set
-				article.setCategorieArticle(rs.getInt("no_categorie"));
+//				article.setCategorieArticle(rs.getInt("no_categorie"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_ECHEC);
-=======
->>>>>>> master
+			throw new BusinessException("Echec selection d'article by id");
 		}	
 		
 		return null;

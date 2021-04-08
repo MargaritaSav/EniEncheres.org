@@ -8,14 +8,13 @@ import org.eni.encheres.bo.Utilisateur;
 
 public interface EncheresDAO {
 	
-	public Utilisateur selectUtilisateurByLogin(String login);
+	public Utilisateur selectUtilisateurByLogin(String login, String email) throws BusinessException ;
 	
 	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	public void deleteUtilisateur(int noUtilisateur) throws BusinessException;
-<<<<<<< HEAD
 	
 	public ArrayList<ArticleVendu> selectAllArticles() throws BusinessException;
 	
@@ -26,7 +25,5 @@ public interface EncheresDAO {
 	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException;
 	
 	public void deleteArticle(int noArticle) throws BusinessException;
-=======
->>>>>>> master
 
 }

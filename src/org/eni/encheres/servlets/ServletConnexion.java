@@ -44,8 +44,7 @@ public class ServletConnexion extends HttpServlet {
 			Utilisateur utilisateur = um.login(login, mdp);
 			HttpSession session = request.getSession();
 			session.setAttribute("session", "on");
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
-			rd.forward(request, response);
+			response.sendRedirect(request.getContextPath() + "/accueil");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
