@@ -206,6 +206,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			if(rs.next())
 			{
 				article.setNoArticle(rs.getInt(1));
+				article.getLieuRetrait().setArticle(article);
 				insertRetrait(article.getLieuRetrait(), article.getNoArticle());
 			}
 		} catch(Exception e) {
