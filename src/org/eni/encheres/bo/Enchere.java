@@ -1,25 +1,34 @@
 package org.eni.encheres.bo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Enchere {
 
-	private LocalDate dateEnchere;
+	private LocalDateTime dateEnchere;
 	private int montant_enchere;
-	private ArticleVendu article;
+	private Utilisateur utilisateur;
 	
 	public Enchere() {}
 	
-	public Enchere(LocalDate dateEnchere, int montant_enchere, ArticleVendu article) {
+	public Enchere(LocalDateTime dateEnchere, int montant_enchere) {
 		super();
 		this.dateEnchere = dateEnchere;
 		this.montant_enchere = montant_enchere;
-		this.article = article;
 	}
-	public LocalDate getDateEnchere() {
+	
+	
+	public Utilisateur getUtilisateur() {
+		return utilisateur;
+	}
+
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
+	}
+
+	public LocalDateTime getDateEnchere() {
 		return dateEnchere;
 	}
-	public void setDateEnchere(LocalDate dateEnchere) {
+	public void setDateEnchere(LocalDateTime dateEnchere) {
 		this.dateEnchere = dateEnchere;
 	}
 	public int getMontant_enchere() {
@@ -28,17 +37,14 @@ public class Enchere {
 	public void setMontant_enchere(int montant_enchere) {
 		this.montant_enchere = montant_enchere;
 	}
-	public ArticleVendu getArticle() {
-		return article;
-	}
-	public void setArticle(ArticleVendu article) {
-		this.article = article;
-	}
+
 	@Override
 	public String toString() {
-		return "Enchere [dateEnchere=" + dateEnchere + ", montant_enchere=" + montant_enchere + ", article=" + article
-				+ "]";
+		return "Enchere [dateEnchere=" + dateEnchere + ", montant_enchere=" + montant_enchere + ", utilisateur="
+				+ utilisateur + "]";
 	}
+
+	
 	
 	
 	
