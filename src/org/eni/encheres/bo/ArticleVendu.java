@@ -1,21 +1,31 @@
 package org.eni.encheres.bo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class ArticleVendu {
 	
 	private int noArticle;
 	private String nomArticle;
 	private String description;
-	private LocalDate dateDebutEncheres;
-	private LocalDate dateFinEncheres;
+	private LocalDateTime dateDebutEncheres;
+	private LocalDateTime dateFinEncheres;
 	private int miseAPrix;
 	private int prixVente;
 	private String etatVente;
 	private Retrait lieuRetrait;
 	private Categorie categorieArticle;
 	private Utilisateur vendeur;
+	private ArrayList<Enchere> encheres = new ArrayList<>();
 	
+	public ArrayList<Enchere> getEncheres() {
+		return encheres;
+	}
+
+	public void setEncheres(ArrayList<Enchere> encheres) {
+		this.encheres = encheres;
+	}
+
 	public Utilisateur getVendeur() {
 		return vendeur;
 	}
@@ -42,16 +52,16 @@ public class ArticleVendu {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public LocalDate getDateDebutEncheres() {
+	public LocalDateTime getDateDebutEncheres() {
 		return dateDebutEncheres;
 	}
-	public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+	public void setDateDebutEncheres(LocalDateTime dateDebutEncheres) {
 		this.dateDebutEncheres = dateDebutEncheres;
 	}
-	public LocalDate getDateFinEncheres() {
+	public LocalDateTime getDateFinEncheres() {
 		return dateFinEncheres;
 	}
-	public void setDateFinEncheres(LocalDate dateFinEncheres) {
+	public void setDateFinEncheres(LocalDateTime dateFinEncheres) {
 		this.dateFinEncheres = dateFinEncheres;
 	}
 	public int getMiseAPrix() {

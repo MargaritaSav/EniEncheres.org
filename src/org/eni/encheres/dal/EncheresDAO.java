@@ -26,6 +26,17 @@ public interface EncheresDAO {
 	public void deleteArticle(int noArticle) throws BusinessException;
 	
 	public Retrait insertRetrait (Retrait retrait, int noArticle) throws BusinessException;
+	
+	public Retrait updateRetrait (Retrait retrait, int noArticle) throws BusinessException;
+	
+	public ArrayList<Categorie> selectAllCategories() throws BusinessException;
+	
+	public Enchere insertEnchere(Enchere enchere, int noArticle, int noUtilisateur) throws BusinessException;
+	
+	public ArrayList<Enchere> selectEncheresByNoArticle (int noArticle) throws BusinessException;
+	
+	public void deleteEncheres (int noArticle) throws BusinessException;
+
 
 	
 
