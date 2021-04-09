@@ -55,9 +55,11 @@
                     </div>
 
                     <div class="col-4 mt-3">
-
-                        <a href="${pageContext.request.contextPath}/profil/delete" class="btn btn-danger" id="edit-btn">Supprimer
-                            mon profil</a>
+                  	
+                    	<button type="button" class="btn btn-danger" id="edit-btn" data-target="#confirmation-modal" data-toggle="modal">Supprimer
+                            mon profil</button>
+                    
+                        
                     </div>
                 </div>
             </div>
@@ -66,25 +68,33 @@
     </div>
 
 </div>
+
+<div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Suppression d'utilisateur</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Etes-vous sur(e) de vouloir supprimer votre profil ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+        <form action="${pageContext.request.contextPath}/profil/delete" method="POST">             
+                    	<button type="submit" class="btn btn-danger" id="edit-btn">Supprimer
+                           </button>
+         </form>
+       
+      </div>
+    </div>
+  </div>
+</div>
 </body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<script>
-    function loadHtml(href) {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", href, false);
-        xmlhttp.send();
-        return xmlhttp.responseText;
-    }
-
-    document.getElementById("edit-btn").addEventListener("click", () => {
-        let form = loadHtml("./profil/edit");
-        document.getElementById("show-profile").innerHTML = form;
-
-    })
-</script>
 </html>

@@ -48,7 +48,7 @@ public class ConnexionFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
 		System.out.println(session.getAttribute("user"));
-		if(session.getAttribute("session").equals("on"))
+		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on"))
 		{
 			chain.doFilter(request, response);
 		}
@@ -56,7 +56,7 @@ public class ConnexionFilter implements Filter {
 		{
 			//Renvoyons une 403 à l'utilisateur
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
-			httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+			httpResponse.sendRedirect(httpRequest.getContextPath() + "/connexion");
 		}
 	}
 

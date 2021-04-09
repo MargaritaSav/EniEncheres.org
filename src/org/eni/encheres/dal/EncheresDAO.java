@@ -9,7 +9,7 @@ public interface EncheresDAO {
 	
 	public Utilisateur selectUtilisateurByLogin(String login, String email) throws BusinessException ;
 	
-	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	void insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
@@ -26,5 +26,7 @@ public interface EncheresDAO {
 	public void deleteArticle(int noArticle) throws BusinessException;
 	
 	public Retrait insertRetrait (Retrait retrait, int noArticle) throws BusinessException;
+
+	
 
 }

@@ -8,9 +8,9 @@ public interface UtilisateurManager {
 	
 	public Utilisateur login(String login, String password) throws BusinessException;
 	
-	public Utilisateur addUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	public Utilisateur addUtilisateur(Utilisateur utilisateur, String plainPwd) throws BusinessException;
 	
-	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	public void updateUtilisateur(Utilisateur utilisateur, String plainPwd) throws BusinessException;
 	
 	public void deleteUtilisateur(int numUtilisateur) throws BusinessException;
 	

@@ -21,7 +21,7 @@
     <form action="${pageContext.request.contextPath}/profil/edit" method="POST">
         <div class="row">
         <c:if test="${!empty error}">
-				<p style="color:red;" class="px-3">${error}</p>
+				<p style="color:red;white-space: pre-line" class="px-3">${error}</p>
 			</c:if>
             <div class="col-12">
                 <div class="mb-3">

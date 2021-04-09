@@ -50,19 +50,9 @@ public class ServletInscription extends HttpServlet {
 		String ville = request.getParameter("ville");
 		
 		try {
-			if(pseudo.isEmpty() || mdp.isEmpty() || mdp2.isEmpty() || prenom.isEmpty() || nom.isEmpty() || email.isEmpty() || tel.isEmpty() || rue.isEmpty() || codePostal.isEmpty() || ville.isEmpty()) {
-				throw new ServletException("Veuillez remplir tous les champs");
-			}
+		
 			if(!mdp.equals(mdp2)) {
 				throw new ServletException("Les mots de passe saisis ne correspondent pas !");
-			}
-			
-			if(tel.length() > 10 || !onlyDigits(tel)) {
-				throw new ServletException("Le nombre de telephone est trop longue ou contient autrechose que des chiffres");
-			}
-			
-			if(codePostal.length() < 5 || codePostal.length() > 6 || !onlyDigits(codePostal)) {
-				throw new ServletException("Le code postal est invalid ou contient autrechose que des chiffres");
 			}
 			
 			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
@@ -71,14 +61,14 @@ public class ServletInscription extends HttpServlet {
 			utilisateur.setPrenom(prenom);
 			utilisateur.setPseudo(pseudo);
 			utilisateur.setEmail(email);
-			utilisateur.setMotDePasse(mdp);
 			utilisateur.setCodePostal(codePostal);
 			utilisateur.setRue(rue);
 			utilisateur.setTelephone(tel);
 			utilisateur.setVille(ville);
-			um.addUtilisateur(utilisateur);
+			um.addUtilisateur(utilisateur, mdp);
 			HttpSession session = request.getSession();
 			session.setAttribute("session", "on");
+			session.setAttribute("user", utilisateur);
 			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,29 +77,6 @@ public class ServletInscription extends HttpServlet {
 		}
 	}
 	
-	public static boolean onlyDigits(String str)
-    {
-        // Regex to check string
-        // contains only digits
-        String regex = "[0-9]+";
-  
-        // Compile the ReGex
-        Pattern p = Pattern.compile(regex);
-  
-        // If the string is empty
-        // return false
-        if (str == null) {
-            return false;
-        }
-  
-        // Find match between given string
-        // and regular expression
-        // using Pattern.matcher()
-        Matcher m = p.matcher(str);
-  
-        // Return if the string
-        // matched the ReGex
-        return m.matches();
-    }
+	
 
 }

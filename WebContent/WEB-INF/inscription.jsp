@@ -16,7 +16,7 @@
 	<div class="row m-auto" style="max-width: 70%;">
 		<div class="col-12">
 			<c:if test="${!empty error}">
-				<p style="color:red;">${error}</p>
+				<p style="color:red;white-space: pre-line">${error}</p>
 			</c:if>
 			<form  action="${pageContext.request.contextPath}/inscription" method="POST">
 			  	<div class="row">

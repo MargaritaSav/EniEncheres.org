@@ -19,8 +19,6 @@
 			<c:if test="${!empty error}">
 				<p style="color:red;">${error}</p>
 			</c:if>
-		</div>
-		<div class="col-12">
 			<form action="${pageContext.request.contextPath}/connexion" method="POST">
 			  <div class="mb-3">
 			    <label for="login" class="form-label">Email ou pseudo</label>

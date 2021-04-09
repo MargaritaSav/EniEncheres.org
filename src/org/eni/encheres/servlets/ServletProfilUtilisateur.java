@@ -39,5 +39,10 @@ public class ServletProfilUtilisateur extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+	
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("delete");
+	}
 
 }

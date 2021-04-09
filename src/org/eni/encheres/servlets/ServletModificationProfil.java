@@ -63,13 +63,15 @@ public class ServletModificationProfil extends HttpServlet {
 				throw new ServletException("Veuillez remplir tous les champs");
 			}
 			if(!mdpNow.isEmpty()) {
+				if(mdpNew.isEmpty() || mdp2.isEmpty()) {
+					throw new ServletException("Veuillez renseigner le nouveau mot de passe");
+				}
 				if(!um.checkMotDePasse(pseudo, mdpNow)) {
 					throw new ServletException("Le mot de passe actuel est incorrect");
 				}
 				if(!mdpNew.equals(mdp2)) {
 					throw new ServletException("Les nouveux mots de passe saisis ne correspondent pas !");
 				}
-				utilisateur.setMotDePasse(mdpNew);
 			}
 			
 			
@@ -82,9 +84,9 @@ public class ServletModificationProfil extends HttpServlet {
 			utilisateur.setRue(rue);
 			utilisateur.setTelephone(tel);
 			utilisateur.setVille(ville);
-			um.updateUtilisateur(utilisateur);
 			HttpSession session = request.getSession();
 			session.setAttribute("user", utilisateur);
+			um.updateUtilisateur(utilisateur, mdpNew);
 			response.sendRedirect(request.getContextPath() + "/profil");
 		} catch (Exception e) {
 			e.printStackTrace();

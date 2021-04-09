@@ -16,9 +16,9 @@ import org.eni.encheres.bo.Utilisateur;
 
 public class EncheresDAOImpl implements EncheresDAO{
 	
-	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur FROM utilisateurs WHERE pseudo = ? OR email = ?";
-	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ? WHERE no_utilisateur = ?";
+	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, salt, credit, administrateur FROM utilisateurs WHERE pseudo = ? OR email = ?";
+	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
 	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
 										 + "c.libelle,"
@@ -64,9 +64,10 @@ public class EncheresDAOImpl implements EncheresDAO{
 				utilisateur.setRue(rs.getString("rue"));
 				utilisateur.setCodePostal(rs.getString("code_postal"));
 				utilisateur.setVille(rs.getString("ville"));
-				utilisateur.setMotDePasse(rs.getString("mot_de_passe"));
+				utilisateur.setMotDePasse(rs.getBytes("mot_de_passe"));
 				utilisateur.setCredit(rs.getInt("credit"));
 				utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
+				utilisateur.setSalt(rs.getBytes("salt"));
 				return utilisateur;
 			}
 		} catch(Exception e) {
@@ -93,9 +94,10 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setString(6, utilisateur.getRue());
 			stmt.setString(7, utilisateur.getCodePostal());
 			stmt.setString(8, utilisateur.getVille());
-			stmt.setString(9, utilisateur.getMotDePasse());
+			stmt.setBytes(9, utilisateur.getMotDePasse());
 			stmt.setInt(10, utilisateur.getCredit());
 			stmt.setBoolean(11, utilisateur.isAdministrateur());
+			stmt.setBytes(12, utilisateur.getSalt());
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			if(rs.next())
@@ -125,8 +127,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setString(6, utilisateur.getRue());
 			stmt.setString(7, utilisateur.getCodePostal());
 			stmt.setString(8, utilisateur.getVille());
-			stmt.setString(9, utilisateur.getMotDePasse());
-			stmt.setInt(10, utilisateur.getNoUtilisateur());
+			stmt.setBytes(9, utilisateur.getMotDePasse());
+			stmt.setBytes(10, utilisateur.getSalt());
+			stmt.setInt(11, utilisateur.getNoUtilisateur());
 			stmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
