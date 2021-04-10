@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,6 +63,54 @@
                 </select>
             </div>
         </div>
+    </div>
+
+    <div class="row mt-5">
+        <c:choose>
+            <c:when test="${!empty articles}">
+                <c:forEach var="article" items="${articles}">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 d-flex flex-column align-items-center justify-content-around">
+                                    
+                                        <img class="card-img-top" src="./ressources/images/no-image.png" alt="Card image cap">
+                                        <span class="badge badge-info">${article.categorieArticle.libelle}</span>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">${article.nomArticle}</h5>
+                                        <p class="card-text">${article.description}</p>
+                                        <p>Prix:
+                                            <c:choose>
+                                                <c:when test="${article.prixVente != null}">
+                                                    ${article.miseAPrix}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${article.prixVente}
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </p>
+                                        <p>Fin de l'enchère :
+                                            <fmt:parseDate value="${ article.dateFinEncheres }"
+                                                           pattern="yyyy-MM-dd'T'HH:mm"
+                                                           var="parsedDateTime" type="both"/>
+                                            <fmt:formatDate pattern="dd/MM/yyyy HH'h'mm" value="${ parsedDateTime }"/>
+                                        </p>
+                                        <p>Vendeur: <a href="${pageContext.request.contextPath}/profil?pseudo=${article.vendeur.pseudo}" >${article.vendeur.pseudo}</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:when>
+
+            <c:otherwise>
+                <p style="font-size: 30px">Désolé, il n'y a pas d'articles en vente</p>
+            </c:otherwise>
+
+        </c:choose>
     </div>
 
 

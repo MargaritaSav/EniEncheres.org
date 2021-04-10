@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eni.encheres.bll.utilistaeurs.UtilisateurManager;
+import org.eni.encheres.bll.utilistaeurs.UtilisateurManagerSingl;
+import org.eni.encheres.bo.Utilisateur;
+
 /**
  * Servlet implementation class ServletProfilUtilisateur
  */
@@ -28,6 +32,18 @@ public class ServletProfilUtilisateur extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if(request.getParameter("pseudo") != null) {
+			try {
+				UtilisateurManager um = UtilisateurManagerSingl.getInstance();
+				Utilisateur user = um.getUtilisateurByPseudo(request.getParameter("pseudo"));
+				request.setAttribute("userProfil", user);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/profilUtilisateur/userProfile.jsp");
 		rd.forward(request, response);
 	}

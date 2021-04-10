@@ -10,6 +10,8 @@ public interface UtilisateurManager {
 	
 	public Utilisateur addUtilisateur(Utilisateur utilisateur, String plainPwd) throws BusinessException;
 	
+	public Utilisateur getUtilisateurByPseudo(String pseudo) throws BusinessException;
+	
 	public void updateUtilisateur(Utilisateur utilisateur, String plainPwd) throws BusinessException;
 	
 	public void deleteUtilisateur(int numUtilisateur) throws BusinessException;

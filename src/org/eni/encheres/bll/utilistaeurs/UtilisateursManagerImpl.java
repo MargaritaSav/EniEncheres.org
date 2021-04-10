@@ -85,6 +85,13 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		return utilisateur;
 	}
 	
+	@Override
+	public Utilisateur getUtilisateurByPseudo(String pseudo) throws BusinessException {
+		
+		return dao.selectUtilisateurByLogin(pseudo, pseudo);
+	}
+
+	
 	/**
 	 * Mets à jour les données utilisateurs
 	 * @param Utilisateur utilisateur
@@ -229,6 +236,8 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		return Arrays.equals(hash, hashedPwd);
 		
 	}
+
+
 
 
 }

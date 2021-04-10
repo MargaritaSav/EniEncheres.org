@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.eni.encheres.BusinessException;
 import org.eni.encheres.bo.*;
@@ -38,7 +38,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "FROM articles_vendus a "
 										 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
-										 + "INNER JOIN retraits r ON r.no_article = a.no_article";
+										 + "INNER JOIN retraits r ON r.no_article = a.no_article "
+										 + "WHERE a.date_debut_encheres <= ? "
+										 + "ORDER BY a.date_fin_encheres";
 	private final String INSERT_RETRAIT = "INSERT INTO retraits (no_article, rue, code_postal, ville) VALUES (?,?,?,?)";
 	private final String UPDATE_RETRAIT = "UPDATE retraits SET rue = ?, code_postal = ?, ville = ? WHERE no_article = ?";
 	private final String INSERT_ENCHERE = "INSERT INTO encheres (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
@@ -261,6 +263,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 		ArrayList<ArticleVendu> articles = new ArrayList<>();
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES);
+			stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				ArticleVendu article = new ArticleVendu();
@@ -407,3 +410,4 @@ public class EncheresDAOImpl implements EncheresDAO{
 	}
 
 }
+

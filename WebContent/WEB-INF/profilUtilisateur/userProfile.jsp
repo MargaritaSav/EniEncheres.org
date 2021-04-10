@@ -20,32 +20,35 @@
     <div class="vh-100 d-flex align-items-center justify-content-center" id="show-profile">
         <div class="row">
             <div class="col-6 text-right">Pseudo :</div>
-            <div class="col-6">${sessionScope.user.pseudo}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.pseudo : userProfil.pseudo}</div>
 
             <div class="col-6 text-right">Nom :</div>
-            <div class="col-6">${sessionScope.user.nom}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.nom : userProfil.nom}</div>
 
             <div class="col-6 text-right">Prénom :</div>
-            <div class="col-6">${sessionScope.user.prenom}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.prenom : userProfil.prenom}</div>
 
             <div class="col-6 text-right">Email</div>
-            <div class="col-6">${sessionScope.user.email}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.email : userProfil.email}</div>
 
             <div class="col-6 text-right">Teléphone</div>
-            <div class="col-6">${sessionScope.user.telephone}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.telephone : userProfil.telephone}</div>
 
             <div class="col-6 text-right">Rue</div>
-            <div class="col-6">${sessionScope.user.rue}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.rue : userProfil.rue}</div>
 
             <div class="col-6 text-right">Code postal</div>
-            <div class="col-6">${sessionScope.user.codePostal}</div>
+            <div class="col-6">${empty userProfil ? sessionScope.user.codePostal : userProfil.codePostal}</div>
 
             <div class="col-6 text-right">Ville</div>
-            <div class="col-6">${sessionScope.user.ville}</div>
-
+            <div class="col-6">${empty userProfil ? sessionScope.user.ville : userProfil.ville}</div>
+			
+			
+			<c:if test="${empty userProfil }">
             <div class="col-6 text-right">Credit :</div>
             <div class="col-6">${sessionScope.user.credit}</div>
-
+	
+			
             <div class="col-12">
                 <div class="row justify-content-center">
                     <div class="col-4 mt-3 text-right">
@@ -63,6 +66,7 @@
                     </div>
                 </div>
             </div>
+            </c:if>
 
         </div>
     </div>
