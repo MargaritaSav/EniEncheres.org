@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -23,7 +22,6 @@
                 <jsp:include page="../header.jsp"/>
             </div>
             <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
-                <!-- TODO : condition de la connexion -->
                 <c:choose>
                     <c:when test="${sessionScope.session.equals('on')}">
                         <jsp:include page="./navConnected.jsp"/>
@@ -64,7 +62,7 @@
         </div>
         <div class="col-12 col-md-3 mb-2 d-flex align-items-end justify-content-center">
         
-        	<button class="btn btn-primary">Effacer les filters</button>
+        	<button class="btn btn-primary" id="clean-btn">Effacer les filters</button>
         </div>
         
     </div>

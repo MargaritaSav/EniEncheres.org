@@ -3,6 +3,7 @@ let urlApi = "/EniEncheres.org/api/rest/articles";
 let projectPath = "/EniEncheres.org";
 let searchInput = $("#search-input");
 let selectCat = $("#select-categories");
+let cleanButton = $("#clean-btn")
 let lastSearchResult = null;
 let articles = null;
 let searchValue = "";
@@ -56,6 +57,13 @@ window.onload = function(){
 			result.forEach(article=>addArticleCard(article));
 			lastSearchResult = result;
 		}
+	})
+	
+	cleanButton.click(()=>{
+		articleContainer.empty();
+		selectCat.prop('selectedIndex', 0);
+		searchInput.val('');
+		articles.forEach(article=>addArticleCard(article))
 	})
 } 
 
