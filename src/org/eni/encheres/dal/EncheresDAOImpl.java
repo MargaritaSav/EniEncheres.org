@@ -18,7 +18,11 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ?, credit = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
+<<<<<<< HEAD
 	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.no_acheteur,  "
+=======
+	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+>>>>>>> 653c6e9aa1ded2182b1d3a6ccb7151d900e042c7
 										 + "c.libelle,"
 										 + "u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
@@ -27,7 +31,18 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article"
 										 + "WHERE a.no_article = ?";	
+<<<<<<< HEAD
 	private final String SELECT_ARTICLES_BY_USER = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.no_acheteur, "
+=======
+	private final String SELECT_ARTICLES_BY_USER = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+												 + "c.libelle,"
+												 + "r.rue, r.code_postal, r.ville "
+												 + "FROM articles_vendus a "
+												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
+												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
+												 + "WHERE a.no_utilisateur = ? OR a.no_acheteur = ?";
+	private final String SELECT_ENCHERES_FINIS = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+>>>>>>> 653c6e9aa1ded2182b1d3a6ccb7151d900e042c7
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
@@ -37,7 +52,11 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?  WHERE no_article = ?";
 	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
+<<<<<<< HEAD
 	private final String SELECT_ARTICLES = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.no_acheteur, "
+=======
+	private final String SELECT_ARTICLES = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+>>>>>>> 653c6e9aa1ded2182b1d3a6ccb7151d900e042c7
 										 + "c.libelle, "
 										 + "u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
@@ -53,9 +72,16 @@ public class EncheresDAOImpl implements EncheresDAO{
 													+ "FROM encheres e "
 													+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
 													+ "WHERE no_article = ?";
-	private final String SELECT_ENCHERES_BY_USER = "SELECT no_utilisateur, no_article, date_enchere, montant_enchere "
-													+ "FROM encheres "
-													+ "WHERE no_utilisateur = ?";
+	private final String SELECT_ENCHERES_BY_USER = "SELECT e.no_utilisateur, e.no_article, e.date_enchere, e.montant_enchere, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_categorie, a.no_acheteur, "
+												 + "c.libelle, "
+												 + "u.pseudo, "
+												 + "r.rue, r.code_postal, r.ville "
+												 + "FROM encheres e "
+												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
+												 + "INNER JOIN retraits r ON r.no_article = e.no_article "
+												 + "INNER JOIN articles_vendus a ON a.no_article = e.no_article "
+												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
+												 + "WHERE e.no_utilisateur = ?";
 	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
 
@@ -476,8 +502,11 @@ public class EncheresDAOImpl implements EncheresDAO{
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				Enchere enchere = new Enchere();
+				enchere.setUtilisateur(utilisateur);
 				enchere.setDateEnchere(rs.getTimestamp("date_enchere").toLocalDateTime());
 				enchere.setMontant_enchere(rs.getInt("montant_enchere"));
+				ArticleVendu article = mapArticle(rs, utilisateur);
+				enchere.setArticle(article);
 				encheres.add(enchere);
 			}
 		} catch(Exception e) {
@@ -485,6 +514,25 @@ public class EncheresDAOImpl implements EncheresDAO{
 			throw new BusinessException("Echec de selection d'encheres pour l'utilisateur no " + utilisateur.getNoUtilisateur());
 		}
 		return encheres;
+	}
+
+	@Override
+	public ArrayList<ArticleVendu> selectArticlesFinis() throws BusinessException {
+		ArrayList<ArticleVendu> articles = new ArrayList<>();
+//		try(Connection cnx = ConnectionProvider.getConnection()) {
+//			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES_FINIS);
+//			ResultSet rs = stmt.executeQuery();
+//			while(rs.next()) {
+//				ArticleVendu article = mapArticle(rs, utilisateur);
+//				
+//				articles.add(article);
+//			}
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			throw new BusinessException("Echec selection des articles par utilisateur");
+//		}
+//		System.out.println(articles.size());
+		return articles;
 	}
 
 }

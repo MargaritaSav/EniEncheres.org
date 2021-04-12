@@ -21,6 +21,8 @@ public interface EncheresDAO {
 	
 	public ArrayList<ArticleVendu> selectArticlesByUser(Utilisateur utilisateur) throws BusinessException;
 	
+	public ArrayList<ArticleVendu> selectArticlesFinis() throws BusinessException;
+	
 	public ArticleVendu insertArticle(ArticleVendu article) throws BusinessException;
 	
 	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException;
