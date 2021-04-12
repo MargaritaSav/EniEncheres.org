@@ -18,7 +18,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ?, credit = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
-	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.no_acheteur,  "
 										 + "c.libelle,"
 										 + "u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
@@ -27,7 +27,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article"
 										 + "WHERE a.no_article = ?";	
-	private final String SELECT_ARTICLES_BY_USER = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLES_BY_USER = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.no_acheteur, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
@@ -37,7 +37,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?  WHERE no_article = ?";
 	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
-	private final String SELECT_ARTICLES = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLES = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.no_acheteur, "
 										 + "c.libelle, "
 										 + "u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
