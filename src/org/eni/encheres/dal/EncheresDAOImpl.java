@@ -44,7 +44,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_RETRAIT = "INSERT INTO retraits (no_article, rue, code_postal, ville) VALUES (?,?,?,?)";
 	private final String UPDATE_RETRAIT = "UPDATE retraits SET rue = ?, code_postal = ?, ville = ? WHERE no_article = ?";
 	private final String INSERT_ENCHERE = "INSERT INTO encheres (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
-	private final String SELECT_CATEGORIES = "SELECT libelle FROM categories";
+	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 	private final String SELECT_ENCHERES = "SELECT e.no_utilisateur, e.date_enchere, e.montant_enchere, u.pseudo "
 										+ "FROM encheres e "
 										+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
@@ -348,6 +348,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 				Categorie categorie = new Categorie();
 				categorie.setNoCategorie(rs.getInt(1));
 				categorie.setLibelle(rs.getString(2));
+				categories.add(categorie);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
