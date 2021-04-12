@@ -13,6 +13,7 @@ import org.eni.encheres.bll.utilistaeurs.UtilisateurManager;
 import org.eni.encheres.bll.utilistaeurs.UtilisateurManagerSingl;
 import org.eni.encheres.bo.ArticleVendu;
 import org.eni.encheres.bo.Categorie;
+import org.eni.encheres.bo.Enchere;
 import org.eni.encheres.bo.Utilisateur;
 
 /**
@@ -30,22 +31,22 @@ public class ServletTestEncheres extends HttpServlet {
 			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
 			Utilisateur lolo = um.login("lolo", "lolo");
 			Utilisateur toto = um.login("toto", "toto");
-			lolo.setCredit(500);
-			toto.setCredit(500);
-			um.updateUtilisateur(toto, "toto");
-			um.updateUtilisateur(lolo, "lolo");
-			EnchereManager em = EnchereManagerSingl.getInstance();
-			Categorie maison = new Categorie(1, "maison");
-			ArticleVendu article = em.addArticle(toto, "article bll", "description", maison, "2021-04-10T08:30", "2021-08-01T08:30", 100, "rue de caves", "35700", "rennes");
-			article.setNomArticle("mon article modifie toto");
-			em.updateArticle(article);
-			em.faireEnchere(toto, article, 200);
-			em.faireEnchere(lolo, article, 300);
+//			lolo.setCredit(500);
+//			toto.setCredit(500);
+//			um.updateUtilisateur(toto, "toto");
+//			um.updateUtilisateur(lolo, "lolo");
+//			EnchereManager em = EnchereManagerSingl.getInstance();
+//			Categorie maison = new Categorie(1, "maison");
+//			ArticleVendu article = em.addArticle(toto, "article bll", "description", maison, "2021-04-10T08:30", "2021-08-01T08:30", 100, "rue de caves", "35700", "rennes");
+//			article.setNomArticle("mon article modifie toto");
+//			em.updateArticle(article);
+//			em.faireEnchere(toto, article, 200);
+//			em.faireEnchere(lolo, article, 300);
 			
-			System.out.println("====Articles de TOTO =====");
-			ArrayList<ArticleVendu> articlesLolo = toto.getArticlesVendus();
-			for(ArticleVendu b : articlesLolo) {
-				System.out.println(b.toString());
+			System.out.println("====Encheres de LOLO =====");
+			ArrayList<Enchere> encheresLolo = lolo.getEncheres();
+			for(Enchere e : encheresLolo) {
+				System.out.println(e.getArticle().toString());
 			}
 			
 		} catch (Exception e) {
