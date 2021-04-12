@@ -359,6 +359,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			article.setAcheteur(utilisateur);
 		} else {
 			Utilisateur vendeur = new Utilisateur();
+			vendeur.setNoUtilisateur(rs.getInt("no_utilisateur"));
 			vendeur.setPseudo(rs.getString("pseudo"));
 			article.setVendeur(vendeur);
 		}
