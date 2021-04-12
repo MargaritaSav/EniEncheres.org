@@ -49,8 +49,6 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_RETRAIT = "INSERT INTO retraits (no_article, rue, code_postal, ville) VALUES (?,?,?,?)";
 	private final String UPDATE_RETRAIT = "UPDATE retraits SET rue = ?, code_postal = ?, ville = ? WHERE no_article = ?";
 	private final String INSERT_ENCHERE = "INSERT INTO encheres (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
-<<<<<<< HEAD
-	private final String SELECT_CATEGORIES = "SELECT libelle FROM categories";
 	private final String SELECT_ENCHERES_BY_ARTICLE = "SELECT e.no_utilisateur, e.date_enchere, e.montant_enchere, u.pseudo "
 													+ "FROM encheres e "
 													+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
@@ -58,13 +56,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String SELECT_ENCHERES_BY_USER = "SELECT no_utilisateur, no_article, date_enchere, montant_enchere "
 													+ "FROM encheres "
 													+ "WHERE no_utilisateur = ?";
-=======
 	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
-	private final String SELECT_ENCHERES = "SELECT e.no_utilisateur, e.date_enchere, e.montant_enchere, u.pseudo "
-										+ "FROM encheres e "
-										+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
-										+ "WHERE no_article = ?";
->>>>>>> 165ae421f7120ffc49b210420d9a4f2600727572
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
 
 
