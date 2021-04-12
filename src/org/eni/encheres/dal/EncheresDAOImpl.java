@@ -31,15 +31,15 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article"
 										 + "WHERE a.no_article = ?";	
 
-	private final String SELECT_ARTICLES_BY_USER = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLES_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
 												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
+												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "WHERE a.no_utilisateur = ? OR a.no_acheteur = ?";
 	private final String SELECT_ENCHERES_FINIS = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
-
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
@@ -91,7 +91,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setString(2, email);
 
 			ResultSet rs = stmt.executeQuery();
-			
+			System.err.println("Je suis dans selectUtilisateurByLogin");
 			while(rs.next())
 			{
 				Utilisateur utilisateur = new Utilisateur();
@@ -113,12 +113,16 @@ public class EncheresDAOImpl implements EncheresDAO{
 				ArrayList<ArticleVendu> articlesVendus = new ArrayList<>();
 				ArrayList<ArticleVendu> articlesAchetes = new ArrayList<>();
 				utilisateur.setEncheres(encheres);
+				System.out.println(articles.get(1));
 				for(ArticleVendu a : articles) {
-					if(a.getVendeur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
-						articlesVendus.add(a);
-					} else {
-						articlesAchetes.add(a);
-					}
+						
+						if(a.getVendeur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+							articlesVendus.add(a);
+						} else {
+							articlesAchetes.add(a);
+						}
+					
+					
 				}
 				utilisateur.setArticlesVendus(articlesVendus);
 				utilisateur.setArticlesAchetes(articlesAchetes);
@@ -307,21 +311,23 @@ public class EncheresDAOImpl implements EncheresDAO{
 	@Override
 	public ArrayList<ArticleVendu> selectArticlesByUser(Utilisateur utilisateur) throws BusinessException {
 		ArrayList<ArticleVendu> articles = new ArrayList<>();
+		System.err.println("Je suis dans selectArticlesByUser");
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES_BY_USER);
 			stmt.setInt(1, utilisateur.getNoUtilisateur());
 			stmt.setInt(2, utilisateur.getNoUtilisateur());
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
+				System.out.println("No util in RS: " + rs.getInt("no_utilisateur"));
 				ArticleVendu article = mapArticle(rs, utilisateur);
-				
+				System.out.println(article);
 				articles.add(article);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new BusinessException("Echec selection des articles par utilisateur");
 		}
-		System.out.println(articles.size());
+		
 		return articles;
 	}
 
@@ -346,6 +352,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	}
 	
 	public ArticleVendu mapArticle(ResultSet rs, Utilisateur utilisateur) throws BusinessException, SQLException {
+		System.err.println("Je suis dans mapArticle");
 		ArticleVendu article = new ArticleVendu();
 		article.setNoArticle(rs.getInt("no_article"));
 		article.setNomArticle(rs.getString("nom_article"));
@@ -363,14 +370,18 @@ public class EncheresDAOImpl implements EncheresDAO{
 		
 		if(utilisateur != null && rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
 			article.setVendeur(utilisateur);
-		} else if (utilisateur != null && rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
-			article.setAcheteur(utilisateur);
 		} else {
 			Utilisateur vendeur = new Utilisateur();
+			
 			vendeur.setNoUtilisateur(rs.getInt("no_utilisateur"));
 			vendeur.setPseudo(rs.getString("pseudo"));
+				
 			article.setVendeur(vendeur);
 		}
+		
+		if (utilisateur != null && rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
+			article.setAcheteur(utilisateur);
+		} 
 		
 		Retrait retrait = new Retrait();
 		retrait.setCode_postal(rs.getString("code_postal"));
