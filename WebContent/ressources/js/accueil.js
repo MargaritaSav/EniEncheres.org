@@ -60,13 +60,13 @@ window.onload = function(){
 } 
 
 
-
 function filterByNom(articlesArray, search){
 	return articlesArray.filter((article) => {
 		let nomArticle = article.nomArticle.toLowerCase();
 		return nomArticle.includes(search);
 	})
 }
+
 
 function filterByCategorie(articlesArray, categorieId){
 	if(categorieId == "0") return articlesArray;
