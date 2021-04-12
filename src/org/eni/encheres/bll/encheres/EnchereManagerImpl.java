@@ -192,8 +192,17 @@ public class EnchereManagerImpl implements EnchereManager{
 
 	@Override
 	public ArticleVendu getArticleById(int id) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.selectArticleById(id);
+	}
+
+	@Override
+	public void checkFinEnchere() throws BusinessException {
+		//selectionner tous les encheres termines avec acheteur == null
+//		dao.select
+		//trouver l'enchere le plus haut pour chaque article
+		
+		//mettre a jour les articles -> no_acheteur
+		
 	}
 
 }
