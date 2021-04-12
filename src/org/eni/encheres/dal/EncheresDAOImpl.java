@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.eni.encheres.BusinessException;
 import org.eni.encheres.bo.*;
@@ -26,8 +26,14 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article"
-										 + "INNER JOIN encheres e ON e.no_article = a.no_article"
 										 + "WHERE a.no_article = ?";	
+	private final String SELECT_ARTICLES_BY_USER = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+												 + "c.libelle,"
+												 + "r.rue, r.code_postal, r.ville "
+												 + "FROM articles_vendus a "
+												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
+												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
+												 + "WHERE a.no_utilisateur = ? OR a.no_acheteur = ?";
 	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?  WHERE no_article = ?";
 	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
@@ -39,16 +45,18 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article "
-										 + "WHERE a.date_debut_encheres <= ? "
-										 + "ORDER BY a.date_fin_encheres";
+										 + "WHERE a.date_debut_encheres <= ? AND a.date_fin_encheres >= ?";
 	private final String INSERT_RETRAIT = "INSERT INTO retraits (no_article, rue, code_postal, ville) VALUES (?,?,?,?)";
 	private final String UPDATE_RETRAIT = "UPDATE retraits SET rue = ?, code_postal = ?, ville = ? WHERE no_article = ?";
 	private final String INSERT_ENCHERE = "INSERT INTO encheres (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
 	private final String SELECT_CATEGORIES = "SELECT libelle FROM categories";
-	private final String SELECT_ENCHERES = "SELECT e.no_utilisateur, e.date_enchere, e.montant_enchere, u.pseudo "
-										+ "FROM encheres e "
-										+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
-										+ "WHERE no_article = ?";
+	private final String SELECT_ENCHERES_BY_ARTICLE = "SELECT e.no_utilisateur, e.date_enchere, e.montant_enchere, u.pseudo "
+													+ "FROM encheres e "
+													+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
+													+ "WHERE no_article = ?";
+	private final String SELECT_ENCHERES_BY_USER = "SELECT no_utilisateur, no_article, date_enchere, montant_enchere "
+													+ "FROM encheres "
+													+ "WHERE no_utilisateur = ?";
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
 
 
@@ -78,6 +86,20 @@ public class EncheresDAOImpl implements EncheresDAO{
 				utilisateur.setCredit(rs.getInt("credit"));
 				utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
 				utilisateur.setSalt(rs.getBytes("salt"));
+				ArrayList<ArticleVendu> articles = selectArticlesByUser(utilisateur);
+				ArrayList<Enchere> encheres = selectEncheresByUser(utilisateur);
+				ArrayList<ArticleVendu> articlesVendus = new ArrayList<>();
+				ArrayList<ArticleVendu> articlesAchetes = new ArrayList<>();
+				utilisateur.setEncheres(encheres);
+				for(ArticleVendu a : articles) {
+					if(a.getVendeur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+						articlesVendus.add(a);
+					} else {
+						articlesAchetes.add(a);
+					}
+				}
+				utilisateur.setArticlesVendus(articlesVendus);
+				utilisateur.setArticlesAchetes(articlesAchetes);
 				return utilisateur;
 			}
 		} catch(Exception e) {
@@ -259,6 +281,27 @@ public class EncheresDAOImpl implements EncheresDAO{
 		System.out.println("Suppression d'article reussie");
 
 	}
+	
+	@Override
+	public ArrayList<ArticleVendu> selectArticlesByUser(Utilisateur utilisateur) throws BusinessException {
+		ArrayList<ArticleVendu> articles = new ArrayList<>();
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES_BY_USER);
+			stmt.setInt(1, utilisateur.getNoUtilisateur());
+			stmt.setInt(2, utilisateur.getNoUtilisateur());
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				ArticleVendu article = mapArticle(rs, utilisateur);
+				
+				articles.add(article);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec selection des articles par utilisateur");
+		}
+		System.out.println(articles.size());
+		return articles;
+	}
 
 	@Override
 	public ArrayList<ArticleVendu> selectAllArticles() throws BusinessException {
@@ -266,36 +309,11 @@ public class EncheresDAOImpl implements EncheresDAO{
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES);
 			stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+			stmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
-				ArticleVendu article = new ArticleVendu();
-				article.setNoArticle(rs.getInt("no_article"));
-				article.setNomArticle(rs.getString("nom_article"));
-				article.setDescription(rs.getString("description"));
-				article.setDateDebutEncheres(rs.getTimestamp("date_debut_encheres").toLocalDateTime());
-				article.setDateFinEncheres(rs.getTimestamp("date_fin_encheres").toLocalDateTime());
-				article.setMiseAPrix(rs.getInt("prix_initial"));
-				article.setPrixVente(rs.getInt("prix_vente"));
-				if(LocalDateTime.now().compareTo(article.getDateFinEncheres()) > 0) {
-					article.setEtatVente("Terminé");
-				} else {
-					article.setEtatVente("En cours");
-				}
-				article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
-				
-				Utilisateur vendeur = new Utilisateur();
-				vendeur.setPseudo(rs.getString("pseudo"));
-				article.setVendeur(vendeur);
-				
-				Retrait retrait = new Retrait();
-				retrait.setCode_postal(rs.getString("code_postal"));
-				retrait.setRue(rs.getString("rue"));
-				retrait.setVille(rs.getString("ville"));
-				article.setLieuRetrait(retrait);
-				
-				ArrayList<Enchere> encheres = selectEncheresByNoArticle(article.getNoArticle());
-				article.setEncheres(encheres);
-				
+				ArticleVendu article = mapArticle(rs, null);
 				articles.add(article);
 			}
 		} catch(Exception e) {
@@ -303,6 +321,43 @@ public class EncheresDAOImpl implements EncheresDAO{
 			throw new BusinessException("Echec selection de tous les articles");
 		}
 		return articles;
+	}
+	
+	public ArticleVendu mapArticle(ResultSet rs, Utilisateur utilisateur) throws BusinessException, SQLException {
+		ArticleVendu article = new ArticleVendu();
+		article.setNoArticle(rs.getInt("no_article"));
+		article.setNomArticle(rs.getString("nom_article"));
+		article.setDescription(rs.getString("description"));
+		article.setDateDebutEncheres(rs.getTimestamp("date_debut_encheres").toLocalDateTime());
+		article.setDateFinEncheres(rs.getTimestamp("date_fin_encheres").toLocalDateTime());
+		article.setMiseAPrix(rs.getInt("prix_initial"));
+		article.setPrixVente(rs.getInt("prix_vente"));
+		if(LocalDateTime.now().compareTo(article.getDateFinEncheres()) > 0) {
+			article.setEtatVente("Terminé");
+		} else {
+			article.setEtatVente("En cours");
+		}
+		article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
+		
+		if(rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
+			article.setVendeur(utilisateur);
+		} else if (rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
+			article.setAcheteur(utilisateur);
+		} else {
+			Utilisateur vendeur = new Utilisateur();
+			vendeur.setPseudo(rs.getString("pseudo"));
+			article.setVendeur(vendeur);
+		}
+		
+		Retrait retrait = new Retrait();
+		retrait.setCode_postal(rs.getString("code_postal"));
+		retrait.setRue(rs.getString("rue"));
+		retrait.setVille(rs.getString("ville"));
+		article.setLieuRetrait(retrait);
+		
+		ArrayList<Enchere> encheres = selectEncheresByNoArticle(article.getNoArticle());
+		article.setEncheres(encheres);
+		return article;
 	}
 
 	@Override
@@ -377,7 +432,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	public ArrayList<Enchere> selectEncheresByNoArticle(int noArticle) throws BusinessException {
 		ArrayList<Enchere> encheres = new ArrayList<>();
 		try(Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stmt = cnx.prepareStatement(SELECT_ENCHERES);
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_ENCHERES_BY_ARTICLE);
 			stmt.setInt(1, noArticle);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
@@ -409,6 +464,26 @@ public class EncheresDAOImpl implements EncheresDAO{
 		}	
 		System.out.println("Suppression d'encheres reussie");
 		
+	}
+
+	@Override
+	public ArrayList<Enchere> selectEncheresByUser(Utilisateur utilisateur) throws BusinessException {
+		ArrayList<Enchere> encheres = new ArrayList<>();
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_ENCHERES_BY_USER);
+			stmt.setInt(1, utilisateur.getNoUtilisateur());
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				Enchere enchere = new Enchere();
+				enchere.setDateEnchere(rs.getTimestamp("date_enchere").toLocalDateTime());
+				enchere.setMontant_enchere(rs.getInt("montant_enchere"));
+				encheres.add(enchere);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec de selection d'encheres pour l'utilisateur no " + utilisateur.getNoUtilisateur());
+		}
+		return encheres;
 	}
 
 }

@@ -16,8 +16,19 @@ public class ArticleVendu {
 	private Retrait lieuRetrait;
 	private Categorie categorieArticle;
 	private Utilisateur vendeur;
+	private Utilisateur acheteur;
 	private ArrayList<Enchere> encheres = new ArrayList<>();
 	
+	
+	
+	public Utilisateur getAcheteur() {
+		return acheteur;
+	}
+
+	public void setAcheteur(Utilisateur acheteur) {
+		this.acheteur = acheteur;
+	}
+
 	public ArrayList<Enchere> getEncheres() {
 		return encheres;
 	}

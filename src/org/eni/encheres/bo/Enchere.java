@@ -7,6 +7,7 @@ public class Enchere {
 	private LocalDateTime dateEnchere;
 	private int montant_enchere;
 	private Utilisateur utilisateur;
+	private ArticleVendu article;
 	
 	public Enchere() {}
 	
@@ -17,6 +18,15 @@ public class Enchere {
 	}
 	
 	
+	
+	public ArticleVendu getArticle() {
+		return article;
+	}
+
+	public void setArticle(ArticleVendu article) {
+		this.article = article;
+	}
+
 	public Utilisateur getUtilisateur() {
 		return utilisateur;
 	}

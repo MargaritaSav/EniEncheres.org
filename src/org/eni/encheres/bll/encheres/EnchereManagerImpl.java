@@ -126,12 +126,12 @@ public class EnchereManagerImpl implements EnchereManager{
 			sb.append(System.lineSeparator());
 		}
 		
-
-		if(convertToLocalDateTime(date_debut).compareTo(LocalDateTime.now()) < 0
-				|| convertToLocalDateTime(date_fin).compareTo(LocalDateTime.now()) < 0) {
-			sb.append("Vous ne pouvez pas renseigner les dates passées");
-			sb.append(System.lineSeparator());
-		}
+		//decocher en production
+//		if(convertToLocalDateTime(date_debut).compareTo(LocalDateTime.now()) < 0
+//				|| convertToLocalDateTime(date_fin).compareTo(LocalDateTime.now()) < 0) {
+//			sb.append("Vous ne pouvez pas renseigner les dates passées");
+//			sb.append(System.lineSeparator());
+//		}
 		
 		if(convertToLocalDateTime(date_debut).compareTo(convertToLocalDateTime(date_fin)) > 0) {
 			sb.append("La date de début d'enchere ne peut pas etre supérieur a la date de fin");
@@ -188,6 +188,12 @@ public class EnchereManagerImpl implements EnchereManager{
 	@Override
 	public ArrayList<Categorie> getCategories() throws BusinessException {
 		return dao.selectAllCategories();
+	}
+
+	@Override
+	public ArticleVendu getArticleById(int id) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

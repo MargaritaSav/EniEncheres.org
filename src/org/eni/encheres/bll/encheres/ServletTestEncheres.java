@@ -1,6 +1,8 @@
 package org.eni.encheres.bll.encheres;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,11 +36,18 @@ public class ServletTestEncheres extends HttpServlet {
 			um.updateUtilisateur(lolo, "lolo");
 			EnchereManager em = EnchereManagerSingl.getInstance();
 			Categorie maison = new Categorie(1, "maison");
-			ArticleVendu article = em.addArticle(lolo, "article bll", "description", maison, "2021-06-01T08:30", "2021-08-01T08:30", 100, "rue de caves", "35700", "rennes");
-//			article.setNomArticle("mon article modifie");
-//			em.updateArticle(article);
+			ArticleVendu article = em.addArticle(toto, "article bll", "description", maison, "2021-04-10T08:30", "2021-08-01T08:30", 100, "rue de caves", "35700", "rennes");
+			article.setNomArticle("mon article modifie toto");
+			em.updateArticle(article);
 			em.faireEnchere(toto, article, 200);
 			em.faireEnchere(lolo, article, 300);
+			
+			System.out.println("====Articles de TOTO =====");
+			ArrayList<ArticleVendu> articlesLolo = toto.getArticlesVendus();
+			for(ArticleVendu b : articlesLolo) {
+				System.out.println(b.toString());
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
