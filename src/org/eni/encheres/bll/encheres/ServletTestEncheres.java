@@ -27,11 +27,18 @@ public class ServletTestEncheres extends HttpServlet {
 		try {
 			UtilisateurManager um = UtilisateurManagerSingl.getInstance();
 			Utilisateur lolo = um.login("lolo", "lolo");
+			Utilisateur toto = um.login("toto", "toto");
+			lolo.setCredit(500);
+			toto.setCredit(500);
+			um.updateUtilisateur(toto, "toto");
+			um.updateUtilisateur(lolo, "lolo");
 			EnchereManager em = EnchereManagerSingl.getInstance();
 			Categorie maison = new Categorie(1, "maison");
 			ArticleVendu article = em.addArticle(lolo, "article bll", "description", maison, "2021-06-01T08:30", "2021-08-01T08:30", 100, "rue de caves", "35700", "rennes");
-			article.setNomArticle("mon article modifie");
-			em.updateArticle(article);
+//			article.setNomArticle("mon article modifie");
+//			em.updateArticle(article);
+			em.faireEnchere(toto, article, 200);
+			em.faireEnchere(lolo, article, 300);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

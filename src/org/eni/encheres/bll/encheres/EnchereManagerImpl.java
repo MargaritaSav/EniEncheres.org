@@ -64,9 +64,42 @@ public class EnchereManagerImpl implements EnchereManager{
 	}
 
 	@Override
-	public Enchere addEnchere(Utilisateur utilisateur, int no_article, int montant_enchere) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+	public Enchere faireEnchere(Utilisateur utilisateur, ArticleVendu article, int montant_enchere) throws BusinessException {
+		ArrayList<Enchere> encheres = article.getEncheres();
+		//verif si l'enchere actuel est superieur au precedent ou mise a prix 
+		if((encheres.size() > 0 && montant_enchere <= encheres.get(encheres.size()-1).getMontant_enchere()) 
+				|| (encheres.size() == 0 && montant_enchere <= article.getMiseAPrix() )) {
+			throw new BusinessException("Vous devez proposer un montant superieur");
+		}
+		if(montant_enchere > utilisateur.getCredit()) {
+			throw new BusinessException("Vous n'avez pas assez de points");
+		}
+		
+		Enchere enchere = new Enchere();
+		enchere.setDateEnchere(LocalDateTime.now());
+		enchere.setMontant_enchere(montant_enchere);
+		enchere.setUtilisateur(utilisateur);
+		dao.insertEnchere(enchere, article.getNoArticle(), utilisateur.getNoUtilisateur());
+		
+		//debiter l'utilisateur actuel
+		transfererPoints(utilisateur, -montant_enchere);
+		
+		//si jamais l'enchereur precedent supprime son compte au moment que l'utilisateur actuel fait son enchere
+		try {
+			//recrediter les points a l'enchereur precedent
+			if(encheres.size() > 0) {
+				transfererPoints(encheres.get(encheres.size() - 1).getUtilisateur(), montant_enchere);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		return enchere;
+	}
+	
+	public void transfererPoints(Utilisateur utilisateur, int montant) throws BusinessException {
+		utilisateur.transfererPoints(montant);
+		dao.updateUtilisateur(utilisateur);
 	}
 
 	@Override
@@ -151,5 +184,10 @@ public class EnchereManagerImpl implements EnchereManager{
         // matched the ReGex
         return m.matches();
     }
+
+	@Override
+	public ArrayList<Categorie> getCategories() throws BusinessException {
+		return dao.selectAllCategories();
+	}
 
 }

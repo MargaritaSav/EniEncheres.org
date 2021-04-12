@@ -37,6 +37,11 @@ public class Utilisateur {
 		this.ville = ville;
 		this.credit = credit;
 	}
+	
+	public void transfererPoints(int montant) {
+		this.credit += montant;
+	}
+	
 	public int getNoUtilisateur() {
 		return noUtilisateur;
 	}

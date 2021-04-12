@@ -16,7 +16,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	
 	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, salt, credit, administrateur FROM utilisateurs WHERE pseudo = ? OR email = ?";
 	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ? WHERE no_utilisateur = ?";
+	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ?, credit = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
 	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
 										 + "c.libelle,"
@@ -137,7 +137,8 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setString(8, utilisateur.getVille());
 			stmt.setBytes(9, utilisateur.getMotDePasse());
 			stmt.setBytes(10, utilisateur.getSalt());
-			stmt.setInt(11, utilisateur.getNoUtilisateur());
+			stmt.setInt(11, utilisateur.getCredit());
+			stmt.setInt(12, utilisateur.getNoUtilisateur());
 			stmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -364,7 +365,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new BusinessException("Echec rajout enchere");
-		}
+		}	
 		System.out.println("Insertion enchere reussie");
 		return enchere;
 	}
