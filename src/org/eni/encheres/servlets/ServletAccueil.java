@@ -15,6 +15,7 @@ import org.eni.encheres.BusinessException;
 import org.eni.encheres.bll.encheres.EnchereManager;
 import org.eni.encheres.bll.encheres.EnchereManagerSingl;
 import org.eni.encheres.bo.ArticleVendu;
+import org.eni.encheres.bo.Categorie;
 import org.eni.encheres.dal.DAOFactory;
 import org.eni.encheres.dal.EncheresDAO;
 
@@ -30,11 +31,13 @@ public class ServletAccueil extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//EnchereManager em = EnchereManagerSingl.getInstance();
+		EnchereManager em = EnchereManagerSingl.getInstance();
 		EncheresDAO dao = DAOFactory.getInstance();
 		
 		try {
-			List<ArticleVendu> articles = dao.selectAllArticles();
+			List<ArticleVendu> articles = em.getArticles();
+			List<Categorie> categories = em.getCategories();
+			request.setAttribute("categories", categories);
 			request.setAttribute("articles", articles);
 			System.out.println(articles);
 		} catch (BusinessException e) {

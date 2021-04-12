@@ -37,10 +37,10 @@
     </header>
     <div class="row">
         <div class="col-12 text-center"><h2>Liste des enchères</h2></div>
-        <div class="col-12 col-md-6 mt-2">
-            <label for="search-control" class="form-label">Filters</label>
+        <div class="col-12 col-md-5 mt-2 mb-2">
+            <label for="search-control" class="form-label">Recherche</label>
             <div class="input-group" id="search-control">
-                <input type="text" class="form-control" placeholder="Le  nom de l'article contient">
+                <input type="text" class="form-control" id="search-input" placeholder="Le  nom de l'article contient">
                 <div class="input-group-btn">
                     <button class="btn btn-secondary rounded-0" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -51,66 +51,26 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6 d-flex align-items-end">
+        <div class="col-12 col-md-4 mb-2 d-flex align-items-end">
             <div class="form-group m-0 w-100">
-                <label for="exampleFormControlSelect1">Example select</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                <label for="select-categories">Categories</label>
+                <select class="form-control" id="select-categories">
+                	<option value="0">Toutes les categories</option>
+                	<c:forEach var="сategorie" items="${categories}">
+                		<option value="${сategorie.noCategorie}">${сategorie.libelle}</option>
+                	</c:forEach>
                 </select>
             </div>
         </div>
+        <div class="col-12 col-md-3 mb-2 d-flex align-items-end justify-content-center">
+        
+        	<button class="btn btn-primary">Effacer les filters</button>
+        </div>
+        
     </div>
 
-    <div class="row mt-5">
-        <c:choose>
-            <c:when test="${!empty articles}">
-                <c:forEach var="article" items="${articles}">
-                    <div class="col-md-6 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4 d-flex flex-column align-items-center justify-content-around">
-                                    
-                                        <img class="card-img-top" src="./ressources/images/no-image.png" alt="Card image cap">
-                                        <span class="badge badge-info">${article.categorieArticle.libelle}</span>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h5 class="card-title">${article.nomArticle}</h5>
-                                        <p class="card-text">${article.description}</p>
-                                        <p>Prix:
-                                            <c:choose>
-                                                <c:when test="${article.prixVente != null}">
-                                                    ${article.miseAPrix}
-                                                </c:when>
-                                                <c:otherwise>
-                                                    ${article.prixVente}
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </p>
-                                        <p>Fin de l'enchère :
-                                            <fmt:parseDate value="${ article.dateFinEncheres }"
-                                                           pattern="yyyy-MM-dd'T'HH:mm"
-                                                           var="parsedDateTime" type="both"/>
-                                            <fmt:formatDate pattern="dd/MM/yyyy HH'h'mm" value="${ parsedDateTime }"/>
-                                        </p>
-                                        <p>Vendeur: <a href="${pageContext.request.contextPath}/profil?pseudo=${article.vendeur.pseudo}" >${article.vendeur.pseudo}</a></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </c:forEach>
-            </c:when>
+    <div class="row mt-5" id="articles-container">
 
-            <c:otherwise>
-                <p style="font-size: 30px">Désolé, il n'y a pas d'articles en vente</p>
-            </c:otherwise>
-
-        </c:choose>
     </div>
 
 
@@ -120,5 +80,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
+        
+<script src="./ressources/js/accueil.js" type="text/javascript"></script>
 </body>
 </html>
