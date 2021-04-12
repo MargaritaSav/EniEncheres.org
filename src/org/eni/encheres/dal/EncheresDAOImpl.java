@@ -339,9 +339,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 		}
 		article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
 		
-		if(rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
+		if(utilisateur != null && rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
 			article.setVendeur(utilisateur);
-		} else if (rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
+		} else if (utilisateur != null && rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
 			article.setAcheteur(utilisateur);
 		} else {
 			Utilisateur vendeur = new Utilisateur();
