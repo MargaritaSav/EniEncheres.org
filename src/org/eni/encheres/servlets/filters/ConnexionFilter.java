@@ -48,7 +48,7 @@ public class ConnexionFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
 		System.out.println(session.getAttribute("user"));
-		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on"))
+		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") || httpRequest.getParameter("pseudo")!= null)
 		{
 			chain.doFilter(request, response);
 		}
