@@ -1,4 +1,4 @@
-package org.eni.encheres;
+package org.eni.encheres.api;
 
 import javax.ws.rs.ApplicationPath;
 

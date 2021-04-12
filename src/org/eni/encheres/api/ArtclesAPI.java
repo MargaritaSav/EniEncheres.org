@@ -1,4 +1,4 @@
-package org.eni.encheres;
+package org.eni.encheres.api;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import org.eni.encheres.BusinessException;
 import org.eni.encheres.bll.encheres.EnchereManager;
 import org.eni.encheres.bll.encheres.EnchereManagerSingl;
 import org.eni.encheres.bo.ArticleVendu;
