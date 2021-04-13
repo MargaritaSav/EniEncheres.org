@@ -370,12 +370,15 @@ public class EncheresDAOImpl implements EncheresDAO{
 		article.setPrixVente(rs.getInt("prix_vente"));
 		if(LocalDateTime.now().compareTo(article.getDateFinEncheres()) > 0) {
 			article.setEtatVente("Terminé");
+		} else if(LocalDateTime.now().compareTo(article.getDateDebutEncheres()) < 0) {
+			article.setEtatVente("Non débutée");
 		} else {
 			article.setEtatVente("En cours");
 		}
 		article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
 		
 		if(utilisateur != null && rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
+			utilisateur.setPseudo(rs.getString("pseudo"));
 			article.setVendeur(utilisateur);
 		} else {
 			Utilisateur vendeur = new Utilisateur();
@@ -387,6 +390,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 		}
 	
 		if (utilisateur != null && rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
+			utilisateur.setPseudo(rs.getString("pseudo"));
 			article.setAcheteur(utilisateur);
 		} 
 		

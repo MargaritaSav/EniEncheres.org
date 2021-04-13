@@ -10,6 +10,7 @@ let searchValue = "";
 let categorieChoisie = "0";
 let userSales = null;
 let userPurchase = null;
+let userEncheres = null;
 let userPseudo = $("#user-filters").data("user");
 let userData;
 
@@ -26,9 +27,15 @@ window.onload = function(){
 			
 	});
 	
-	$.get(urlApi + "/" + userPseudo, function(data){
-		console.log(data)	
-	})
+	if(userPseudo){
+		$.get(urlApi + "/" + userPseudo, function(data){
+			console.log(data);
+			userSales = data.AtticlesVendus;
+			userPurchase = data.AtticlesAchetes;
+			userEncheres = data.articlesEncheresEnCours;
+		})
+	}
+	
 	
 	searchInput.keyup((e)=>{
 		let result;
@@ -94,7 +101,93 @@ function filterByCategorie(articlesArray, categorieId){
 	})
 }
 
+function filterUSerPurchase(articlesArray, categorieId){
+	if(categorieId == "0") return articlesArray;
+	return articlesArray.filter((article) => {
+		let numCat = article.categorieArticle.noCategorie;
+		return numCat == categorieId;
+	})
+}
 
+function filterCurrentEncheres(){
+	showArticles(userEncheres)
+}
+
+function filterFinishedEncheres(){
+	showArticles(userPurchase)
+}
+
+function activateSales(){
+	toggleSalesButtons(false)
+	togglePurchaseButtons(true)
+	
+	showArticles(userSales)
+}
+
+function activatePurchase(){
+	toggleSalesButtons(true)
+	togglePurchaseButtons(false)
+	showAllArticlesToBuy();
+}
+
+function togglePurchaseButtons(bool){
+	$("#buy-ckbox-group input").each(function(){
+		$(this).prop("disabled", bool );
+		$(this).prop("checked", false );
+	})
+}
+
+function toggleSalesButtons(bool){
+	$("#sales-ckbox-group input").each(function(){
+		$(this).prop("checked", false );
+		$(this).prop("disabled", bool );
+	})
+}
+
+function showArticles(array){
+	articleContainer.empty();
+	array.forEach(article=>{
+		addArticleCard(article)
+	})
+}
+
+function filterBySales(){
+	let result = [];
+	let allUnchecked = true;
+	$("#sales-ckbox-group input").each(function(){
+		allUnchecked *= !$(this).is(":checked");
+		if($(this).is(":checked")){
+			switch ($(this).val()) {
+				case "current-sales" : 
+					userSales.forEach((article)=>{
+						if(article.etatVente == "En cours"){
+							result.push(article)
+						};
+					})
+					break;
+				case "future-sales" :
+					userSales.forEach((article)=>{
+						if(article.etatVente == "Non débutée"){
+							result.push(article)
+						};
+					})
+					break;
+				case "finished-sales" :
+					userSales.forEach((article)=>{
+						if(article.etatVente == "Terminé"){
+							result.push(article)
+						};
+					})
+					break;
+			}	
+		}
+		
+	})
+	if(allUnchecked){
+		result = userSales;
+	}
+	showArticles(result);
+}
 
 function addArticleCard(article){
 	let html = `<div class="col-md-6 mb-3">
@@ -128,6 +221,13 @@ function addArticleCard(article){
 	articleContainer.append(html);
 }
 
+function showAllArticlesToBuy(){
+	articleContainer.empty();
+	articles.forEach(article=>{
+		addArticleCard(article)
+	})
+}
+
 function formatDate(date){
 	return (date.dayOfMonth < 10 ? '0' : '') 
 			+ date.dayOfMonth
@@ -142,10 +242,4 @@ function formatDate(date){
 			+ "H"
 			+ (date.minute < 10 ? '0' : '') 
 			+ date.minute;
-}
-
-function setUserSales(sales){
-	userSales = sales;
-	console.log(sales)
-	
 }

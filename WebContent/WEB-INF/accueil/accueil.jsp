@@ -72,34 +72,31 @@
             <div class="form-group m-0 w-100">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" id="buy-radio-btn"
-                           value="achat" checked>
+                           value="achat" name="optprincipal" checked onclick="activatePurchase()">
                     <label class="form-check-label" for="buy-radio-btn">
                         Achats
                     </label>
                     <div id="buy-ckbox-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="all" id="all-ckbox" checked>
+                            <input class="form-check-input" type="radio" value="all" id="all-ckbox" name="optradio" checked onclick="showAllArticlesToBuy()">
                             <label class="form-check-label" for="all-ckbox" >
                                 Enchères ouvertes
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="current" id="current-ckbox">
+                            <input class="form-check-input" type="radio" value="current" id="current-ckbox" name="optradio" onclick="filterCurrentEncheres()">
                             <label class="form-check-label" for="current-ckbox">
                                 Mes enchères en cours
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="finished" id="finished-ckbox">
+                            <input class="form-check-input" type="radio" value="finished" id="finished-ckbox" name="optradio" onclick="filterFinishedEncheres()">
                             <label class="form-check-label" for="finished-ckbox">
                                 Mes enchères remportées
                             </label>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
 
@@ -107,25 +104,25 @@
 			<div class="form-group m-0 w-100">
                 <div class="form-check">
                     <input class="form-check-input" type="radio" id="sales-radio-btn"
-                           value="achat"">
-                    <label class="form-check-label" for="sales-radio-btn">
+                           value="achat" name="optprincipal" onclick="activateSales()">
+                    <label class="form-check-label" for="sales-radio-btn" >
                         Mes ventes
                     </label>
-                    <div id="buy-ckbox-group">
+                    <div id="sales-ckbox-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="current-sales" id="current-sales-ckbox">
+                            <input class="form-check-input" type="checkbox" value="current-sales" id="current-sales-ckbox" name="chk[]" onclick="filterBySales()">
                             <label class="form-check-label" for="current-sales-ckbox" >
                                 Mes ventes en cours
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="future-sales" id="future-sales-ckbox">
+                            <input class="form-check-input" type="checkbox" value="future-sales" id="future-sales-ckbox" name="chk[]" onclick="filterBySales()">
                             <label class="form-check-label" for="future-sales-ckbox">
                                 Ventes non débutées
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="finished-sales" id="finished-sales-ckbox">
+                            <input class="form-check-input" type="checkbox" value="finished-sales" id="finished-sales-ckbox" name="chk[]" onclick="filterBySales()"> 
                             <label class="form-check-label" for="finished-sales-ckbox">
                                 Ventes terminées
                             </label>
