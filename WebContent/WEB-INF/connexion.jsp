@@ -22,7 +22,7 @@
 			<form action="${pageContext.request.contextPath}/connexion" method="POST">
 			  <div class="mb-3">
 			    <label for="login" class="form-label">Email ou pseudo</label>
-			    <input type="text" class="form-control" id="login" name="login" aria-describedby="login" value="${param.login}">
+			    <input type="text" class="form-control" id="login" name="login" aria-describedby="login" value="${cookie.eni_login != null ? cookie.eni_login.value : param.login}">
 			  </div>
 			  <div>
 			    <label for="password" class="form-label">Mot de passe</label>
@@ -36,7 +36,7 @@
 			  <div class="row mb-3">
 		    	<div class="col-12">
 		    		<div class="form-check">
-				    <input type="checkbox" class="form-check-input" id="resterConnecte">
+				    <input type="checkbox" class="form-check-input" id="resterConnecte" name="resterConnecte">
 				    <label class="form-check-label" for="resterConnecte">Se souvenir de moi</label>
 				  </div>
 		    	</div>
