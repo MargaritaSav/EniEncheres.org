@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.eni.encheres.bo.Utilisateur;
+
 
 /**
  * Servlet Filter implementation class ConnexionFilter
@@ -47,7 +49,7 @@ public class ConnexionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
-		System.out.println(session.getAttribute("user"));
+		System.out.println(((Utilisateur)session.getAttribute("user")).getEncheres());
 		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") || httpRequest.getParameter("pseudo")!= null)
 		{
 			chain.doFilter(request, response);

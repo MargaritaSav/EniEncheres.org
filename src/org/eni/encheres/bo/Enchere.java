@@ -17,8 +17,6 @@ public class Enchere {
 		this.montant_enchere = montant_enchere;
 	}
 	
-	
-	
 	public ArticleVendu getArticle() {
 		return article;
 	}

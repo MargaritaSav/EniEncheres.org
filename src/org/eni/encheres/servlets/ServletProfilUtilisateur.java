@@ -56,9 +56,5 @@ public class ServletProfilUtilisateur extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("delete");
-	}
 
 }

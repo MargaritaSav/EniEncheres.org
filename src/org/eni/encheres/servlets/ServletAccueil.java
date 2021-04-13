@@ -32,14 +32,13 @@ public class ServletAccueil extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		EnchereManager em = EnchereManagerSingl.getInstance();
-		EncheresDAO dao = DAOFactory.getInstance();
 		
 		try {
 			List<ArticleVendu> articles = em.getArticles();
 			List<Categorie> categories = em.getCategories();
 			request.setAttribute("categories", categories);
 			request.setAttribute("articles", articles);
-			System.out.println(articles);
+		
 		} catch (BusinessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

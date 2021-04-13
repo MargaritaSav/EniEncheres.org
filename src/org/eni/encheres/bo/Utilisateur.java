@@ -17,9 +17,6 @@ public class Utilisateur {
 	private byte[] salt;
 	private int credit;
 	private boolean administrateur = false;
-	private ArrayList<Enchere> encheres;
-	private ArrayList<ArticleVendu> articlesAchetes;
-	private ArrayList<ArticleVendu> articlesVendus;
 	
 	public Utilisateur() {}
 	
@@ -114,24 +111,6 @@ public class Utilisateur {
 	public void setAdministrateur(boolean administrateur) {
 		this.administrateur = administrateur;
 	}
-	public ArrayList<Enchere> getEncheres() {
-		return encheres;
-	}
-	public void setEncheres(ArrayList<Enchere> encheres) {
-		this.encheres = encheres;
-	}
-	public ArrayList<ArticleVendu> getArticlesAchetes() {
-		return articlesAchetes;
-	}
-	public void setArticlesAchetes(ArrayList<ArticleVendu> articlesAchetes) {
-		this.articlesAchetes = articlesAchetes;
-	}
-	public ArrayList<ArticleVendu> getArticlesVendus() {
-		return articlesVendus;
-	}
-	public void setArticlesVendus(ArrayList<ArticleVendu> articlesVendus) {
-		this.articlesVendus = articlesVendus;
-	}
 	
 	
 	public byte[] getSalt() {
@@ -147,8 +126,8 @@ public class Utilisateur {
 		return "Utilisateur [noUtilisateur=" + noUtilisateur + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom="
 				+ prenom + ", email=" + email + ", telephone=" + telephone + ", rue=" + rue + ", codePostal="
 				+ codePostal + ", ville=" + ville + ", motDePasse=" + motDePasse + ", credit=" + credit
-				+ ", administrateur=" + administrateur + ", encheres=" + encheres + ", articlesAchetes="
-				+ articlesAchetes + ", articlesVendus=" + articlesVendus + "]";
+				+ ", administrateur=" + administrateur + "]"
+				;
 	}
 	
 	

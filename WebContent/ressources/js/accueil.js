@@ -8,6 +8,10 @@ let lastSearchResult = null;
 let articles = null;
 let searchValue = "";
 let categorieChoisie = "0";
+let userSales = null;
+let userPurchase = null;
+let userPseudo = $("#user-filters").data("user");
+let userData;
 
 window.onload = function(){
 		
@@ -15,10 +19,15 @@ window.onload = function(){
 		if(data.length == 0){
 			articleContainer.append("<p style='font-size: 30px'>Désolé, il n'y a pas d'articles en vente</p>");
 		} else{
+			
 			articles = data;
 			data.forEach(article=>addArticleCard(article))
 		}
 			
+	});
+	
+	$.get(urlApi + "/" + userPseudo, function(data){
+		console.log(data)	
 	})
 	
 	searchInput.keyup((e)=>{
@@ -65,6 +74,7 @@ window.onload = function(){
 		searchInput.val('');
 		articles.forEach(article=>addArticleCard(article))
 	})
+	
 } 
 
 
@@ -83,6 +93,7 @@ function filterByCategorie(articlesArray, categorieId){
 		return numCat == categorieId;
 	})
 }
+
 
 
 function addArticleCard(article){
@@ -131,4 +142,10 @@ function formatDate(date){
 			+ "H"
 			+ (date.minute < 10 ? '0' : '') 
 			+ date.minute;
+}
+
+function setUserSales(sales){
+	userSales = sales;
+	console.log(sales)
+	
 }

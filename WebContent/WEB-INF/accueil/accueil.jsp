@@ -53,19 +53,94 @@
             <div class="form-group m-0 w-100">
                 <label for="select-categories">Categories</label>
                 <select class="form-control" id="select-categories">
-                	<option value="0">Toutes les categories</option>
-                	<c:forEach var="сategorie" items="${categories}">
-                		<option value="${сategorie.noCategorie}">${сategorie.libelle}</option>
-                	</c:forEach>
+                    <option value="0">Toutes les categories</option>
+                    <c:forEach var="сategorie" items="${categories}">
+                        <option value="${сategorie.noCategorie}">${сategorie.libelle}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
         <div class="col-12 col-md-3 mb-2 d-flex align-items-end justify-content-center">
-        
-        	<button class="btn btn-primary" id="clean-btn">Effacer les filters</button>
+
+            <button class="btn btn-primary" id="clean-btn">Effacer les filters</button>
         </div>
-        
+
     </div>
+	<c:if test="${sessionScope.session.equals('on')}">
+    <div class="row" id="user-filters" data-user="${sessionScope.user.pseudo }">
+        <div class="col-12 col-md-6">
+            <div class="form-group m-0 w-100">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="buy-radio-btn"
+                           value="achat" checked>
+                    <label class="form-check-label" for="buy-radio-btn">
+                        Achats
+                    </label>
+                    <div id="buy-ckbox-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="all" id="all-ckbox" checked>
+                            <label class="form-check-label" for="all-ckbox" >
+                                Enchères ouvertes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="current" id="current-ckbox">
+                            <label class="form-check-label" for="current-ckbox">
+                                Mes enchères en cours
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="finished" id="finished-ckbox">
+                            <label class="form-check-label" for="finished-ckbox">
+                                Mes enchères remportées
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+			<div class="form-group m-0 w-100">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="sales-radio-btn"
+                           value="achat"">
+                    <label class="form-check-label" for="sales-radio-btn">
+                        Mes ventes
+                    </label>
+                    <div id="buy-ckbox-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="current-sales" id="current-sales-ckbox">
+                            <label class="form-check-label" for="current-sales-ckbox" >
+                                Mes ventes en cours
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="future-sales" id="future-sales-ckbox">
+                            <label class="form-check-label" for="future-sales-ckbox">
+                                Ventes non débutées
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="finished-sales" id="finished-sales-ckbox">
+                            <label class="form-check-label" for="finished-sales-ckbox">
+                                Ventes terminées
+                            </label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    
+    </c:if>
 
     <div class="row mt-5" id="articles-container">
 
@@ -78,7 +153,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
-        
+
 <script src="./ressources/js/accueil.js" type="text/javascript"></script>
 </body>
 </html>
