@@ -52,7 +52,7 @@ public class ServletConnexion extends HttpServlet {
 				session.setAttribute("user", utilisateur);
 				//limiter la duree d'inactivite a 5min
 				session.setMaxInactiveInterval(5 * 60);
-				if(resterConnecte.equals("on")) {
+				if(resterConnecte != null) {
 					Cookie cookieLogin = new Cookie("eni_login", login);
 				    response.addCookie( cookieLogin );
 				}
