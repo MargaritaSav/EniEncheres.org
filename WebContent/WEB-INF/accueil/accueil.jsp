@@ -110,19 +110,19 @@
                     </label>
                     <div id="sales-ckbox-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="current-sales" id="current-sales-ckbox" name="chk[]" onclick="filterBySales()">
+                            <input class="form-check-input" type="checkbox" value="current-sales" id="current-sales-ckbox" name="chk[]" onclick="filterBySales()" disabled>
                             <label class="form-check-label" for="current-sales-ckbox" >
                                 Mes ventes en cours
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="future-sales" id="future-sales-ckbox" name="chk[]" onclick="filterBySales()">
+                            <input class="form-check-input" type="checkbox" value="future-sales" id="future-sales-ckbox" name="chk[]" onclick="filterBySales()" disabled>
                             <label class="form-check-label" for="future-sales-ckbox">
                                 Ventes non débutées
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="finished-sales" id="finished-sales-ckbox" name="chk[]" onclick="filterBySales()"> 
+                            <input class="form-check-input" type="checkbox" value="finished-sales" id="finished-sales-ckbox" name="chk[]" onclick="filterBySales()" disabled> 
                             <label class="form-check-label" for="finished-sales-ckbox">
                                 Ventes terminées
                             </label>
