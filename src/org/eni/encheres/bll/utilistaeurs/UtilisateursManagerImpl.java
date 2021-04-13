@@ -248,15 +248,13 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		int compteur = 0;
 		
 		for(ArticleVendu article : encheresFinis) {
-			if(article.getAcheteur() == null) {
-				ArrayList<Enchere> encheres = article.getEncheres();
-				Collections.sort(encheres);
-				article.setAcheteur(encheres.get(0).getUtilisateur());
-				
-				//mettre a jour les articles -> no_acheteur
-				dao.updateArticle(article);
-				compteur ++;
-			}
+			ArrayList<Enchere> encheres = article.getEncheres();
+			Collections.sort(encheres);
+			article.setAcheteur(encheres.get(0).getUtilisateur());
+			
+			//mettre a jour les articles -> no_acheteur
+			dao.updateArticle(article);
+			compteur ++;
 		}
 		
 		if(compteur > 0)

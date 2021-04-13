@@ -54,7 +54,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
-												 + "WHERE date_fin_encheres < ?";
+												 + "WHERE date_fin_encheres < ? AND a.no_acheteur IS NULL";
 	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?, no_acheteur = ?  WHERE no_article = ?";
 	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
