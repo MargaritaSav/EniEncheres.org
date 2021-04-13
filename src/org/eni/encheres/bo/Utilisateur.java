@@ -126,8 +126,12 @@ public class Utilisateur {
 		return "Utilisateur [noUtilisateur=" + noUtilisateur + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom="
 				+ prenom + ", email=" + email + ", telephone=" + telephone + ", rue=" + rue + ", codePostal="
 				+ codePostal + ", ville=" + ville + ", motDePasse=" + motDePasse + ", credit=" + credit
+<<<<<<< HEAD
 				+ ", administrateur=" + administrateur + "]"
 				;
+=======
+				+ ", administrateur=" + administrateur + "]";
+>>>>>>> 95caf196c7a3c16283110b02450c7acff747a86a
 	}
 	
 	

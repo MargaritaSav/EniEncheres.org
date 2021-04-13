@@ -40,14 +40,16 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "WHERE a.no_utilisateur = ? OR a.no_acheteur = ?";
 	private final String SELECT_ENCHERES_FINIS = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
-												 + "c.libelle,"
+												+ "c.libelle,"
+												 + "u.pseudo, "
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
 												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
+												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
-												 + "WHERE a.no_utilisateur = ? OR a.no_acheteur = ?";
+												 + "WHERE date_fin_encheres < ?";
 	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?  WHERE no_article = ?";
+	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?, no_acheteur = ?  WHERE no_article = ?";
 	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
 
 
@@ -91,7 +93,6 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setString(2, email);
 
 			ResultSet rs = stmt.executeQuery();
-			System.err.println("Je suis dans selectUtilisateurByLogin");
 			while(rs.next())
 			{
 				Utilisateur utilisateur = new Utilisateur();
@@ -280,7 +281,8 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setInt(6, 0);
 			stmt.setInt(7, article.getVendeur().getNoUtilisateur());
 			stmt.setInt(8, article.getCategorieArticle().getNoCategorie());
-			stmt.setInt(9, article.getNoArticle());
+			stmt.setInt(9, article.getAcheteur() == null ? null : article.getAcheteur().getNoUtilisateur());
+			stmt.setInt(10, article.getNoArticle());
 			stmt.executeUpdate();
 			
 			updateRetrait(article.getLieuRetrait(), article.getNoArticle());
@@ -311,16 +313,13 @@ public class EncheresDAOImpl implements EncheresDAO{
 	@Override
 	public ArrayList<ArticleVendu> selectArticlesByUser(Utilisateur utilisateur) throws BusinessException {
 		ArrayList<ArticleVendu> articles = new ArrayList<>();
-		System.err.println("Je suis dans selectArticlesByUser");
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES_BY_USER);
 			stmt.setInt(1, utilisateur.getNoUtilisateur());
 			stmt.setInt(2, utilisateur.getNoUtilisateur());
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
-				System.out.println("No util in RS: " + rs.getInt("no_utilisateur"));
 				ArticleVendu article = mapArticle(rs, utilisateur);
-				System.out.println(article);
 				articles.add(article);
 			}
 		} catch(Exception e) {
@@ -352,7 +351,6 @@ public class EncheresDAOImpl implements EncheresDAO{
 	}
 	
 	public ArticleVendu mapArticle(ResultSet rs, Utilisateur utilisateur) throws BusinessException, SQLException {
-		System.err.println("Je suis dans mapArticle");
 		ArticleVendu article = new ArticleVendu();
 		article.setNoArticle(rs.getInt("no_article"));
 		article.setNomArticle(rs.getString("nom_article"));
@@ -524,22 +522,24 @@ public class EncheresDAOImpl implements EncheresDAO{
 		return encheres;
 	}
 
+
 	@Override
-	public ArrayList<ArticleVendu> selectArticlesFinis() throws BusinessException {
+	public ArrayList<ArticleVendu> selectEncheresFinis() throws BusinessException {
 		ArrayList<ArticleVendu> articles = new ArrayList<>();
-//		try(Connection cnx = ConnectionProvider.getConnection()) {
-//			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLES_FINIS);
-//			ResultSet rs = stmt.executeQuery();
-//			while(rs.next()) {
-//				ArticleVendu article = mapArticle(rs, utilisateur);
-//				
-//				articles.add(article);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			throw new BusinessException("Echec selection des articles par utilisateur");
-//		}
-//		System.out.println(articles.size());
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_ENCHERES_FINIS);
+			stmt.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				ArticleVendu article = mapArticle(rs, null);
+				
+				articles.add(article);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec selection des articles par utilisateur");
+		}
+		System.out.println(articles.size());
 		return articles;
 	}
 
