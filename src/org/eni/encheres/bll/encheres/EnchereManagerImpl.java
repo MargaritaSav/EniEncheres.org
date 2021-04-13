@@ -21,11 +21,12 @@ public class EnchereManagerImpl implements EnchereManager{
 	public ArticleVendu addArticle(Utilisateur vendeur, String nom, String description, Categorie categorie,
 			String date_debut, String date_fin, int miseAPrix, String rue, String code_postal, String ville)
 			throws BusinessException {
-		ArticleVendu article = new ArticleVendu();
-		String errors = checkEntry(nom, description, categorie, date_debut, date_fin, miseAPrix, rue, code_postal, ville);;
 		if(vendeur == null) {
 			throw new BusinessException("Utilisateur est null");
 		}
+		ArticleVendu article = new ArticleVendu();
+		String errors = checkEntry(nom, description, categorie, date_debut, date_fin, miseAPrix, rue, code_postal, ville);
+		
 		if(errors != null) {
 			throw new BusinessException(errors);
 		}
@@ -126,18 +127,16 @@ public class EnchereManagerImpl implements EnchereManager{
 			sb.append(System.lineSeparator());
 		}
 		
-		//decocher en production
-//		if(convertToLocalDateTime(date_debut).compareTo(LocalDateTime.now()) < 0
-//				|| convertToLocalDateTime(date_fin).compareTo(LocalDateTime.now()) < 0) {
-//			sb.append("Vous ne pouvez pas renseigner les dates passées");
-//			sb.append(System.lineSeparator());
-//		}
+		if(convertToLocalDateTime(date_debut).compareTo(LocalDateTime.now()) < 0
+				|| convertToLocalDateTime(date_fin).compareTo(LocalDateTime.now()) < 0) {
+			sb.append("Vous ne pouvez pas renseigner les dates passées");
+			sb.append(System.lineSeparator());
+		}
 		
 		if(convertToLocalDateTime(date_debut).compareTo(convertToLocalDateTime(date_fin)) > 0) {
 			sb.append("La date de début d'enchere ne peut pas etre supérieur a la date de fin");
 			sb.append(System.lineSeparator());
 		}
-		
 		
 		if(!checkCodePostal(code_postal)) {
 			sb.append("Le code postal est invalide ou contient autrechose que des chiffres");
