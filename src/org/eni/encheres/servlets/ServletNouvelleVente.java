@@ -1,20 +1,23 @@
 package org.eni.encheres.servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.eni.encheres.BusinessException;
 import org.eni.encheres.bll.encheres.EnchereManager;
 import org.eni.encheres.bll.encheres.EnchereManagerSingl;
-
+import org.eni.encheres.bo.ArticleVendu;
 import org.eni.encheres.bo.Categorie;
 import org.eni.encheres.bo.Utilisateur;
 
@@ -22,8 +25,15 @@ import org.eni.encheres.bo.Utilisateur;
  * Servlet implementation class ServletNouvelleVente
  */
 @WebServlet("/nouvellevente")
+
+@MultipartConfig(
+		  fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+		  maxFileSize = 1024 * 1024 * 10,      // 10 MB
+		  maxRequestSize = 1024 * 1024 * 100   // 100 MB
+)
 public class ServletNouvelleVente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String SAVE_DIR = "uploadFiles";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,7 +57,7 @@ public class ServletNouvelleVente extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
 		String nomArticle = request.getParameter("titre");
 		String description = request.getParameter("description");
 		int cat = Integer.valueOf(request.getParameter("categorie"));
@@ -71,8 +81,23 @@ public class ServletNouvelleVente extends HttpServlet {
 			Categorie categorie = new Categorie();
 			categorie.setNoCategorie(cat);
 			Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("user");
-			em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
+			ArticleVendu article = em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
 
+			
+			Part filePart = request.getPart("image");
+		    String fileName = filePart.getSubmittedFileName();
+		    String appPath = request.getServletContext().getRealPath("");
+		    System.out.println(appPath);
+		    String savePath = appPath + File.separator + SAVE_DIR;
+		    
+		 // creates the save directory if it does not exists
+	        File fileSaveDir = new File(savePath);
+	        if (!fileSaveDir.exists()) {
+	            fileSaveDir.mkdir();
+	        }
+		    for (Part part : request.getParts()) {
+		      part.write(savePath + File.separator + fileName);
+		    }
 			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Exception e) {
 			e.printStackTrace();

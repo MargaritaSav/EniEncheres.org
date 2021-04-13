@@ -34,7 +34,7 @@
 	            <c:if test="${!empty error}">
 					<p style="color:red;white-space: pre-line">${error}</p>
 				</c:if>
-				<form  action="${pageContext.request.contextPath}/nouvellevente" method="POST">
+				<form  action="${pageContext.request.contextPath}/nouvellevente" method="POST" enctype="multipart/form-data">
 	                <div class="mb-3">
 	                    <label for="titre" class="form-label">Article</label>
 	                    <input type="text" class="form-control" id="titre" name="titre" aria-describedby="login" value="${param.titre}">
@@ -55,7 +55,7 @@
 		            </div>
 	                <div class="bd-highlight mb-3">
 	                    <div class="p-2 bd-highlight">
-	                        <input id="input-b2" name="input-b2" type="file" class="file" data-show-preview="false">
+	                        <input id="input-b2" name="image" type="file" class="file" data-show-preview="false">
 	                    </div>
 	                </div>
 	                <div class="mb-3" >
