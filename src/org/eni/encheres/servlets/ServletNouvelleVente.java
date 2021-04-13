@@ -83,7 +83,7 @@ public class ServletNouvelleVente extends HttpServlet {
 			Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("user");
 			ArticleVendu article = em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
 
-			
+			/*
 			Part filePart = request.getPart("image");
 		    String fileName = filePart.getSubmittedFileName();
 		    String appPath = request.getServletContext().getRealPath("");
@@ -97,7 +97,7 @@ public class ServletNouvelleVente extends HttpServlet {
 	        }
 		    for (Part part : request.getParts()) {
 		      part.write(savePath + File.separator + fileName);
-		    }
+		    }*/
 			response.sendRedirect(request.getContextPath() + "/accueil");
 		} catch (Exception e) {
 			e.printStackTrace();
