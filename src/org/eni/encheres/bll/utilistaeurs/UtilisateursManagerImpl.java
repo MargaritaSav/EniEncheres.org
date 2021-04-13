@@ -1,10 +1,6 @@
 package org.eni.encheres.bll.utilistaeurs;
 
-import org.apache.catalina.authenticator.BasicAuthenticator.BasicCredentials;
 import org.eni.encheres.BusinessException;
-import org.eni.encheres.bll.*;
-import org.eni.encheres.bll.utilistaeurs.CodesResultatBLL;
-import org.eni.encheres.dal.CodesResultatDAL;
 import org.eni.encheres.dal.DAOFactory;
 import org.eni.encheres.dal.EncheresDAO;
 import org.eni.encheres.bo.*;
@@ -18,13 +14,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.servlet.ServletException;
 
 
 public class UtilisateursManagerImpl implements UtilisateurManager {
@@ -203,7 +197,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 	
 	//à discuter
 	
-	private HashMap<String, byte[]> hashPassword(String mdp) throws BusinessException {
+	public HashMap<String, byte[]> hashPassword(String mdp) throws BusinessException {
 		byte[] hash;
 		SecureRandom sr = new SecureRandom();
 		byte[] salt = new byte[16];
