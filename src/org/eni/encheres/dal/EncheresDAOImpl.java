@@ -368,13 +368,6 @@ public class EncheresDAOImpl implements EncheresDAO{
 		article.setDateFinEncheres(rs.getTimestamp("date_fin_encheres").toLocalDateTime());
 		article.setMiseAPrix(rs.getInt("prix_initial"));
 		article.setPrixVente(rs.getInt("prix_vente"));
-		if(LocalDateTime.now().compareTo(article.getDateFinEncheres()) > 0) {
-			article.setEtatVente("Terminé");
-		} else if(LocalDateTime.now().compareTo(article.getDateDebutEncheres()) < 0) {
-			article.setEtatVente("Non débutée");
-		} else {
-			article.setEtatVente("En cours");
-		}
 		article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
 		
 		if(utilisateur != null && rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
@@ -391,8 +384,13 @@ public class EncheresDAOImpl implements EncheresDAO{
 	
 		if (utilisateur != null && rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
 			utilisateur.setPseudo(rs.getString("pseudo"));
+			article.setEtatVente("Terminé");
 			article.setAcheteur(utilisateur);
-		} 
+		} else if(LocalDateTime.now().compareTo(article.getDateDebutEncheres()) < 0) {
+			article.setEtatVente("Non débutée");
+		} else {
+			article.setEtatVente("En cours");
+		}
 		
 		Retrait retrait = new Retrait();
 		retrait.setCode_postal(rs.getString("code_postal"));
