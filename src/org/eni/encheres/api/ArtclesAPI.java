@@ -1,5 +1,7 @@
 package org.eni.encheres.api;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -10,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import org.codehaus.jackson.JsonGenerator;
 import org.eni.encheres.BusinessException;
 import org.eni.encheres.bll.encheres.EnchereManager;
 import org.eni.encheres.bll.encheres.EnchereManagerSingl;
@@ -36,16 +39,12 @@ public class ArtclesAPI {
 	}
 	
 	@GET
-	@Path("/{pseudo}")
-	public Utilisateur getUserWithArticles(@PathParam("pseudo") String pseudo) {
-		
-		try {
-			return uManager.getUtilisateurByPseudo(pseudo);
-		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null; 
+	@Path("/{noUtilisateur}")
+	public HashMap<String, ArrayList<ArticleVendu>> getUserWithArticles(@PathParam("noUtilisateur") int noUtilisateur) {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setNoUtilisateur(noUtilisateur);
+		System.out.println(eManager.getArticlesParUtilisateur(utilisateur));
+		return  eManager.getArticlesParUtilisateur(utilisateur); 
 	}
 	
 	

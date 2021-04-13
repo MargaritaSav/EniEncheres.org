@@ -67,7 +67,7 @@
 
     </div>
 	<c:if test="${sessionScope.session.equals('on')}">
-    <div class="row" id="user-filters" data-user="${sessionScope.user.pseudo }">
+    <div class="row" id="user-filters" data-user="${sessionScope.user.noUtilisateur }">
         <div class="col-12 col-md-6">
             <div class="form-group m-0 w-100">
                 <div class="form-check">

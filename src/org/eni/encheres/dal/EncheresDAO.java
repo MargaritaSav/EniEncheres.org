@@ -19,7 +19,7 @@ public interface EncheresDAO {
 	
 	public ArticleVendu selectArticleById(int noArticle) throws BusinessException;
 	
-	public ArrayList<ArticleVendu> selectArticlesByUser(Utilisateur utilisateur) throws BusinessException;
+	public ArrayList<ArticleVendu> selectArticlesAchetesByUser(Utilisateur utilisateur) throws BusinessException;
 	
 	
 	public ArticleVendu insertArticle(ArticleVendu article) throws BusinessException;
@@ -43,5 +43,7 @@ public interface EncheresDAO {
 	public void deleteEncheres (int noArticle) throws BusinessException;
 
 	public ArrayList<ArticleVendu> selectEncheresFinis() throws BusinessException;
+
+	ArrayList<ArticleVendu> selectArticlesVendusByUser(Utilisateur utilisateur) throws BusinessException;
 
 }

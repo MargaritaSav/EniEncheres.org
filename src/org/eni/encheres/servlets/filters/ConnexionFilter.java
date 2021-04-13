@@ -49,7 +49,7 @@ public class ConnexionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
-		System.out.println(((Utilisateur)session.getAttribute("user")).getEncheres());
+		
 		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") || httpRequest.getParameter("pseudo")!= null)
 		{
 			chain.doFilter(request, response);

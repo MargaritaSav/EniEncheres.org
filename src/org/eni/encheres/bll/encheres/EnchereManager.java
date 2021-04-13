@@ -1,6 +1,7 @@
 package org.eni.encheres.bll.encheres;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eni.encheres.BusinessException;
 import org.eni.encheres.bo.*;
@@ -14,4 +15,5 @@ public interface EnchereManager{
 	public ArticleVendu getArticleById(int id) throws BusinessException;
 	public Enchere faireEnchere (Utilisateur utilisateur, ArticleVendu article, int montant_enchere) throws BusinessException;
 	public ArrayList<Categorie> getCategories() throws BusinessException;
+	public HashMap<String, ArrayList<ArticleVendu>> getArticlesParUtilisateur(Utilisateur utilisateur);
 }

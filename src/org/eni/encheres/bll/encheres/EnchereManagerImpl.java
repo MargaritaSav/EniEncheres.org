@@ -3,6 +3,8 @@ package org.eni.encheres.bll.encheres;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -191,6 +193,39 @@ public class EnchereManagerImpl implements EnchereManager{
 	@Override
 	public ArticleVendu getArticleById(int id) throws BusinessException {
 		return dao.selectArticleById(id);
+	}
+
+	@Override
+	public HashMap<String, ArrayList<ArticleVendu>> getArticlesParUtilisateur(Utilisateur utilisateur) {
+		HashMap<String, ArrayList<ArticleVendu>> result = new HashMap<>();
+		ArrayList<ArticleVendu> articlesAchetes = null;
+		ArrayList<ArticleVendu> articlesVendus = null;
+		ArrayList<ArticleVendu> articlesEncheresEnCours = new ArrayList<ArticleVendu>();
+		ArrayList<Enchere> encheresEnCours = null;
+		try {
+			articlesAchetes = dao.selectArticlesAchetesByUser(utilisateur);
+			
+			articlesVendus = dao.selectArticlesVendusByUser(utilisateur);
+			
+			encheresEnCours = dao.selectEncheresByUser(utilisateur);
+		} catch (BusinessException e) {
+			
+			e.printStackTrace();
+		}
+		
+		for (Enchere enchere : encheresEnCours) {
+			if(!enchere.getArticle().getEtatVente().equals("Terminé")) {
+				articlesEncheresEnCours.add(enchere.getArticle());
+			}
+			
+		}
+		
+		
+		
+		result.put("AtticlesAchetes", articlesAchetes);
+		result.put("AtticlesVendus", articlesVendus);
+		result.put("articlesEncheresEnCours", articlesEncheresEnCours);
+		return result;
 	}
 
 
