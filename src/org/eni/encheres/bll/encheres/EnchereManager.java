@@ -12,7 +12,6 @@ public interface EnchereManager{
 	public void deleteArticle(int noArticle) throws BusinessException;
 	public ArrayList<ArticleVendu> getArticles() throws BusinessException;
 	public ArticleVendu getArticleById(int id) throws BusinessException;
-	public void checkFinEnchere() throws BusinessException;
 	public Enchere faireEnchere (Utilisateur utilisateur, ArticleVendu article, int montant_enchere) throws BusinessException;
 	public ArrayList<Categorie> getCategories() throws BusinessException;
 }

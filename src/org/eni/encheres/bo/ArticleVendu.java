@@ -16,7 +16,7 @@ public class ArticleVendu {
 	private Retrait lieuRetrait;
 	private Categorie categorieArticle;
 	private Utilisateur vendeur;
-	private Utilisateur acheteur;
+	private Utilisateur acheteur = null;
 	private ArrayList<Enchere> encheres = new ArrayList<>();
 	
 	

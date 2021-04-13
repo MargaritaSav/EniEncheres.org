@@ -193,14 +193,6 @@ public class EnchereManagerImpl implements EnchereManager{
 		return dao.selectArticleById(id);
 	}
 
-	@Override
-	public void checkFinEnchere() throws BusinessException {
-		//selectionner tous les encheres termines avec acheteur == null
-//		dao.select
-		//trouver l'enchere le plus haut pour chaque article
-		
-		//mettre a jour les articles -> no_acheteur
-		
-	}
+
 
 }
