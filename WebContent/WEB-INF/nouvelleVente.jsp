@@ -34,14 +34,14 @@
 	            <c:if test="${!empty error}">
 					<p style="color:red;white-space: pre-line">${error}</p>
 				</c:if>
-				<form  action="${pageContext.request.contextPath}/nouvellevente" method="POST" enctype="multipart/form-data">
+				<form  action="${pageContext.request.contextPath}/nouvellevente?action=${article ? 'modifier' : 'creer'}" method="POST" enctype="multipart/form-data">
 	                <div class="mb-3">
 	                    <label for="titre" class="form-label">Article</label>
-	                    <input type="text" class="form-control" id="titre" name="titre" aria-describedby="login" value="${param.titre}">
+	                    <input type="text" class="form-control" id="titre" name="titre" aria-describedby="login" value="${article ? article.nomArticle : param.titre}">
 	                </div>
 	                <div class="mb-3">
 	                	<label for="description" class="form-label">Description</label>
-					  	<textarea class="form-control" placeholder="Mon article est le meilleur" id="description" name="description" style="height: 100px">${param.description}</textarea>
+					  	<textarea class="form-control" placeholder="Mon article est le meilleur" id="description" name="description" style="height: 100px">${article ? article.description : param.description}</textarea>
 					</div>
 	
 	                <div class="form-group m-0 w-100 mb-3">
@@ -49,7 +49,8 @@
 		                <select class="form-control" id="categorie" name="categorie" >
 		                	<option value="0" >Toutes les categories</option>
 		                	<c:forEach var="сategorie" items="${categories}">
-		                		<option value="${сategorie.noCategorie}" ${param.categorie == сategorie.noCategorie ? "selected" : "" } >${сategorie.libelle}</option>
+		                		
+		                		<option value="${сategorie.noCategorie}" ${article ? article.categorieArticle.noCategorie == сategorie.noCategorie ? "selected" : param.categorie == сategorie.noCategorie ? "selected" : "" } >${сategorie.libelle}</option>
 		                	</c:forEach>
 		                </select>
 		            </div>
@@ -61,18 +62,18 @@
 	                <div class="mb-3" >
 	                    <label for="prix">Prix de l'enchere:</label>
 	
-	                    <input type="number" id="prix" name="prix" min="10" max="10000" value="${param.prix ? param.prix : 10}">
+	                    <input type="number" id="prix" name="prix" min="10" max="10000" value="${article ? article.miseAPrix : param.prix ? param.prix : 10}">
 	
 	                </div>
 	                <div class="mb-3">
 	                    <label class="form-label" for="debut">Début de l'enchere :</label>
 	
-	                    <input type="datetime-local" class="form-control" id="debut" name="debut" class="form-control" value="${param.debut}" />
+	                    <input type="datetime-local" class="form-control" id="debut" name="debut" class="form-control" value="${article ? article.dateDebutEncheres : param.debut}" />
 	                </div>
 	                <div class="mb-3">
 	                    <label class="form-label" for="fin">Fin de l'enchere :</label>
 	
-	                    <input type="datetime-local" class="form-control" id="fin" name="fin" class="form-control" value="${param.fin}" />
+	                    <input type="datetime-local" class="form-control" id="fin" name="fin" class="form-control" value="${article ? article.dateFinEncheres : param.fin}" />
 	                </div>
 	               
 	
@@ -81,20 +82,20 @@
 	                    <div class="control-group ">
 	                        <label class="control-label input-label" for="rueRetrait">Rue :</label>
 	                            <input type="text" class="datetime" type="text" id="rueRetrait" name="rueRetrait"
-	                                value="${param.rueRetrait ? param.rueRetrait : sessionScope.user.rue }" />
+	                                value="${article ? article.lieuRetrait.rue : param.rueRetrait ? param.rueRetrait : sessionScope.user.rue }" />
 	                    </div>
 	                       
 	                    <div class="control-group ">
 	                        <label class="control-label input-label" for="villeRetrait">Ville :</label>
 	                            <input type="text" class="datetime" type="text" id="villeRetrait" name="villeRetrait"
-	                                value="${param.villeRetrait ? param.villeRetrait : sessionScope.user.ville }"/>
+	                                value="${article ? article.lieuRetrait.ville : param.villeRetrait ? param.villeRetrait : sessionScope.user.ville }"/>
 	                    </div>
 	                    
 	                    <div class="control-group">
 	
 	                        <label class="control-label input-label" for="code_postal">Code Postal :</label>
 	                    <input type="text" class="datetime" type="text" id="code_postal" name="code_postal"
-	                        value="${param.code_postal ? param.code_postal : sessionScope.user.codePostal }" />
+	                        value="${article ? article.lieuRetrait.code_postal : param.code_postal ? param.code_postal : sessionScope.user.codePostal }" />
 	                    </div>
 	                    
 	                </fieldset>

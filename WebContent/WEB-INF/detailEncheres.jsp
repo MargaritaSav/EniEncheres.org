@@ -33,7 +33,14 @@
                 <jsp:include page="./header.jsp"/>
             </div>
             <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
-                <jsp:include page="./accueil/navConnected.jsp"/>
+                <c:choose>
+                    <c:when test="${sessionScope.session.equals('on')}">
+                        <jsp:include page="./accueil/navConnected.jsp"/>
+                    </c:when>
+                    <c:otherwise>
+                        <jsp:include page="./accueil/navGuest.jsp"/>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </header>
@@ -96,18 +103,29 @@
                 </div>
                 
                 
+                  <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur}">
                 
-                	<form method="POST" action="${pageContext.request.contextPath}/vente/details?noArticle=${article.noArticle}" class ="row">
+                	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row">
                 		<div class="col-3"><label for="encherir">Prix de l'enchere:</label></div>
                 		<div class="col-3"><input type="number" id="encherir" name="encherir"
-                           min="10" max="100"></div>
+                           min="${article.miseAPrix}" max="10000"></div>
                 		<div class="col-3"><input class="btn btn-primary" type="submit" value="Encherir"></div>
                 		
                 		<c:if test="${!empty error}">
 							<p style="color:red;">${error}</p>
 						</c:if>
+						<c:if test="${!empty success}">
+							<p style="color:green;">${success}</p>
+						</c:if>
                 	</form>	
-                
+                </c:if>
+                <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur == article.vendeur.noUtilisateur && article.etatVente == 'Non débutée'}">
+                	<div class="row">
+                		<div class="col-6"><a type="button" href="${pageContext.request.contextPath}/vente?action=modifier&noArticle=${article.noArticle}" class="btn btn-primary">Modifier</a></div>
+                		<div class="col-6"><a type="button" href="${pageContext.request.contextPath}/vente?action=supprimer&noArticle=${article.noArticle}" class="btn btn-primary">Annuler la vente</a></div>
+                	</div>	
+                		
+                </c:if>
             </div>
         </div>
     </div>

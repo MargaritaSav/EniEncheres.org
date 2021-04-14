@@ -3,6 +3,8 @@ package org.eni.encheres.bll.encheres;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -37,6 +39,8 @@ public class EnchereManagerImpl implements EnchereManager{
 		article.setDateFinEncheres(convertToLocalDateTime(date_fin));
 		article.setMiseAPrix(miseAPrix);
 		article.setVendeur(vendeur);
+		
+		article.setEtatVente();
 		
 		Retrait retrait = new Retrait();
 		retrait.setRue(rue);
@@ -76,13 +80,30 @@ public class EnchereManagerImpl implements EnchereManager{
 			throw new BusinessException("Vous n'avez pas assez de points");
 		}
 		
+		if(article.getVendeur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+			throw new BusinessException("Vous ne pouvez pas encherir vos articles");
+		}
+		
 		Enchere enchere = new Enchere();
 		enchere.setDateEnchere(LocalDateTime.now());
 		enchere.setMontant_enchere(montant_enchere);
 		enchere.setUtilisateur(utilisateur);
 		article.setPrixVente(montant_enchere);
+		article.setAcheteur(utilisateur);
 		dao.updateArticle(article);
-		dao.insertEnchere(enchere, article.getNoArticle(), utilisateur.getNoUtilisateur());
+		
+		boolean hasEncheres = false;
+		for(Enchere e : encheres) {
+			if(e.getUtilisateur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+				e.setMontant_enchere(montant_enchere);
+				dao.updateEnchere(e);
+				hasEncheres = true;
+				break;
+			}
+		}
+		if(!hasEncheres) {
+			dao.insertEnchere(enchere, article.getNoArticle(), utilisateur.getNoUtilisateur());
+		}
 		
 		//debiter l'utilisateur actuel
 		transfererPoints(utilisateur, -montant_enchere);
@@ -91,7 +112,10 @@ public class EnchereManagerImpl implements EnchereManager{
 		try {
 			//recrediter les points a l'enchereur precedent
 			if(encheres.size() > 0) {
-				transfererPoints(encheres.get(encheres.size() - 1).getUtilisateur(), montant_enchere);
+				Collections.sort(encheres);
+				String highestEnchereur = encheres.get(0).getUtilisateur().getPseudo();
+				Utilisateur tmp = dao.selectUtilisateurByLogin(highestEnchereur, highestEnchereur);
+				transfererPoints(tmp, montant_enchere);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,6 +126,7 @@ public class EnchereManagerImpl implements EnchereManager{
 	
 	public void transfererPoints(Utilisateur utilisateur, int montant) throws BusinessException {
 		utilisateur.transfererPoints(montant);
+		
 		dao.updateUtilisateur(utilisateur);
 	}
 
@@ -230,5 +255,27 @@ public class EnchereManagerImpl implements EnchereManager{
 	}
 
 
-
+	public void checkFinEnchere() throws BusinessException {
+		//selectionner tous les encheres termines avec acheteur == null
+		ArrayList<ArticleVendu> encheresFinis = dao.selectEncheresFinis();
+		
+		//trouver l'enchere le plus haut pour chaque article
+		int compteur = 0;
+		
+		for(ArticleVendu article : encheresFinis) {
+			ArrayList<Enchere> encheres = article.getEncheres();
+			Collections.sort(encheres);
+			article.setAcheteur(encheres.get(0).getUtilisateur());
+			article.setRetraitEffectue(true);
+			//mettre a jour les articles -> no_acheteur
+			dao.updateArticle(article);
+			Utilisateur vendeur = dao.selectUtilisateurByLogin(article.getVendeur().getPseudo(), article.getVendeur().getPseudo());
+			transfererPoints(vendeur, encheres.get(0).getMontant_enchere());
+			compteur ++;
+		}
+		
+		if(compteur > 0)
+			System.out.println(compteur + " encheres ont termines et ont ete mis a jour");
+	}
+	
 }

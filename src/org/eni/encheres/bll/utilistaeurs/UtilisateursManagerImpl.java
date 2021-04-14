@@ -1,6 +1,8 @@
 package org.eni.encheres.bll.utilistaeurs;
 
 import org.eni.encheres.BusinessException;
+import org.eni.encheres.bll.encheres.EnchereManager;
+import org.eni.encheres.bll.encheres.EnchereManagerSingl;
 import org.eni.encheres.dal.DAOFactory;
 import org.eni.encheres.dal.EncheresDAO;
 import org.eni.encheres.bo.*;
@@ -35,8 +37,8 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 	 * @throws BusinessException
 	 */
 	public Utilisateur login(String login, String password) throws BusinessException {
-		
-		checkFinEnchere();
+		EnchereManager em = EnchereManagerSingl.getInstance();
+		((EnchereManager) em).checkFinEnchere();
 
 		Utilisateur user = dao.selectUtilisateurByLogin(login, login);
 		
@@ -234,26 +236,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		
 	}
 
-	public void checkFinEnchere() throws BusinessException {
-		//selectionner tous les encheres termines avec acheteur == null
-		ArrayList<ArticleVendu> encheresFinis = dao.selectEncheresFinis();
-		
-		//trouver l'enchere le plus haut pour chaque article
-		int compteur = 0;
-		
-		for(ArticleVendu article : encheresFinis) {
-			ArrayList<Enchere> encheres = article.getEncheres();
-			Collections.sort(encheres);
-			article.setAcheteur(encheres.get(0).getUtilisateur());
-			
-			//mettre a jour les articles -> no_acheteur
-			dao.updateArticle(article);
-			compteur ++;
-		}
-		
-		if(compteur > 0)
-			System.out.println(compteur + " encheres ont termines et ont ete mis a jour");
-	}
+	
 
 
 }

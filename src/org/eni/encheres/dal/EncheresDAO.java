@@ -36,6 +36,8 @@ public interface EncheresDAO {
 	
 	public Enchere insertEnchere(Enchere enchere, int noArticle, int noUtilisateur) throws BusinessException;
 	
+	public Enchere updateEnchere(Enchere enchere) throws BusinessException;
+	
 	public ArrayList<Enchere> selectEncheresByNoArticle (int noArticle) throws BusinessException;
 	
 	public ArrayList<Enchere> selectEncheresByUser (Utilisateur utilisateur) throws BusinessException;

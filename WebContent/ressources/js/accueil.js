@@ -202,7 +202,7 @@ function addArticleCard(article) {
                                         <span class="badge badge-info">${article.categorieArticle.libelle}</span>
                                     </div>
                                     <div class="col-md-8">
-                                        <a href="${projectPath}/vente/details?noArticle=${article.noArticle}"><h5 class="card-title">${article.nomArticle}</h5></a>
+                                        <a href="${projectPath}/vente?action=details&noArticle=${article.noArticle}"><h5 class="card-title">${article.nomArticle}</h5></a>
                                         <p class="card-text">${article.description}</p>
                                         <p>Prix:
                                         

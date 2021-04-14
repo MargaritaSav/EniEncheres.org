@@ -98,7 +98,8 @@ public class ServletNouvelleVente extends HttpServlet {
 		    for (Part part : request.getParts()) {
 		      part.write(savePath + File.separator + fileName);
 		    }*/
-			response.sendRedirect(request.getContextPath() + "/accueil");
+			request.setAttribute("success", "Rajout d'article réussi");
+			response.sendRedirect(request.getContextPath() + "/vente/detail?noArticle="+article.getNoArticle());
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());

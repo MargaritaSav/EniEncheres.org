@@ -16,4 +16,5 @@ public interface EnchereManager{
 	public Enchere faireEnchere (Utilisateur utilisateur, ArticleVendu article, int montant_enchere) throws BusinessException;
 	public ArrayList<Categorie> getCategories() throws BusinessException;
 	public HashMap<String, ArrayList<ArticleVendu>> getArticlesParUtilisateur(Utilisateur utilisateur);
+	public void checkFinEnchere() throws BusinessException;
 }

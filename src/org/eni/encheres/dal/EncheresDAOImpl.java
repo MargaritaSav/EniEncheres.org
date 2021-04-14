@@ -21,7 +21,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
 
 
-	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 										 + "c.libelle,"
 										 + "u.no_utilisateur, u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
@@ -31,7 +31,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 										 + "WHERE a.no_article = ?";	
 
-	private final String SELECT_ARTICLES_ACHETES_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLES_ACHETES_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
@@ -39,7 +39,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "WHERE a.no_acheteur = ?";
-	private final String SELECT_ARTICLES_VENDUS_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ARTICLES_VENDUS_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
@@ -47,7 +47,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "WHERE a.no_utilisateur = ?";
-	private final String SELECT_ENCHERES_FINIS = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
+	private final String SELECT_ENCHERES_FINIS = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												+ "c.libelle,"
 												 + "u.pseudo, "
 												 + "r.rue, r.code_postal, r.ville "
@@ -55,14 +55,13 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
-												 + "WHERE date_fin_encheres < ? AND a.no_acheteur IS NULL";
-	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?, no_acheteur = ?  WHERE no_article = ?";
+												 + "WHERE date_fin_encheres < ? AND retraitEffectue = 0";
+	private final String INSERT_ARTICLE = "INSERT INTO articles_vendus (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, etat,retraitEffectue) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String UPDATE_ARTICLE = "UPDATE articles_vendus SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, prix_vente = ?, no_utilisateur = ?, no_categorie = ?, no_acheteur = ?, etat = ?, retraitEffectue = ? WHERE no_article = ?";
 	private final String DELETE_ARTICLE = "DELETE FROM articles_vendus WHERE no_article = ?";
 
 
-	private final String SELECT_ARTICLES = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
-
+	private final String SELECT_ARTICLES = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 										 + "c.libelle, "
 										 + "u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
@@ -78,7 +77,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 													+ "FROM encheres e "
 													+ "INNER JOIN utilisateurs u ON u.no_utilisateur = e.no_utilisateur "
 													+ "WHERE no_article = ?";
-	private final String SELECT_ENCHERES_BY_USER = "SELECT e.no_utilisateur, e.no_article, e.date_enchere, e.montant_enchere, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_categorie, a.no_acheteur, "
+	private final String SELECT_ENCHERES_BY_USER = "SELECT e.no_utilisateur, e.no_article, e.date_enchere, e.montant_enchere, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_categorie, a.no_acheteur, a.etat, a.retraitEffectue, "
 												 + "c.libelle, "
 												 + "u.pseudo, "
 												 + "r.rue, r.code_postal, r.ville "
@@ -90,7 +89,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "WHERE e.no_utilisateur = ?";
 	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
-	private final String UPDATE_ENCHERES = "UPDATE encheres SET montant_enchere = ?, date_enchere = ? WHERE no_utilisateur = ? AND no_article = ?";
+	private final String UPDATE_ENCHERE = "UPDATE encheres SET montant_enchere = ?, date_enchere = ? WHERE no_utilisateur = ? AND no_article = ?";
 
 
 	
@@ -210,9 +209,10 @@ public class EncheresDAOImpl implements EncheresDAO{
 			PreparedStatement stmt = cnx.prepareStatement(SELECT_ARTICLE_BY_ID);
 			stmt.setInt(1, noArticle);
 			ResultSet rs = stmt.executeQuery();
-			ArticleVendu article = new ArticleVendu();
+			ArticleVendu article = null;
 			while(rs.next())
 			{
+				article = new ArticleVendu();
 				article = mapArticle(rs, null);
 				
 			}
@@ -235,6 +235,8 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setInt(6, 0);
 			stmt.setInt(7, article.getVendeur().getNoUtilisateur());
 			stmt.setInt(8, article.getCategorieArticle().getNoCategorie());
+			stmt.setString(9, article.getEtatVente());
+			stmt.setBoolean(10, article.isRetraitEffectue());
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
 			if(rs.next())
@@ -264,7 +266,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setInt(7, article.getVendeur().getNoUtilisateur());
 			stmt.setInt(8, article.getCategorieArticle().getNoCategorie());
 			stmt.setInt(9, article.getAcheteur() == null ? null : article.getAcheteur().getNoUtilisateur());
-			stmt.setInt(10, article.getNoArticle());
+			stmt.setString(10, article.getEtatVente());
+			stmt.setBoolean(11, article.isRetraitEffectue());
+			stmt.setInt(12, article.getNoArticle());
 			stmt.executeUpdate();
 			
 			updateRetrait(article.getLieuRetrait(), article.getNoArticle());
@@ -376,13 +380,11 @@ public class EncheresDAOImpl implements EncheresDAO{
 	
 		if (utilisateur != null && rs.getInt("no_acheteur") == utilisateur.getNoUtilisateur()) {
 			utilisateur.setPseudo(rs.getString("pseudo"));
-			article.setEtatVente("Terminé");
 			article.setAcheteur(utilisateur);
-		} else if(LocalDateTime.now().compareTo(article.getDateDebutEncheres()) < 0) {
-			article.setEtatVente("Non débutée");
-		} else {
-			article.setEtatVente("En cours");
 		}
+		
+		article.setEtatVente();
+		article.setRetraitEffectue(rs.getBoolean("retraitEffectue"));
 		
 		Retrait retrait = new Retrait();
 		retrait.setCode_postal(rs.getString("code_postal"));
@@ -551,6 +553,23 @@ public class EncheresDAOImpl implements EncheresDAO{
 		}
 		System.out.println(articles.size());
 		return articles;
+	}
+
+	@Override
+	public Enchere updateEnchere(Enchere enchere) throws BusinessException {
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(UPDATE_ENCHERE);
+			stmt.setInt(1, enchere.getMontant_enchere());
+			stmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+			stmt.setInt(3, enchere.getUtilisateur().getNoUtilisateur());
+			stmt.setInt(4, enchere.getArticle().getNoArticle());
+			stmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec mis a jour enchere");
+		}	
+		System.out.println("Mise a jour d'un enchere reussie");
+		return enchere;
 	}
 
 }

@@ -13,6 +13,7 @@ public class ArticleVendu {
 	private int miseAPrix;
 	private int prixVente;
 	private String etatVente;
+	private boolean retraitEffectue = false;
 	private Retrait lieuRetrait;
 	private Categorie categorieArticle;
 	private Utilisateur vendeur;
@@ -21,6 +22,18 @@ public class ArticleVendu {
 	
 	
 	
+	public boolean isRetraitEffectue() {
+		return retraitEffectue;
+	}
+
+	public void setRetraitEffectue(boolean retraitEffectue) {
+		this.retraitEffectue = retraitEffectue;
+	}
+
+	public void setEtatVente(String etatVente) {
+		this.etatVente = etatVente;
+	}
+
 	public Utilisateur getAcheteur() {
 		return acheteur;
 	}
@@ -88,11 +101,19 @@ public class ArticleVendu {
 		this.prixVente = prixVente;
 	}
 	public String getEtatVente() {
-		return etatVente;
+		this.setEtatVente();
+		return this.etatVente;
 	}
-	public void setEtatVente(String etatVente) {
-		this.etatVente = etatVente;
+	public void setEtatVente() {
+		if(LocalDateTime.now().compareTo(this.dateFinEncheres) > 0) {
+			this.etatVente = "Terminé";
+		} else if(LocalDateTime.now().compareTo(this.dateDebutEncheres) < 0) {
+			this.etatVente = "Non débutée";
+		} else {
+			this.etatVente = "En cours";
+		}
 	}
+	
 	public Retrait getLieuRetrait() {
 		return lieuRetrait;
 	}
