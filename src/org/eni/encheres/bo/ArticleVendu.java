@@ -20,8 +20,23 @@ public class ArticleVendu {
 	private Utilisateur acheteur = null;
 	private ArrayList<Enchere> encheres = new ArrayList<>();
 	
+	public ArticleVendu() {}
 	
-	
+	public ArticleVendu(String nomArticle, String description, LocalDateTime dateDebutEncheres,
+			LocalDateTime dateFinEncheres, int miseAPrix, Retrait lieuRetrait,
+			Categorie categorieArticle, Utilisateur vendeur) {
+		super();
+		this.nomArticle = nomArticle;
+		this.description = description;
+		this.dateDebutEncheres = dateDebutEncheres;
+		this.dateFinEncheres = dateFinEncheres;
+		this.miseAPrix = miseAPrix;
+		this.lieuRetrait = lieuRetrait;
+		this.categorieArticle = categorieArticle;
+		this.vendeur = vendeur;
+		setEtatVente();
+	}
+
 	public boolean isRetraitEffectue() {
 		return retraitEffectue;
 	}

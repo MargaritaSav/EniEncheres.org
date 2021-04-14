@@ -29,7 +29,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article "
-										 + "WHERE a.no_article = ?";	
+										 + "WHERE a.no_article = ? ";	
 
 	private final String SELECT_ARTICLES_ACHETES_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												 + "c.libelle,"
@@ -38,7 +38,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
-												 + "WHERE a.no_acheteur = ?";
+												 + "WHERE a.no_acheteur = ? AND etat = 'Terminé' ";
 	private final String SELECT_ARTICLES_VENDUS_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
@@ -255,6 +255,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 
 	@Override
 	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException {
+	
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(UPDATE_ARTICLE);
 			stmt.setString(1,  article.getNomArticle());
@@ -265,7 +266,12 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setInt(6, article.getPrixVente());
 			stmt.setInt(7, article.getVendeur().getNoUtilisateur());
 			stmt.setInt(8, article.getCategorieArticle().getNoCategorie());
-			stmt.setInt(9, article.getAcheteur() == null ? null : article.getAcheteur().getNoUtilisateur());
+			if(article.getAcheteur() == null) {
+				stmt.setNull(9, java.sql.Types.INTEGER);
+			}else {
+				stmt.setInt(9, article.getAcheteur().getNoUtilisateur());
+			}
+			
 			stmt.setString(10, article.getEtatVente());
 			stmt.setBoolean(11, article.isRetraitEffectue());
 			stmt.setInt(12, article.getNoArticle());

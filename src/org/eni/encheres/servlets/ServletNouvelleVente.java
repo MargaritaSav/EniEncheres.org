@@ -81,8 +81,17 @@ public class ServletNouvelleVente extends HttpServlet {
 			Categorie categorie = new Categorie();
 			categorie.setNoCategorie(cat);
 			Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("user");
-			ArticleVendu article = em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
+			ArticleVendu article = new ArticleVendu();
+			
+			
+			String action = request.getParameter("action");
+			if(action.equals("modifier")) {
+				int noArticle = Integer.valueOf(request.getParameter("noArticle"));
+				article = em.updateArticle(noArticle, utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
 
+			} else if(action.equals("creer")) {
+				article = em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
+			}
 			/*
 			Part filePart = request.getPart("image");
 		    String fileName = filePart.getSubmittedFileName();
@@ -99,7 +108,7 @@ public class ServletNouvelleVente extends HttpServlet {
 		      part.write(savePath + File.separator + fileName);
 		    }*/
 			request.setAttribute("success", "Rajout d'article réussi");
-			response.sendRedirect(request.getContextPath() + "/vente/detail?noArticle="+article.getNoArticle());
+			response.sendRedirect(request.getContextPath() + "/vente?action=detail&noArticle="+article.getNoArticle());
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());

@@ -26,27 +26,18 @@ public class EnchereManagerImpl implements EnchereManager{
 		if(vendeur == null) {
 			throw new BusinessException("Utilisateur est null");
 		}
-		ArticleVendu article = new ArticleVendu();
+		
 		String errors = checkEntry(nom, description, categorie, date_debut, date_fin, miseAPrix, rue, code_postal, ville);
 		
 		if(errors != null) {
 			throw new BusinessException(errors);
 		}
-		article.setNomArticle(nom);
-		article.setDescription(description);
-		article.setCategorieArticle(categorie);
-		article.setDateDebutEncheres(convertToLocalDateTime(date_debut));
-		article.setDateFinEncheres(convertToLocalDateTime(date_fin));
-		article.setMiseAPrix(miseAPrix);
-		article.setVendeur(vendeur);
 		
-		article.setEtatVente();
+		Retrait retrait = new Retrait(rue, code_postal, ville);
 		
-		Retrait retrait = new Retrait();
-		retrait.setRue(rue);
-		retrait.setCode_postal(code_postal);
-		retrait.setVille(ville);
-		article.setLieuRetrait(retrait);
+		ArticleVendu article = new ArticleVendu(nom, description, convertToLocalDateTime(date_debut),
+				convertToLocalDateTime(date_fin), miseAPrix, retrait, categorie, vendeur);
+		
 		
 		dao.insertArticle(article);
 		
@@ -56,12 +47,29 @@ public class EnchereManagerImpl implements EnchereManager{
 	public LocalDateTime convertToLocalDateTime(String datetime) {
 		return LocalDateTime.parse(datetime, DateTimeFormatter.ISO_DATE_TIME);
 	}
-
+	
+	
 	@Override
-	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException {
+	public ArticleVendu updateArticle(int noArticle, Utilisateur vendeur, String nom, String description,
+			Categorie categorie, String date_debut, String date_fin, int miseAPrix, String rue, String code_postal,
+			String ville) throws BusinessException {
+		
+		String errors = checkEntry(nom, description, categorie, date_debut, date_fin, miseAPrix, rue, code_postal, ville);
+		
+		if(errors != null) {
+			throw new BusinessException(errors);
+		}
+		Retrait retrait = new Retrait(rue, code_postal, ville);
+		
+		ArticleVendu article = new ArticleVendu(nom, description, convertToLocalDateTime(date_debut),
+				convertToLocalDateTime(date_fin), miseAPrix, retrait, categorie, vendeur);
+		
+		article.setNoArticle(noArticle);
 		dao.updateArticle(article);
 		return article;
 	}
+
+
 
 	@Override
 	public void deleteArticle(int noArticle) throws BusinessException {
@@ -70,6 +78,10 @@ public class EnchereManagerImpl implements EnchereManager{
 
 	@Override
 	public Enchere faireEnchere(Utilisateur utilisateur, ArticleVendu article, int montant_enchere) throws BusinessException {
+		
+		if(!article.getEtatVente().equals("En cours")) {
+			throw new BusinessException("Vous ne pouvez pas encherir sur cet article");
+		}
 		ArrayList<Enchere> encheres = article.getEncheres();
 		//verif si l'enchere actuel est superieur au precedent ou mise a prix 
 		if((encheres.size() > 0 && montant_enchere <= encheres.get(encheres.size()-1).getMontant_enchere()) 
@@ -277,5 +289,7 @@ public class EnchereManagerImpl implements EnchereManager{
 		if(compteur > 0)
 			System.out.println(compteur + " encheres ont termines et ont ete mis a jour");
 	}
+
+
 	
 }

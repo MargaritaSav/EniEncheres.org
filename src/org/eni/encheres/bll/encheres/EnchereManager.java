@@ -9,7 +9,7 @@ import org.eni.encheres.bo.*;
 public interface EnchereManager{
 	
 	public ArticleVendu addArticle(Utilisateur vendeur, String nom, String description, Categorie categorie, String date_debut, String date_fin, int miseAPrix, String rue, String code_postal, String ville) throws BusinessException;
-	public ArticleVendu updateArticle(ArticleVendu article) throws BusinessException;
+	public ArticleVendu updateArticle(int noArticle, Utilisateur vendeur, String nom, String description, Categorie categorie, String date_debut, String date_fin, int miseAPrix, String rue, String code_postal, String ville) throws BusinessException;
 	public void deleteArticle(int noArticle) throws BusinessException;
 	public ArrayList<ArticleVendu> getArticles() throws BusinessException;
 	public ArticleVendu getArticleById(int id) throws BusinessException;
@@ -17,4 +17,5 @@ public interface EnchereManager{
 	public ArrayList<Categorie> getCategories() throws BusinessException;
 	public HashMap<String, ArrayList<ArticleVendu>> getArticlesParUtilisateur(Utilisateur utilisateur);
 	public void checkFinEnchere() throws BusinessException;
+
 }

@@ -1,6 +1,7 @@
 package org.eni.encheres.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import org.eni.encheres.bll.encheres.EnchereManagerSingl;
 import org.eni.encheres.bll.utilistaeurs.UtilisateurManager;
 import org.eni.encheres.bll.utilistaeurs.UtilisateurManagerSingl;
 import org.eni.encheres.bo.ArticleVendu;
+import org.eni.encheres.bo.Categorie;
 import org.eni.encheres.bo.Utilisateur;
 
 /**
@@ -52,8 +54,16 @@ public class ServletDetailVente extends HttpServlet {
 			
 			switch(request.getParameter("action")) {
 			case "modifier":
-				RequestDispatcher rd2 = request.getRequestDispatcher("/WEB-INF/nouvelleVente.jsp");
-				rd2.forward(request, response);
+				try {
+					ArrayList<Categorie> cat = em.getCategories();
+					request.setAttribute("categories", cat);
+					RequestDispatcher rd2 = request.getRequestDispatcher("/WEB-INF/nouvelleVente.jsp");
+					rd2.forward(request, response);
+				} catch (BusinessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				break;
 			case "supprimer":
 				try {

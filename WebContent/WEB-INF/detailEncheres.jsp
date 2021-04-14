@@ -44,7 +44,13 @@
             </div>
         </div>
     </header>
+    <c:if test="${article.etatVente == 'Terminé' && sessionScope.user.pseudo == article.acheteur.pseudo}">
+    	<h3>Felicitations ! Vous avez remporté cette vente !</h3>
+    </c:if>
     
+    <c:if test="${article.etatVente == 'Terminé' && sessionScope.user.pseudo == article.vendeur.pseudo}">
+    	<h3><a href="${pageContext.request.contextPath}/profil?pseudo=${article.acheteur.pseudo }">${article.acheteur.pseudo }</a> a remporté cette vente !</h3>
+    </c:if>
     <div class="row mt-5">
         <div class="col-8 m-auto" style="max-width: 100%">
             <div class="col-12 ">
@@ -86,7 +92,7 @@
                     <label for="finEnchere" class="font-weight-bold">Fin de l'enchère </label>
 
                     <p>
-                        <fmt:parseDate value="${article.dateFinEncheres}" pattern="yyyy-MM-dd" var="finEncheres"
+                        <fmt:parseDate value="${article.dateFinEncheres}" pattern="yyyy-MM-dd'T'HH:mm" var="finEncheres"
                                        type="date"/>
                         <fmt:formatDate pattern="dd/MMM/yyyy HH:mm" value="${finEncheres}"/>
                     </p>
@@ -103,7 +109,7 @@
                 </div>
                 
                 
-                  <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur}">
+                  <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
                 
                 	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row">
                 		<div class="col-3"><label for="encherir">Prix de l'enchere:</label></div>
