@@ -80,6 +80,8 @@ public class EnchereManagerImpl implements EnchereManager{
 		enchere.setDateEnchere(LocalDateTime.now());
 		enchere.setMontant_enchere(montant_enchere);
 		enchere.setUtilisateur(utilisateur);
+		article.setPrixVente(montant_enchere);
+		dao.updateArticle(article);
 		dao.insertEnchere(enchere, article.getNoArticle(), utilisateur.getNoUtilisateur());
 		
 		//debiter l'utilisateur actuel

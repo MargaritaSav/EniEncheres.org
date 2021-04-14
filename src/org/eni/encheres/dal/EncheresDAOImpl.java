@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eni.encheres.BusinessException;
 import org.eni.encheres.bo.*;
@@ -22,12 +23,12 @@ public class EncheresDAOImpl implements EncheresDAO{
 
 	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
 										 + "c.libelle,"
-										 + "u.pseudo, "
+										 + "u.no_utilisateur, u.pseudo, "
 										 + "r.rue, r.code_postal, r.ville "
 										 + "FROM articles_vendus a "
 										 + "INNER JOIN categories c ON c.no_categorie = a.no_categorie "
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
-										 + "INNER JOIN retraits r ON r.no_article = a.no_article"
+										 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 										 + "WHERE a.no_article = ?";	
 
 	private final String SELECT_ARTICLES_ACHETES_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, "
@@ -89,6 +90,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "WHERE e.no_utilisateur = ?";
 	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
+	private final String UPDATE_ENCHERES = "UPDATE encheres SET montant_enchere = ?, date_enchere = ? WHERE no_utilisateur = ? AND no_article = ?";
 
 
 	
@@ -211,17 +213,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			ArticleVendu article = new ArticleVendu();
 			while(rs.next())
 			{
-				article.setNoArticle(noArticle);
-				article.setNomArticle(rs.getString("nom_article"));
-				article.setDescription(rs.getString("description"));
-				article.setDateDebutEncheres(rs.getTimestamp("date_debut_encheres").toLocalDateTime());
-				article.setDateFinEncheres(rs.getTimestamp("date_fin_encheres").toLocalDateTime());
-				article.setMiseAPrix(rs.getInt("prix_initial"));
-				article.setPrixVente(rs.getInt("prix_vente"));
-				Categorie categorie = new Categorie();
-				categorie.setNoCategorie(rs.getInt("no_categorie"));
-				categorie.setLibelle(rs.getString("libelle"));
-				article.setCategorieArticle(categorie);
+				article = mapArticle(rs, null);
 				
 			}
 			return article;
@@ -268,7 +260,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setTimestamp(3,  Timestamp.valueOf(article.getDateDebutEncheres()));
 			stmt.setTimestamp(4,  Timestamp.valueOf(article.getDateFinEncheres()));
 			stmt.setInt(5,  article.getMiseAPrix());
-			stmt.setInt(6, 0);
+			stmt.setInt(6, article.getPrixVente());
 			stmt.setInt(7, article.getVendeur().getNoUtilisateur());
 			stmt.setInt(8, article.getCategorieArticle().getNoCategorie());
 			stmt.setInt(9, article.getAcheteur() == null ? null : article.getAcheteur().getNoUtilisateur());
@@ -399,7 +391,14 @@ public class EncheresDAOImpl implements EncheresDAO{
 		article.setLieuRetrait(retrait);
 		
 		ArrayList<Enchere> encheres = selectEncheresByNoArticle(article.getNoArticle());
-		article.setEncheres(encheres);
+		
+		if(encheres.size() > 0) {
+			Collections.sort(encheres);
+			article.setPrixVente(encheres.get(0).getMontant_enchere());
+			article.setAcheteur(encheres.get(0).getUtilisateur());
+			article.setEncheres(encheres);
+		}
+		
 		return article;
 	}
 
@@ -459,8 +458,8 @@ public class EncheresDAOImpl implements EncheresDAO{
 	public Enchere insertEnchere(Enchere enchere, int noArticle, int noUtilisateur) throws BusinessException {
 		try(Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement stmt = cnx.prepareStatement(INSERT_ENCHERE);
-			stmt.setInt(1,  noUtilisateur);
-			stmt.setInt(2,  noArticle);
+			stmt.setInt(1, noUtilisateur);
+			stmt.setInt(2, noArticle);
 			stmt.setTimestamp(3, Timestamp.valueOf(enchere.getDateEnchere()));
 			stmt.setInt(4, enchere.getMontant_enchere());
 			stmt.executeUpdate();
