@@ -47,5 +47,9 @@ public interface EncheresDAO {
 	public ArrayList<ArticleVendu> selectEncheresFinis() throws BusinessException;
 
 	ArrayList<ArticleVendu> selectArticlesVendusByUser(Utilisateur utilisateur) throws BusinessException;
+	
+	ArrayList<Utilisateur> selectAllUtilisateurs() throws BusinessException;
+	
+	void desactiverUtilisateur(int noUtilisateur);
 
 }
