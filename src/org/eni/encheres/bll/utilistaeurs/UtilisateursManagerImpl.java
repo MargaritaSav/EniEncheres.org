@@ -236,6 +236,34 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		
 	}
 
+	public void desactiverUtilisateur(String pseudo) throws BusinessException {
+
+		Utilisateur u = dao.selectUtilisateurByLogin(pseudo, pseudo);
+
+		ArrayList<ArticleVendu> articlesVendu = dao.selectArticlesAchetesByUser(u);
+		 ArrayList<ArticleVendu> articlesAchetes = dao.selectArticlesAchetesByUser(u);	     
+
+		for (ArticleVendu av : articlesVendu) {
+			dao.deleteArticle(av.getNoArticle());
+		}
+		for (ArticleVendu aa : articlesAchetes) {
+			dao.deleteArticle(aa.getNoArticle());
+		}
+		
+			dao.deleteEncheresByUser(u);
+			
+			dao.desactiverUtilisateur(u.getNoUtilisateur());
+
+	}
+
+
+	@Override
+	public ArrayList<Utilisateur> selectAllUtilisateurs() throws BusinessException {
+return dao.selectAllUtilisateurs();
+	}
+
+
+
 	
 
 
