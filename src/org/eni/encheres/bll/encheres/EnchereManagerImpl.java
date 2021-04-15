@@ -25,6 +25,8 @@ public class EnchereManagerImpl implements EnchereManager{
 			throws BusinessException {
 		if(vendeur == null) {
 			throw new BusinessException("Utilisateur est null");
+		} else if(!vendeur.isActive()) {
+			throw new BusinessException("Vous n'avez pas le droit de créer une vente parce que l'administrateur a désactivé votre compte");
 		}
 		
 		String errors = checkEntry(nom, description, categorie, date_debut, date_fin, miseAPrix, rue, code_postal, ville);
@@ -81,6 +83,8 @@ public class EnchereManagerImpl implements EnchereManager{
 		
 		if(!article.getEtatVente().equals("En cours")) {
 			throw new BusinessException("Vous ne pouvez pas encherir sur cet article");
+		}else if(!utilisateur.isActive()) {
+			throw new BusinessException("Vous n'avez pas le droit de participer aux encheres parce que l'administrateur a désactivé votre compte");
 		}
 		ArrayList<Enchere> encheres = article.getEncheres();
 		//verif si l'enchere actuel est superieur au precedent ou mise a prix 
@@ -258,8 +262,6 @@ public class EnchereManagerImpl implements EnchereManager{
 			
 		}
 		
-		
-		
 		result.put("AtticlesAchetes", articlesAchetes);
 		result.put("AtticlesVendus", articlesVendus);
 		result.put("articlesEncheresEnCours", articlesEncheresEnCours);
@@ -289,7 +291,5 @@ public class EnchereManagerImpl implements EnchereManager{
 		if(compteur > 0)
 			System.out.println(compteur + " encheres ont termines et ont ete mis a jour");
 	}
-
-
 	
 }

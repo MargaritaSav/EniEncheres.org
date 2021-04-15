@@ -15,12 +15,12 @@ import org.eni.encheres.bo.*;
 
 public class EncheresDAOImpl implements EncheresDAO{
 	
-	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, salt, credit, administrateur FROM utilisateurs WHERE pseudo = ? OR email = ?";
+	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, salt, credit, administrateur, is_active FROM utilisateurs WHERE pseudo = ? OR email = ?";
 	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ?, credit = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
-
-
+	private final String SELECT_ALL_UTILISATEURS = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, is_active administrateur FROM utilisateurs";
+	private final String UPDATE_UTILISATEUR_IS_ACTIVE = "UPDATE utilisateurs SET is_active = ? WHERE no_utilisateur = ?";
 	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 										 + "c.libelle,"
 										 + "u.no_utilisateur, u.pseudo, "
@@ -90,7 +90,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
 	private final String UPDATE_ENCHERE = "UPDATE encheres SET montant_enchere = ?, date_enchere = ? WHERE no_utilisateur = ? AND no_article = ?";
-
+	private final String DELETE_ENCHERESBYUSER = "DELETE FROM encheres WHERE no_utilisateur = ?";
 
 	
 	@Override
@@ -117,7 +117,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 				utilisateur.setCredit(rs.getInt("credit"));
 				utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
 				utilisateur.setSalt(rs.getBytes("salt"));
-	
+				utilisateur.setActive(rs.getBoolean("is_active"));
 				return utilisateur;
 			}
 		} catch(Exception e) {
@@ -577,6 +577,63 @@ public class EncheresDAOImpl implements EncheresDAO{
 		System.out.println("Mise a jour d'un enchere reussie");
 		return enchere;
 	}
+
+	@Override
+	public ArrayList<Utilisateur> selectAllUtilisateurs() throws BusinessException {
+		ArrayList<Utilisateur> utilisateurs = new ArrayList<>();
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_ALL_UTILISATEURS);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				Utilisateur utilisateur = new Utilisateur();
+				utilisateur.setPseudo(rs.getString("pseudo"));
+				utilisateur.setNoUtilisateur(rs.getInt("no_utilisateur"));
+				utilisateur.setNom(rs.getString("nom"));
+				utilisateur.setPrenom(rs.getString("prenom"));
+				utilisateur.setEmail(rs.getString("email"));
+				utilisateur.setTelephone(rs.getString("telephone"));
+				utilisateur.setRue(rs.getString("rue"));
+				utilisateur.setCodePostal(rs.getString("code_postal"));
+				utilisateur.setVille(rs.getString("ville"));
+				utilisateur.setCredit(rs.getInt("credit"));
+				utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
+				utilisateur.setActive(rs.getBoolean("is_active"));
+				utilisateurs.add(utilisateur);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec selection des utilisateurs");
+		}
+		
+		return utilisateurs;
+	}
+
+	@Override
+	public void desactiverUtilisateur(int noUtilisateur) throws BusinessException {
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(UPDATE_UTILISATEUR_IS_ACTIVE);
+			stmt.setBoolean(1, false);
+			stmt.setInt(2,  noUtilisateur);
+			stmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec mis a jour is_active utilisateur");
+		}	
+	}
+	
+	@Override
+	public void deleteEncheresByUser(Utilisateur utilisateur) throws BusinessException {
+        try (Connection cnx = ConnectionProvider.getConnection()) {
+            PreparedStatement stmt = cnx.prepareStatement(DELETE_ENCHERESBYUSER);
+            stmt.setInt(1, utilisateur.getNoUtilisateur());
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("Echec suppression d'enchere par utilisateur");
+        }
+        System.out.println("Suppression d'encheres reussies");
+
+    }
 
 }
 
