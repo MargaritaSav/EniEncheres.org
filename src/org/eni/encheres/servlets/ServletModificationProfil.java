@@ -41,9 +41,9 @@ public class ServletModificationProfil extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		Utilisateur user = (Utilisateur) request.getSession().getAttribute("user");
 		Utilisateur utilisateur = new Utilisateur();
-		utilisateur.setNoUtilisateur(((Utilisateur) request.getSession().getAttribute("user")).getNoUtilisateur());
+		utilisateur.setNoUtilisateur(user.getNoUtilisateur());
 		utilisateur.setMotDePasse(((Utilisateur) request.getSession().getAttribute("user")).getMotDePasse());
 		String pseudo = request.getParameter("pseudo");
 		String mdpNow = request.getParameter("password_now");
@@ -84,6 +84,7 @@ public class ServletModificationProfil extends HttpServlet {
 			utilisateur.setRue(rue);
 			utilisateur.setTelephone(tel);
 			utilisateur.setVille(ville);
+			utilisateur.setCredit(user.getCredit());
 			HttpSession session = request.getSession();
 			session.setAttribute("user", utilisateur);
 			um.updateUtilisateur(utilisateur, mdpNew);

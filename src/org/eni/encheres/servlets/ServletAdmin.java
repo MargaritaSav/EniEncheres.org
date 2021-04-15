@@ -27,20 +27,16 @@ public class ServletAdmin extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(((Utilisateur) request.getSession().getAttribute("user")).isAdministrateur()) {
-			try {
-				ArrayList<Utilisateur> users = um.selectAllUtilisateurs();
-				request.setAttribute("users", users);
+		try {
+			ArrayList<Utilisateur> users = um.selectAllUtilisateurs();
+			request.setAttribute("users", users);
 
-			} catch (BusinessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/admin.jsp");
-			rd.forward(request, response);
-		} else {
-			response.sendRedirect(request.getContextPath() + "/accueil");
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/admin.jsp");
+		rd.forward(request, response);
 	}
 
 	/**

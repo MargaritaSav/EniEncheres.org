@@ -15,15 +15,17 @@
 
 <body>
 
-<div class="container min-vh-50">
+<div class="container min-vh-100">
     <jsp:include page="./header.jsp"/>
-    
-    <table class="table">
+    <h2 class="text-center mb-3" >Gestion des utilisateurs </h2>
+    <table class="table table-hover table-responsive">
 	  <thead>
 	    <tr>
 	      <th scope="col">#</th>
 	      <th scope="col">Pseudo</th>
 	      <th scope="col">E-mail</th>
+	      <th scope="col">Actif</th>
+	      <th scope="col">Admin</th>
 	      <th scope="col">Actions</th>
 	    </tr>
 	  </thead>
@@ -33,12 +35,14 @@
 		      <th scope="row">${user.noUtilisateur}</th>
 		      <td scope="col">${user.pseudo}</td>
 		      <td scope="col">${user.email}</td>
+		      <td scope="col">${user.active ? "Oui" : "Non"}</td>
+		      <td scope="col">${user.administrateur ? "Oui" : "Non"}</td>
 		      <td scope="col">
 		      	<div class="row">	
-			      	<form method="POST" action="${pageContext.request.contextPath}/admin?action=desactiver&pseudo=${user.pseudo}" class ="row">
-	                		<input class="btn btn-sm btn-secondary" type="submit" value="Désactiver">		
+			      	<form method="POST" action="${pageContext.request.contextPath}/admin?action=desactiver&pseudo=${user.pseudo}" class ="col-6">
+	                		<input class="btn btn-sm btn-secondary" type="submit" value="Désactiver" ${user.active ? "" : "disabled"}>		
 	                </form>	
-	                <form method="POST" action="${pageContext.request.contextPath}/admin?action=supprimer&noUser=${user.noUtilisateur}" class ="row">
+	                <form method="POST" action="${pageContext.request.contextPath}/admin?action=supprimer&noUser=${user.noUtilisateur}" class ="col-6">
 	                		<input class="btn btn-sm btn-danger" type="submit" value="Supprimer">		
 	                </form>
                 </div>
@@ -47,18 +51,20 @@
 		</c:forEach>
 	  </tbody>
 	</table>
-	
-</div>
-<c:if test="${!empty error || !empty success}">
-		<div class="toast align-items-center text-white ${!empty error ? 'bg-danger' : 'bg-success'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-		  <div class="d-flex">
-		    <div class="toast-body">
-				${!empty error ? error : success}
-		    </div>
-		    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-		  </div>
+	<c:if test="${!empty error || !empty success}">
+	  	<div class="position-fixed bottom-0 end-0 p-3">
+			<div class="toast align-items-center text-white ${!empty error ? 'bg-danger' : 'bg-success'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+			  <div class="d-flex">
+			    <div class="toast-body">
+					${!empty error ? error : success}
+			    </div>
+			    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+			  </div>
+			</div>
 		</div>
 	</c:if>
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
@@ -69,7 +75,7 @@
 $(document).ready(function(){
 	var toastElList = [].slice.call(document.querySelectorAll('.toast'))
 	var toastList = toastElList.map(function (toastEl) {
-	  return new bootstrap.Toast(toastEl, option)
+	  return new bootstrap.Toast(toastEl);
 	})
 	toastList.forEach(toast => toast.show());
 })

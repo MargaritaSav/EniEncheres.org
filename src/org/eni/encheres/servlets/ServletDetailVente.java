@@ -93,8 +93,12 @@ public class ServletDetailVente extends HttpServlet {
 			if(request.getParameter("encherir").length() ==0) throw new BusinessException("Veuiller rentrer une somme d'enchere");
 			int prix = Integer.valueOf(request.getParameter("encherir"));
 			HttpSession session = request.getSession();
+			Utilisateur user = (Utilisateur)(session.getAttribute("user"));
 			ArticleVendu article = em.getArticleById(Integer.valueOf(request.getParameter("noArticle")));
-			em.faireEnchere((Utilisateur)(session.getAttribute("user")), article, prix);
+			em.faireEnchere(user, article, prix);
+			//update session user
+			user.transfererPoints(-prix);
+			session.setAttribute("user", user);
 		} catch (BusinessException e) {
 			request.setAttribute("error", e.getMessage());
 			doGet(request, response);

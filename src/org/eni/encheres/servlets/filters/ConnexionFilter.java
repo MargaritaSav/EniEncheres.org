@@ -26,7 +26,7 @@ import org.eni.encheres.bo.Utilisateur;
 		DispatcherType.INCLUDE, 
 		DispatcherType.ERROR
 }, 
-urlPatterns = { "/profil/*", "/nouvellevente" })
+urlPatterns = { "/profil/*", "/nouvellevente", "/admin" })
 public class ConnexionFilter implements Filter {
 
     /**
@@ -49,7 +49,9 @@ public class ConnexionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
+		//setting the right encoding of parameters
 		httpRequest.setCharacterEncoding("UTF-8");
+<<<<<<< HEAD
 
 		if(httpRequest.getServletPath().toLowerCase().contains("nouvellevente")) {
 			if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") && ((Utilisateur) session.getAttribute("user")).isActive())
@@ -58,15 +60,48 @@ public class ConnexionFilter implements Filter {
 			} else {
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				httpResponse.sendRedirect(httpRequest.getContextPath() + "/accueil");
+=======
+		boolean wasFiltered = false;
+		Utilisateur user = (Utilisateur) session.getAttribute("user");
+		System.out.println(user!=null);
+		System.out.println(httpRequest.getParameter("pseudo"));
+		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") && user != null) {
+			//only active users can sell stuff
+			if(httpRequest.getServletPath().toLowerCase().contains("nouvellevente")) {
+				if(user.isActive()){
+					wasFiltered = true;
+					chain.doFilter(request, response);
+				} 
+			} else if(httpRequest.getServletPath().toLowerCase().contains("admin")){
+				//only admin can access the admin page
+				if(user.isAdministrateur()){
+					wasFiltered = true;
+					chain.doFilter(request, response);
+				}
+			} else {
+				//all registered users can access their or others' profile
+				wasFiltered = true;
+				chain.doFilter(request, response);
+>>>>>>> fcdd41dcd5ace4a62e2c2cb96bffd439d5352ef7
 			}
 		} else {
-			if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") || httpRequest.getParameter("pseudo")!= null)
-			{
+			//unregistered users can only access profile page with a pseudo parameter ??
+			if(httpRequest.getServletPath().toLowerCase().contains("profil") 
+					&& !httpRequest.getServletPath().toLowerCase().contains("edit") 
+					&& httpRequest.getParameter("pseudo")!= null){
+				wasFiltered = true;
 				chain.doFilter(request, response);
+<<<<<<< HEAD
 			} else {
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				httpResponse.sendRedirect(httpRequest.getContextPath() + "/connexion");
+=======
+>>>>>>> fcdd41dcd5ace4a62e2c2cb96bffd439d5352ef7
 			}
+		}
+		if(!wasFiltered) {
+			HttpServletResponse httpResponse = (HttpServletResponse) response;
+			httpResponse.sendRedirect(httpRequest.getContextPath() + "/accueil");
 		}
 	}
 

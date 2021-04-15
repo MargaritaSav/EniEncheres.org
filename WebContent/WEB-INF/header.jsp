@@ -1,13 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<header>
-    <div class="row mt-1">
+<header class="navbar-expand-sm">
+    <div class="row mt-1 mb-3">
         <div class="col-12 col-md-4 d-flex align-items-center">
 			<a href="${pageContext.request.contextPath}"><h1>ENI-ENCHERES</h1></a>
         </div>
         <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
             <c:choose>
-                <c:when test="${sessionScope.session.equals('on')}">
+                <c:when test="${sessionScope.session.equals('on') && sessionScope.user != null}">
                     <jsp:include page="./accueil/navConnected.jsp"/>
                 </c:when>
                 <c:otherwise>
