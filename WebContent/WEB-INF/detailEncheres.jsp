@@ -109,12 +109,12 @@
                 </div>
                 
                 
-                  <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
+                <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
                 
                 	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row">
                 		<div class="col-3"><label for="encherir">Prix de l'enchere:</label></div>
                 		<div class="col-3"><input type="number" id="encherir" name="encherir"
-                           min="${article.miseAPrix}" max="10000"></div>
+                           value="${article.prixVente != 0 ? article.prixVente : article.miseAPrix }"></div>
                 		<div class="col-3"><input class="btn btn-primary" type="submit" value="Encherir"></div>
                 		
                 		<c:if test="${!empty error}">

@@ -13,13 +13,14 @@
 </head>
 <body>
 
-<div class="container min-vh-100 d-flex align-items-center">
+<div class="container ">
+	<jsp:include page="./header.jsp"/>
 	<div class="row m-auto" style="max-width: 70%;">
 		<div class="col-12">
 			<c:if test="${!empty error}">
 				<p style="color:red;white-space: pre-line">${error}</p>
 			</c:if>
-			<form  action="${pageContext.request.contextPath}/inscription" method="POST">
+			<form  class="min-vh-80 d-flex align-items-center" action="${pageContext.request.contextPath}/inscription" method="POST">
 			  	<div class="row">
 				  	<div class="col-md-6">
 					  <div class="mb-3">

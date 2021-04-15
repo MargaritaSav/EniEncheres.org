@@ -14,9 +14,7 @@
 </head>
 <body>
 <div class="container">
-    <header>
-        <jsp:include page="../header.jsp"/>
-    </header>
+    <jsp:include page="../header.jsp"/>
     <div class="vh-100 d-flex align-items-center justify-content-center" id="show-profile">
         <div class="row">
             <div class="col-6 text-right">Pseudo :</div>

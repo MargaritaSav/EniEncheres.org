@@ -13,9 +13,10 @@
 </head>
 <body>
 
-<div class="container min-vh-100 d-flex align-items-center">
+<div class="container ">
+	<jsp:include page="./header.jsp"/>
 	<div class="row m-auto" style="max-width: 70%">
-		<div class="col-12">
+		<div class="col-12 min-vh-90 min-vw-50 d-flex flex-column justify-content-center">
 			<c:if test="${!empty error}">
 				<p style="color:red;">${error}</p>
 			</c:if>

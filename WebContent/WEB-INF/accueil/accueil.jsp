@@ -16,23 +16,8 @@
 <body>
 
 <div class="container">
-    <header>
-        <div class="row mt-1">
-            <div class="col-12 col-md-4 d-flex align-items-center">
-                <jsp:include page="../header.jsp"/>
-            </div>
-            <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
-                <c:choose>
-                    <c:when test="${sessionScope.session.equals('on')}">
-                        <jsp:include page="./navConnected.jsp"/>
-                    </c:when>
-                    <c:otherwise>
-                        <jsp:include page="./navGuest.jsp"/>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
-    </header>
+    <jsp:include page="../header.jsp"/>
+    
     <div class="row">
         <div class="col-12 text-center"><h2>Liste des enchères</h2></div>
         <div class="col-12 col-md-5 mt-2 mb-2">

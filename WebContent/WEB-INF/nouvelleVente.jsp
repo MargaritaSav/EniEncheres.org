@@ -19,16 +19,8 @@
 <body>
 
     <div class="container ">
-    	<header>
-	        <div class="row mt-1">
-	            <div class="col-12 col-md-4 d-flex align-items-center">
-	                <jsp:include page="./header.jsp"/>
-	            </div>
-	            <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
-	                <jsp:include page="./accueil/navConnected.jsp"/>
-	            </div>
-	        </div>
-	    </header>
+    	<jsp:include page="./header.jsp"/>
+    	
         <div class="row m-auto" style="max-width: 600px">
             <div class="col-12">
 	            <c:if test="${!empty error}">
