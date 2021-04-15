@@ -17,6 +17,7 @@ public class Utilisateur {
 	private byte[] salt;
 	private int credit;
 	private boolean administrateur = false;
+	private boolean active = true;
 	
 	public Utilisateur() {}
 	
@@ -119,6 +120,14 @@ public class Utilisateur {
 
 	public void setSalt(byte[] salt) {
 		this.salt = salt;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	@Override

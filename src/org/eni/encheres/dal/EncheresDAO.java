@@ -50,6 +50,6 @@ public interface EncheresDAO {
 	
 	ArrayList<Utilisateur> selectAllUtilisateurs() throws BusinessException;
 	
-	void desactiverUtilisateur(int noUtilisateur);
+	void desactiverUtilisateur(int noUtilisateur) throws BusinessException;
 
 }
