@@ -90,7 +90,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String SELECT_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 	private final String DELETE_ENCHERES = "DELETE FROM encheres WHERE no_article = ?";
 	private final String UPDATE_ENCHERE = "UPDATE encheres SET montant_enchere = ?, date_enchere = ? WHERE no_utilisateur = ? AND no_article = ?";
-
+	private final String DELETE_ENCHERESBYUSER = "DELETE FROM encheres WHERE no_utilisateur = ?";
 
 	
 	@Override
@@ -620,6 +620,20 @@ public class EncheresDAOImpl implements EncheresDAO{
 			throw new BusinessException("Echec mis a jour is_active utilisateur");
 		}	
 	}
+	
+	@Override
+	public void deleteEncheresByUser(Utilisateur utilisateur) throws BusinessException {
+        try (Connection cnx = ConnectionProvider.getConnection()) {
+            PreparedStatement stmt = cnx.prepareStatement(DELETE_ENCHERESBYUSER);
+            stmt.setInt(1, utilisateur.getNoUtilisateur());
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("Echec suppression d'enchere par utilisateur");
+        }
+        System.out.println("Suppression d'encheres reussies");
+
+    }
 
 }
 
