@@ -17,23 +17,9 @@
 <body>
 
 <div class="container">
-    <header>
-        <div class="row mt-1">
-            <div class="col-12 col-md-4 d-flex align-items-center">
-                <jsp:include page="./header.jsp"/>
-            </div>
-            <div class="col-12 col-md-8 d-flex justify-content-end align-items-center">
-                <c:choose>
-                    <c:when test="${sessionScope.session.equals('on')}">
-                        <jsp:include page="./accueil/navConnected.jsp"/>
-                    </c:when>
-                    <c:otherwise>
-                        <jsp:include page="./accueil/navGuest.jsp"/>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
-    </header>
+
+	<jsp:include page="./header.jsp"/>
+
     
      <div class="card mt-5">
         <c:if test="${article.etatVente == 'Terminé' && sessionScope.user.pseudo == article.acheteur.pseudo}">
@@ -108,7 +94,7 @@
                 </form>	
                 </c:if>
                 
-                <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
+                <c:if test="${!empty sessionScope.user && sessionScope.user.active && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
                 
                 	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row">
                 		<div class="col-3"><label for="encherir">Prix de l'enchere:</label></div>

@@ -57,7 +57,7 @@ public class ServletNouvelleVente extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		request.setCharacterEncoding("UTF-8");
 		String nomArticle = request.getParameter("titre");
 		String description = request.getParameter("description");
 		int cat = Integer.valueOf(request.getParameter("categorie"));

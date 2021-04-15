@@ -19,7 +19,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ?, credit = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
-	private final String SELECT_ALL_UTILISATEURS = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, is_active administrateur FROM utilisateurs";
+	private final String SELECT_ALL_UTILISATEURS = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, is_active, administrateur FROM utilisateurs";
 	private final String UPDATE_UTILISATEUR_IS_ACTIVE = "UPDATE utilisateurs SET is_active = ? WHERE no_utilisateur = ?";
 	private final String SELECT_ARTICLE_BY_ID = "SELECT a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 										 + "c.libelle,"

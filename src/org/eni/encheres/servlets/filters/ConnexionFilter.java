@@ -26,7 +26,7 @@ import org.eni.encheres.bo.Utilisateur;
 		DispatcherType.INCLUDE, 
 		DispatcherType.ERROR
 }, 
-urlPatterns = { "/profil/*" })
+urlPatterns = { "/profil/*", "/nouvellevente" })
 public class ConnexionFilter implements Filter {
 
     /**
@@ -49,16 +49,27 @@ public class ConnexionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
-		
-		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") || httpRequest.getParameter("pseudo")!= null)
-		{
-			chain.doFilter(request, response);
-		}
-		else
-		{
-			//Renvoyons une 403 à l'utilisateur
-			HttpServletResponse httpResponse = (HttpServletResponse) response;
-			httpResponse.sendRedirect(httpRequest.getContextPath() + "/connexion");
+		httpRequest.setCharacterEncoding("UTF-8");
+
+		if(httpRequest.getServletPath().toLowerCase().contains("nouvellevente")) {
+			if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") && ((Utilisateur) session.getAttribute("user")).isActive())
+			{
+				System.out.println("Utilisateur actif");
+				chain.doFilter(request, response);
+			} else {
+				//Renvoyons une 403 à l'utilisateur
+				HttpServletResponse httpResponse = (HttpServletResponse) response;
+				httpResponse.sendRedirect(httpRequest.getContextPath() + "/accueil");
+			}
+		} else {
+			if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") || httpRequest.getParameter("pseudo")!= null)
+			{
+				chain.doFilter(request, response);
+			} else {
+				//Renvoyons une 403 à l'utilisateur
+				HttpServletResponse httpResponse = (HttpServletResponse) response;
+				httpResponse.sendRedirect(httpRequest.getContextPath() + "/connexion");
+			}
 		}
 	}
 

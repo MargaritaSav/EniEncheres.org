@@ -28,12 +28,8 @@ public class ServletAdmin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(((Utilisateur) request.getSession().getAttribute("user")).isAdministrateur()) {
-//			ArrayList<Utilisateur> users = um.selectAllUtilisateurs();
-//			request.setAttribute("users", users);
-			ArrayList<Utilisateur> users = new ArrayList<>();
 			try {
-				users.add(um.login("toto", "toto"));
-				users.add(um.login("lulu", "lulu"));
+				ArrayList<Utilisateur> users = um.selectAllUtilisateurs();
 				request.setAttribute("users", users);
 
 			} catch (BusinessException e) {
@@ -51,25 +47,26 @@ public class ServletAdmin extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.valueOf(request.getParameter("noUser"));
 		switch(request.getParameter("action")) {
 		case "desactiver":
-//			try {
-//				um.desactiverUtilisateur(id);
+			try {
+				String pseudo = request.getParameter("pseudo");
+				um.desactiverUtilisateur(pseudo);
 				request.setAttribute("success", "Utilisateur désactivé");
 
-//			} catch (BusinessException e) {
-//				request.setAttribute("error", e.getMessage());
-//			}
+			} catch (BusinessException e) {
+				request.setAttribute("error", e.getMessage());
+			}
 			break;
 		case "supprimer":
-//			try {
-//			um.desactiverUtilisateur(id);
-			request.setAttribute("success", "Utilisateur supprimé");
+			try {
+				int id = Integer.valueOf(request.getParameter("noUser"));
+				um.deleteUtilisateur(id);
+				request.setAttribute("success", "Utilisateur supprimé");
 
-	//		} catch (BusinessException e) {
-	//			request.setAttribute("error", e.getMessage());
-	//		}
+			} catch (BusinessException e) {
+				request.setAttribute("error", e.getMessage());
+			}
 			break;
 		}
 		doGet(request, response);

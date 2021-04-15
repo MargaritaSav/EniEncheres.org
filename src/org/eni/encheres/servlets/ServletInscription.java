@@ -36,6 +36,7 @@ public class ServletInscription extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		System.out.println(request.getParameter("pseudo"));
 		System.out.println(request.getParameter("password"));
 		String pseudo = request.getParameter("pseudo");

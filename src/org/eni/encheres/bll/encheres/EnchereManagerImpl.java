@@ -275,17 +275,19 @@ public class EnchereManagerImpl implements EnchereManager{
 		
 		//trouver l'enchere le plus haut pour chaque article
 		int compteur = 0;
-		
 		for(ArticleVendu article : encheresFinis) {
 			ArrayList<Enchere> encheres = article.getEncheres();
 			Collections.sort(encheres);
-			article.setAcheteur(encheres.get(0).getUtilisateur());
-			article.setRetraitEffectue(true);
-			//mettre a jour les articles -> no_acheteur
-			dao.updateArticle(article);
-			Utilisateur vendeur = dao.selectUtilisateurByLogin(article.getVendeur().getPseudo(), article.getVendeur().getPseudo());
-			transfererPoints(vendeur, encheres.get(0).getMontant_enchere());
-			compteur ++;
+			if(encheres.size() > 0) {
+				article.setAcheteur(encheres.get(0).getUtilisateur());
+				article.setRetraitEffectue(true);
+				//mettre a jour les articles -> no_acheteur
+				dao.updateArticle(article);
+				Utilisateur vendeur = dao.selectUtilisateurByLogin(article.getVendeur().getPseudo(), article.getVendeur().getPseudo());
+				transfererPoints(vendeur, encheres.get(0).getMontant_enchere());
+				compteur ++;
+			}
+			
 		}
 		
 		if(compteur > 0)
