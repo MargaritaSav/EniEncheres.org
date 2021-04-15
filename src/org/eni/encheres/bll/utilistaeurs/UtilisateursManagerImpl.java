@@ -197,8 +197,6 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		
 	}
 	
-	//à discuter
-	
 	public HashMap<String, byte[]> hashPassword(String mdp) throws BusinessException {
 		byte[] hash;
 		SecureRandom sr = new SecureRandom();
@@ -259,7 +257,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 
 	@Override
 	public ArrayList<Utilisateur> selectAllUtilisateurs() throws BusinessException {
-return dao.selectAllUtilisateurs();
+		return dao.selectAllUtilisateurs();
 	}
 
 

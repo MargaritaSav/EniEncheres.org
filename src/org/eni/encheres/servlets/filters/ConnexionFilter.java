@@ -54,10 +54,8 @@ public class ConnexionFilter implements Filter {
 		if(httpRequest.getServletPath().toLowerCase().contains("nouvellevente")) {
 			if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") && ((Utilisateur) session.getAttribute("user")).isActive())
 			{
-				System.out.println("Utilisateur actif");
 				chain.doFilter(request, response);
 			} else {
-				//Renvoyons une 403 à l'utilisateur
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				httpResponse.sendRedirect(httpRequest.getContextPath() + "/accueil");
 			}
@@ -66,7 +64,6 @@ public class ConnexionFilter implements Filter {
 			{
 				chain.doFilter(request, response);
 			} else {
-				//Renvoyons une 403 à l'utilisateur
 				HttpServletResponse httpResponse = (HttpServletResponse) response;
 				httpResponse.sendRedirect(httpRequest.getContextPath() + "/connexion");
 			}
