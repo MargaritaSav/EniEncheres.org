@@ -51,16 +51,6 @@ public class ConnexionFilter implements Filter {
 		HttpSession session = httpRequest.getSession();
 		//setting the right encoding of parameters
 		httpRequest.setCharacterEncoding("UTF-8");
-<<<<<<< HEAD
-
-		if(httpRequest.getServletPath().toLowerCase().contains("nouvellevente")) {
-			if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") && ((Utilisateur) session.getAttribute("user")).isActive())
-			{
-				chain.doFilter(request, response);
-			} else {
-				HttpServletResponse httpResponse = (HttpServletResponse) response;
-				httpResponse.sendRedirect(httpRequest.getContextPath() + "/accueil");
-=======
 		boolean wasFiltered = false;
 		Utilisateur user = (Utilisateur) session.getAttribute("user");
 		System.out.println(user!=null);
@@ -82,7 +72,6 @@ public class ConnexionFilter implements Filter {
 				//all registered users can access their or others' profile
 				wasFiltered = true;
 				chain.doFilter(request, response);
->>>>>>> fcdd41dcd5ace4a62e2c2cb96bffd439d5352ef7
 			}
 		} else {
 			//unregistered users can only access profile page with a pseudo parameter ??
@@ -91,12 +80,6 @@ public class ConnexionFilter implements Filter {
 					&& httpRequest.getParameter("pseudo")!= null){
 				wasFiltered = true;
 				chain.doFilter(request, response);
-<<<<<<< HEAD
-			} else {
-				HttpServletResponse httpResponse = (HttpServletResponse) response;
-				httpResponse.sendRedirect(httpRequest.getContextPath() + "/connexion");
-=======
->>>>>>> fcdd41dcd5ace4a62e2c2cb96bffd439d5352ef7
 			}
 		}
 		if(!wasFiltered) {
