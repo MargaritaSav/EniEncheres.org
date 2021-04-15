@@ -29,6 +29,8 @@
 	            </div>
 	        </div>
 	    </header>
+
+	    .card
         <div class="row m-auto" style="max-width: 600px">
             <div class="col-12">
 	            <c:if test="${!empty error}">

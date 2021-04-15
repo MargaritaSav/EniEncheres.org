@@ -89,9 +89,10 @@ public class ServletDetailVente extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int prix = Integer.valueOf(request.getParameter("encherir"));
-		HttpSession session = request.getSession();
 		try {
+			if(request.getParameter("encherir").length() ==0) throw new BusinessException("Veuiller rentrer une somme d'enchere");
+			int prix = Integer.valueOf(request.getParameter("encherir"));
+			HttpSession session = request.getSession();
 			ArticleVendu article = em.getArticleById(Integer.valueOf(request.getParameter("noArticle")));
 			em.faireEnchere((Utilisateur)(session.getAttribute("user")), article, prix);
 		} catch (BusinessException e) {
