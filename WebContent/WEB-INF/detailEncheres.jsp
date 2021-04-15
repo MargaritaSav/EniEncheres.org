@@ -46,14 +46,14 @@
 
         <div class="card-body" style="font-size: 20px">
             <div class="row">
-                <div class="col-md-6 mb-1 font-weight-bold">Article</div>
-                <div class="col-md-6 mb-1">${article.nomArticle}</div>
-                <div class="col-md-6 font-weight-bold mb-1">Categorie</div>
-                <div class="col-md-6 mb-1"><span class="badge badge-info">${article.categorieArticle.libelle}</span></div>
-                <div class="col-md-6 font-weight-bold mb-1">Description</div>
-                <div class="col-md-6 mb-1">${article.description}</div>
-                <div class="col-md-6 font-weight-bold mb-1">Meilleur offre</div>
-                <div class="col-md-6 mb-1">
+                <div class="col-md-6 mb-1 font-weight-bold border-bottom">Article</div>
+                <div class="col-md-6 mb-1 border-bottom">${article.nomArticle}</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Categorie</div>
+                <div class="col-md-6 mb-1 border-bottom"><span class="badge badge-info">${article.categorieArticle.libelle}</span></div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Description</div>
+                <div class="col-md-6 mb-1 border-bottom">${article.description}</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Meilleur offre</div>
+                <div class="col-md-6 mb-1 border-bottom">
                     <c:choose>
                         <c:when test="${article.prixVente != 0}">
                             ${article.prixVente} points par ${article.acheteur.pseudo}
@@ -64,18 +64,18 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-                <div class="col-md-6 font-weight-bold mb-1">Mise à prix</div>
-                <div class="col-md-6 mb-1">${article.miseAPrix} points</div>
-                <div class="col-md-6 font-weight-bold mb-1">Fin de l'enchère</div>
-                <div class="col-md-6 mb-1">
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Mise à prix</div>
+                <div class="col-md-6 mb-1 border-bottom">${article.miseAPrix} points</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Fin de l'enchère</div>
+                <div class="col-md-6 mb-1 border-bottom">
                     <fmt:parseDate value="${article.dateFinEncheres}" pattern="yyyy-MM-dd'T'HH:mm" var="finEncheres"
                                    type="date"/>
                     <fmt:formatDate pattern="dd/MMM/yyyy HH:mm" value="${finEncheres}"/>
                 </div>
-                <div class="col-md-6 font-weight-bold mb-1">Retrait</div>
-                <div class="col-md-6 mb-1">${article.lieuRetrait.rue} ${article.lieuRetrait.code_postal} ${article.lieuRetrait.ville}</div>
-                <div class="col-md-6 font-weight-bold mb-1">Vendeur</div>
-                <div class="col-md-6 mb-1"${article.vendeur.pseudo}></div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Retrait</div>
+                <div class="col-md-6 mb-1 border-bottom">${article.lieuRetrait.rue} ${article.lieuRetrait.code_postal} ${article.lieuRetrait.ville}</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Vendeur</div>
+                <div class="col-md-6 mb-1 border-bottom">${article.vendeur.pseudo}</div>
             </div>
         </div>
         
