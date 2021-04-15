@@ -16,7 +16,14 @@ import org.eni.encheres.bo.*;
 public class EncheresDAOImpl implements EncheresDAO{
 	
 	private final String SELECT_UTILISATEUR_BY_LOGIN = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, salt, credit, administrateur, is_active FROM utilisateurs WHERE pseudo = ? OR email = ?";
-	private final String INSERT_UTILISATEUR = "INSERT INTO utilisateurs (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur, salt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	
+	private final String INSERT_UTILISATEUR = 
+			"INSERT INTO utilisateurs "
+			+ "(pseudo, nom, prenom, email, telephone, "
+			+ "rue, code_postal, ville, "
+			+ "mot_de_passe, credit, administrateur, salt) "
+			+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	
 	private final String UPDATE_UTILISATEUR = "UPDATE utilisateurs SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, salt = ?, credit = ? WHERE no_utilisateur = ?";
 	private final String DELETE_UTILISATEUR = "DELETE FROM utilisateurs WHERE no_utilisateur = ?";
 	private final String SELECT_ALL_UTILISATEURS = "SELECT no_utilisateur, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, is_active, administrateur FROM utilisateurs";
@@ -39,7 +46,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 												 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 												 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 												 + "WHERE a.no_acheteur = ? AND etat = 'Terminé' ";
-	private final String SELECT_ARTICLES_VENDUS_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
+	private final String SELECT_ARTICLES_VENDUS_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, "
+												 + "a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, "
+												 + "a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
 												 + "FROM articles_vendus a "
@@ -135,7 +144,8 @@ public class EncheresDAOImpl implements EncheresDAO{
 		}
 		
 		try(Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stmt = cnx.prepareStatement(INSERT_UTILISATEUR, PreparedStatement.RETURN_GENERATED_KEYS);
+			PreparedStatement stmt = cnx.prepareStatement(INSERT_UTILISATEUR, 
+										PreparedStatement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, utilisateur.getPseudo());
 			stmt.setString(2, utilisateur.getNom());
 			stmt.setString(3, utilisateur.getPrenom());

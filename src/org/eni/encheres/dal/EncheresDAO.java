@@ -54,3 +54,4 @@ public interface EncheresDAO {
 	void desactiverUtilisateur(int noUtilisateur) throws BusinessException;
 
 }
+

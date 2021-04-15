@@ -112,6 +112,7 @@ public class EnchereManagerImpl implements EnchereManager{
 		for(Enchere e : encheres) {
 			if(e.getUtilisateur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
 				e.setMontant_enchere(montant_enchere);
+				e.setArticle(article);
 				dao.updateEnchere(e);
 				hasEncheres = true;
 				break;
@@ -124,19 +125,14 @@ public class EnchereManagerImpl implements EnchereManager{
 		//debiter l'utilisateur actuel
 		transfererPoints(utilisateur, -montant_enchere);
 		
-		//si jamais l'enchereur precedent supprime son compte au moment que l'utilisateur actuel fait son enchere
-		try {
-			//recrediter les points a l'enchereur precedent
-			if(encheres.size() > 0) {
-				Collections.sort(encheres);
-				String highestEnchereur = encheres.get(0).getUtilisateur().getPseudo();
-				Utilisateur tmp = dao.selectUtilisateurByLogin(highestEnchereur, highestEnchereur);
-				transfererPoints(tmp, montant_enchere);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		//recrediter les points a l'enchereur precedent
+		if(encheres.size() > 0) {
+			Collections.sort(encheres);
+			String highestEnchereur = encheres.get(0).getUtilisateur().getPseudo();
+			Utilisateur tmp = dao.selectUtilisateurByLogin(highestEnchereur, highestEnchereur);
+			transfererPoints(tmp, montant_enchere);
 		}
-	
+
 		return enchere;
 	}
 	
@@ -270,7 +266,7 @@ public class EnchereManagerImpl implements EnchereManager{
 
 
 	public void checkFinEnchere() throws BusinessException {
-		//selectionner tous les encheres termines avec acheteur == null
+		//selectionner tous les encheres termines avec retraitEffectue = false
 		ArrayList<ArticleVendu> encheresFinis = dao.selectEncheresFinis();
 		
 		//trouver l'enchere le plus haut pour chaque article
@@ -287,7 +283,6 @@ public class EnchereManagerImpl implements EnchereManager{
 				transfererPoints(vendeur, encheres.get(0).getMontant_enchere());
 				compteur ++;
 			}
-			
 		}
 		
 		if(compteur > 0)

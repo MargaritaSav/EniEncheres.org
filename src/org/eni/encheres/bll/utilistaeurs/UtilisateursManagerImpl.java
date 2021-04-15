@@ -67,7 +67,7 @@ public class UtilisateursManagerImpl implements UtilisateurManager {
 		HashMap<String, byte[]> pwd = hashPassword(plainPassword);
 		utilisateur.setMotDePasse(pwd.get("password"));
 		utilisateur.setSalt(pwd.get("salt"));
-		
+		utilisateur.setCredit(500);
 		if (user == null)
 		{
 			if (errors == null) {
