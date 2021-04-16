@@ -13,10 +13,12 @@
 </head>
 <body>
 
-<div class="container ">
+<div class="container-sm">
 	<jsp:include page="./header.jsp"/>
-	<div class="row m-auto" style="max-width: 500px">
-		<div class="col-12 min-vh-90 min-vw-50 d-flex flex-column justify-content-center">
+	<div class="row position-absolute top-50 start-50 translate-middle" style="max-width: 500px; min-width: 300px">
+		<div class="col-sm-12 ">
+			<h2 class="text-center mb-3" >Connectez-vous</h2>
+			
 			<form action="${pageContext.request.contextPath}/connexion" method="POST">
 			  <div class="mb-3">
 			    <label for="login" class="form-label">Email ou pseudo</label>
