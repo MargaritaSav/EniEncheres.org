@@ -45,13 +45,13 @@
         		<div class=col-md-8>
         		
 		            <div class="row">
-		                <div class="col-md-6 mb-1 font-weight-bold border-bottom">Article</div>
+		                <div class="col-md-6 mb-1 fw-bold border-bottom">Article</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.nomArticle}</div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Categorie</div>
-		                <div class="col-md-6 mb-1 border-bottom"><span class="badge bg-info">${article.categorieArticle.libelle}</span></div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Description</div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Categorie</div>
+		                <div class="col-md-6 mb-1 border-bottom"><span class="mb-2 badge bg-info">${article.categorieArticle.libelle}</span></div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Description</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.description}</div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Meilleur offre</div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Meilleur offre</div>
 		                <div class="col-md-6 mb-1 border-bottom">
 		                    <c:choose>
 		                        <c:when test="${article.prixVente != 0}">
@@ -63,17 +63,17 @@
 		                        </c:otherwise>
 		                    </c:choose>
 		                </div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Mise à prix</div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Mise à prix</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.miseAPrix} points</div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Fin de l'enchère</div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Fin de l'enchère</div>
 		                <div class="col-md-6 mb-1 border-bottom">
 		                    <fmt:parseDate value="${article.dateFinEncheres}" pattern="yyyy-MM-dd'T'HH:mm" var="finEncheres"
 		                                   type="date"/>
 		                    <fmt:formatDate pattern="dd/MMM/yyyy HH:mm" value="${finEncheres}"/>
 		                </div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Retrait</div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Retrait</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.lieuRetrait.rue} ${article.lieuRetrait.code_postal} ${article.lieuRetrait.ville}</div>
-		                <div class="col-md-6 font-weight-bold mb-1 border-bottom">Vendeur</div>
+		                <div class="col-md-6 fw-bold mb-1 border-bottom">Vendeur</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.vendeur.pseudo}</div>
 		            </div>
             </div>
@@ -84,10 +84,10 @@
                 
                 <c:if test="${!empty sessionScope.user && sessionScope.user.active && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
                 
-                	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row">
-                			<div class="input-group mb-3">
+                	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row justify-content-end">
+                			<div class="input-group mb-3" style="width: max-content">
 							  <input type="text" class="form-control" aria-label="Prix de l'enchere" aria-describedby="encherir" name="encherir"
-							  value="${article.prixVente != 0 ? article.prixVente : article.miseAPrix }">
+							  value="${article.prixVente != 0 ? article.prixVente : article.miseAPrix }" style="max-width:200px">
 							  <button class="btn btn-primary" type="submit" id="encherir">Encherir</button>
 							</div>
                 	</form>	
