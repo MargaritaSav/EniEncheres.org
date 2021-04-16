@@ -21,7 +21,7 @@ public class EnchereManagerImpl implements EnchereManager{
 
 	@Override
 	public ArticleVendu addArticle(Utilisateur vendeur, String nom, String description, Categorie categorie,
-			String date_debut, String date_fin, int miseAPrix, String rue, String code_postal, String ville)
+			String date_debut, String date_fin, int miseAPrix, String rue, String code_postal, String ville, String imagePath)
 			throws BusinessException {
 		if(vendeur == null) {
 			throw new BusinessException("Utilisateur est null");
@@ -40,6 +40,11 @@ public class EnchereManagerImpl implements EnchereManager{
 		ArticleVendu article = new ArticleVendu(nom, description, convertToLocalDateTime(date_debut),
 				convertToLocalDateTime(date_fin), miseAPrix, retrait, categorie, vendeur);
 		
+		if(imagePath != null) {
+			Image image = new Image();
+			image.setPath(imagePath);
+			article.setImage(image);
+		}
 		
 		dao.insertArticle(article);
 		
@@ -54,7 +59,7 @@ public class EnchereManagerImpl implements EnchereManager{
 	@Override
 	public ArticleVendu updateArticle(int noArticle, Utilisateur vendeur, String nom, String description,
 			Categorie categorie, String date_debut, String date_fin, int miseAPrix, String rue, String code_postal,
-			String ville) throws BusinessException {
+			String ville, String imagePath) throws BusinessException {
 		
 		String errors = checkEntry(nom, description, categorie, date_debut, date_fin, miseAPrix, rue, code_postal, ville);
 		
@@ -67,6 +72,13 @@ public class EnchereManagerImpl implements EnchereManager{
 				convertToLocalDateTime(date_fin), miseAPrix, retrait, categorie, vendeur);
 		
 		article.setNoArticle(noArticle);
+		
+		if(imagePath != null) {
+			Image image = new Image();
+			image.setPath(imagePath);
+			image.setArticle(article);
+			article.setImage(image);
+		}
 		dao.updateArticle(article);
 		return article;
 	}

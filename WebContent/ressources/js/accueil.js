@@ -197,8 +197,14 @@ function addArticleCard(article) {
                             <div class="card-body">
                              
                                 <div class="row">
-                                    <div class="col-md-4 d-flex flex-column align-items-center justify-content-around">                                                             
-                                        <img class="card-img-top" src="./ressources/images/no-image.png" alt="Card image cap">
+                                    <div class="col-md-4 d-flex flex-column align-items-center justify-content-around">
+                                                                                              
+                                        <img class="card-img-top" src="${article.image== null ? './ressources/images/no-image.png' : projectPath + article.image.path}" alt="Card image cap">
+                                   
+                                                                                           
+                                 
+                                    
+                                    
                                         <span class="badge badge-info">${article.categorieArticle.libelle}</span>
                                     </div>
                                     <div class="col-md-8">

@@ -2,10 +2,16 @@ package org.eni.encheres.servlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +39,7 @@ import org.eni.encheres.bo.Utilisateur;
 )
 public class ServletNouvelleVente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String SAVE_DIR = "uploadFiles";
+	private static final String SAVE_DIR = "/uploaded-files/";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -83,30 +89,30 @@ public class ServletNouvelleVente extends HttpServlet {
 			Utilisateur utilisateur = (Utilisateur) request.getSession().getAttribute("user");
 			ArticleVendu article = new ArticleVendu();
 			
+			Part filePart = request.getPart("image");
+			String imagePath = null;
+			if(!filePart.getSubmittedFileName().isEmpty()) {
+				InputStream fileInputStream = filePart.getInputStream();
+				
+				String path = request.getRealPath(SAVE_DIR)  + filePart.getSubmittedFileName();
+			
+				Files.copy(fileInputStream, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+				imagePath = SAVE_DIR  + filePart.getSubmittedFileName();
+			}
+	
+			
 			
 			String action = request.getParameter("action");
 			if(action.equals("modifier")) {
 				int noArticle = Integer.valueOf(request.getParameter("noArticle"));
-				article = em.updateArticle(noArticle, utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
+				article = em.updateArticle(noArticle, utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville, imagePath);
 
 			} else if(action.equals("creer")) {
-				article = em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville);
+				article = em.addArticle(utilisateur, nomArticle, description, categorie, dateDebut, dateFin, prix, rue, codePostal, ville, imagePath);
 			}
-			/*
-			Part filePart = request.getPart("image");
-		    String fileName = filePart.getSubmittedFileName();
-		    String appPath = request.getServletContext().getRealPath("");
-		    System.out.println(appPath);
-		    String savePath = appPath + File.separator + SAVE_DIR;
-		    
-		 // creates the save directory if it does not exists
-	        File fileSaveDir = new File(savePath);
-	        if (!fileSaveDir.exists()) {
-	            fileSaveDir.mkdir();
-	        }
-		    for (Part part : request.getParts()) {
-		      part.write(savePath + File.separator + fileName);
-		    }*/
+			
+			
+		
 			request.setAttribute("success", "Rajout d'article réussi");
 			response.sendRedirect(request.getContextPath() + "/vente?action=detail&noArticle="+article.getNoArticle());
 		} catch (Exception e) {
