@@ -37,7 +37,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 										 + "INNER JOIN utilisateurs u ON u.no_utilisateur = a.no_utilisateur "
 										 + "INNER JOIN retraits r ON r.no_article = a.no_article "
 										 + "WHERE a.no_article = ? ";	
-
+	private final String SELECT_IMAGE = "SELECT path FROM images WHERE no_article= ?";
+	private final String INSERT_IMAGE = "INSERT INTO images (path, no_article) VALUES(?, ?)";
+	private final String UPDATE_IMAGE = "UPDATE images SET path = ? WHERE no_article= ?";
 	private final String SELECT_ARTICLES_ACHETES_BY_USER = "SELECT u.pseudo, a.no_acheteur, a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.no_categorie, a.etat, a.retraitEffectue, "
 												 + "c.libelle,"
 												 + "r.rue, r.code_postal, r.ville "
@@ -253,6 +255,8 @@ public class EncheresDAOImpl implements EncheresDAO{
 			{
 				article.setNoArticle(rs.getInt(1));
 				article.getLieuRetrait().setArticle(article);
+				article.getImage().setArticle(article);
+				insertImage(article.getImage());
 				insertRetrait(article.getLieuRetrait(), article.getNoArticle());
 			}
 		} catch(Exception e) {
@@ -287,6 +291,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setInt(12, article.getNoArticle());
 			stmt.executeUpdate();
 			
+			if(article.getImage() != null) {
+				updateImageByArticle(article.getImage());
+			}
 			updateRetrait(article.getLieuRetrait(), article.getNoArticle());
 			
 		} catch(Exception e) {
@@ -381,6 +388,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 		article.setMiseAPrix(rs.getInt("prix_initial"));
 		article.setPrixVente(rs.getInt("prix_vente"));
 		article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
+		article.setImage(selectImageByArticle(article.getNoArticle()));
 		
 		if(utilisateur != null && rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
 			utilisateur.setPseudo(rs.getString("pseudo"));
@@ -644,6 +652,70 @@ public class EncheresDAOImpl implements EncheresDAO{
         System.out.println("Suppression d'encheres reussies");
 
     }
+	
+	public void insertImage(Image image) throws BusinessException {
+		if(image == null) {
+			throw new BusinessException("Image est null");
+		}
+		
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(INSERT_IMAGE, 
+										PreparedStatement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, image.getPath());
+			stmt.setInt(2, image.getArticle().getNoArticle());
+
+			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			if(rs.next())
+			{
+				image.setId(rs.getInt(1));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec rajout nouvel utilisateur");
+		}
+		
+	}
+	
+	@Override
+	public Image selectImageByArticle(int noArticle) throws BusinessException {
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(SELECT_IMAGE);
+			stmt.setInt(1, noArticle);
+			ResultSet rs = stmt.executeQuery();
+			Image image = null;
+			while(rs.next())
+			{
+				image = new Image();
+				image.setPath(rs.getString("path"));;
+				
+				
+			}
+			return image;
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec selection d'article by id");
+		}	
+	}
+	
+	@Override
+	public void updateImageByArticle(Image image) throws BusinessException {
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stmt = cnx.prepareStatement(UPDATE_IMAGE);
+			stmt.setString(1, image.getPath());
+			stmt.setInt(2, image.getArticle().getNoArticle());
+			int result = stmt.executeUpdate();
+			
+			if(result == 0) {
+				insertImage(image);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			throw new BusinessException("Echec mis à jour image by id");
+		}
+	}
+
 
 }
 

@@ -19,6 +19,7 @@ public class ArticleVendu {
 	private Utilisateur vendeur;
 	private Utilisateur acheteur = null;
 	private ArrayList<Enchere> encheres = new ArrayList<>();
+	private Image image = null;
 	
 	public ArticleVendu() {}
 	
@@ -147,6 +148,14 @@ public class ArticleVendu {
 				+ ", dateDebutEncheres=" + dateDebutEncheres + ", dateFinEncheres=" + dateFinEncheres + ", miseAPrix="
 				+ miseAPrix + ", prixVente=" + prixVente + ", etatVente=" + etatVente + ", lieuRetrait=" + lieuRetrait
 				+ ", categorieArticle=" + categorieArticle + "]";
+	}
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
 	}
 	
 	

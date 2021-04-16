@@ -53,5 +53,9 @@ public interface EncheresDAO {
 
 	void desactiverUtilisateur(int noUtilisateur) throws BusinessException;
 
+	Image selectImageByArticle(int noArticle) throws BusinessException;
+
+	void updateImageByArticle(Image image) throws BusinessException;
+
 }
 

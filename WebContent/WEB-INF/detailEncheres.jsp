@@ -78,7 +78,7 @@
                 </c:if>
                 <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur == article.vendeur.noUtilisateur && article.etatVente == 'Non débutée'}">
                 	<div class="row">
-                		<div class="col-6 text-right"><a type="button" href="${pageContext.request.contextPath}/vente?action=modifier&noArticle=${article.noArticle}" class="btn btn-warning">Modifier</a></div>
+                		<div class="col-6 text-end"><a type="button" href="${pageContext.request.contextPath}/vente?action=modifier&noArticle=${article.noArticle}" class="btn btn-warning">Modifier</a></div>
                 		<div class="col-6"><a type="button" href="${pageContext.request.contextPath}/vente?action=supprimer&noArticle=${article.noArticle}" class="btn btn-danger">Annuler la vente</a></div>
                 	</div>	
                 		
