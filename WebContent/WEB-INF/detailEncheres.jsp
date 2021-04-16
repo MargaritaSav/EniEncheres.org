@@ -19,8 +19,8 @@
 
 	<jsp:include page="./header.jsp"/>
 
-    
-     <div class="card mt-5">
+     <h2 class="text-center mb-3" >Détails article</h2>
+     <div class="card mt-5 m-auto" style="max-width:500px">
         <c:if test="${article.etatVente == 'Terminé' && sessionScope.user.pseudo == article.acheteur.pseudo}">
             <h3 class="card-header">Felicitations ! Vous avez remporté cette vente !</h3>
         </c:if>
@@ -30,6 +30,45 @@
         </c:if>
 
         <div class="card-body" style="font-size: 20px">
+<<<<<<< HEAD
+            <div class="row">
+                <div class="col-md-6 mb-1 font-weight-bold border-bottom"><strong></strong>Article</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">${article.nomArticle}</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Categorie</strong></div>
+                <div class="col-md-6 mb-1 border-bottom"><span class="badge bg-info">${article.categorieArticle.libelle}</span></div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Description</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">${article.description}</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Meilleur offre</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">
+                    <c:choose>
+                        <c:when test="${article.prixVente != 0}">
+                            ${article.prixVente} points par ${article.acheteur.pseudo}
+                        </c:when>
+
+                        <c:otherwise>
+                            Pas d'offres pour le moment
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Mise à prix</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">${article.miseAPrix} points</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Debut de l'enchère</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">
+                    <fmt:parseDate value="${article.dateDebutEncheres}" pattern="yyyy-MM-dd'T'HH:mm" var="debutEncheres"
+                                   type="date"/>
+                    <fmt:formatDate pattern="dd/MMM/yyyy HH:mm" value="${debutEncheres}"/>
+                </div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Fin de l'enchère</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">
+                    <fmt:parseDate value="${article.dateFinEncheres}" pattern="yyyy-MM-dd'T'HH:mm" var="finEncheres"
+                                   type="date"/>
+                    <fmt:formatDate pattern="dd/MMM/yyyy HH:mm" value="${finEncheres}"/>
+                </div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Retrait</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">${article.lieuRetrait.rue} ${article.lieuRetrait.code_postal} ${article.lieuRetrait.ville}</div>
+                <div class="col-md-6 font-weight-bold mb-1 border-bottom"><strong>Vendeur</strong></div>
+                <div class="col-md-6 mb-1 border-bottom">${article.vendeur.pseudo}</div>
+=======
         
         	<div class="row">
         		<div class=col-md-4>
@@ -78,6 +117,7 @@
 		                <div class="col-md-6 mb-1 border-bottom">${article.vendeur.pseudo}</div>
 		            </div>
             
+>>>>>>> 945ece17d794a6e966f334fb1c9fc1608d4c0df6
             </div>
         	</div>
         </div>
@@ -88,10 +128,11 @@
                 <c:if test="${!empty sessionScope.user && sessionScope.user.active && sessionScope.user.noUtilisateur != article.vendeur.noUtilisateur && article.etatVente == 'En cours'}">
                 
                 	<form method="POST" action="${pageContext.request.contextPath}/vente?action=details&noArticle=${article.noArticle}" class ="row">
-                		<div class="col-3"><label for="encherir">Prix de l'enchere:</label></div>
-                		<div class="col-3"><input type="number" id="encherir" name="encherir"
-                           value="${article.prixVente != 0 ? article.prixVente : article.miseAPrix }"></div>
-                		<div class="col-3"><input class="btn btn-primary" type="submit" value="Encherir"></div>
+                			<div class="input-group mb-3">
+							  <input type="text" class="form-control" aria-label="Prix de l'enchere" aria-describedby="encherir" name="encherir"
+							  value="${article.prixVente != 0 ? article.prixVente : article.miseAPrix }">
+							  <button class="btn btn-primary" type="submit" id="encherir">Encherir</button>
+							</div>
                 	</form>	
                 </c:if>
                 <c:if test="${!empty sessionScope.user && sessionScope.user.noUtilisateur == article.vendeur.noUtilisateur && article.etatVente == 'Non débutée'}">

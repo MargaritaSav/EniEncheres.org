@@ -6,8 +6,7 @@
 <head>
 <meta charset="UTF-8">
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>ENI-Encheres - Mon Profil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,12 +16,9 @@
 		<header>
 			<jsp:include page="../header.jsp" />
 		</header>
-<div class="mt-5">
+<div class="mt-5 m-auto" style="max-width:600px">
     <form action="${pageContext.request.contextPath}/profil/edit" method="POST">
         <div class="row">
-        <c:if test="${!empty error}">
-				<p style="color:red;white-space: pre-line" class="px-3">${error}</p>
-			</c:if>
             <div class="col-12">
                 <div class="mb-3">
                     <label for="pseudo" class="form-label">Pseudo :</label>
@@ -107,7 +103,7 @@
             </div>
 
         </div>
-        <div class="row mt-3">
+        <div class="row mt-3 mb-3">
             <div class="col-sm-6">
                 <button type="submit" class="w-100 btn btn-primary">Enregistrer</button>
             </div>
@@ -116,12 +112,34 @@
             </div>
         </div>
     </form>
+    <c:if test="${!empty error || !empty success}">
+	  	<div class="position-fixed bottom-0 end-0 p-3">
+			<div class="toast align-items-center text-white ${!empty error ? 'bg-danger' : 'bg-success'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+			  <div class="d-flex">
+			    <div class="toast-body">
+					${!empty error ? error : success}
+			    </div>
+			    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+			  </div>
+			</div>
+		</div>
+	</c:if>
 </div>
-</body>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
-        
+<script>
+$(document).ready(function(){
+	var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+	var toastList = toastElList.map(function (toastEl) {
+	  return new bootstrap.Toast(toastEl);
+	})
+	toastList.forEach(toast => toast.show());
+})
+
+</script>
+</body>
+      
 </html>
