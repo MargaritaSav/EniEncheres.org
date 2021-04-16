@@ -53,8 +53,6 @@ public class ConnexionFilter implements Filter {
 		httpRequest.setCharacterEncoding("UTF-8");
 		boolean wasFiltered = false;
 		Utilisateur user = (Utilisateur) session.getAttribute("user");
-		System.out.println(user!=null);
-		System.out.println(httpRequest.getParameter("pseudo"));
 		if(session.getAttribute("session") != null && session.getAttribute("session").equals("on") && user != null) {
 			//only active users can sell stuff
 			if(httpRequest.getServletPath().toLowerCase().contains("nouvellevente")) {

@@ -86,18 +86,34 @@ public class EnchereManagerImpl implements EnchereManager{
 		}else if(!utilisateur.isActive()) {
 			throw new BusinessException("Vous n'avez pas le droit de participer aux encheres parce que l'administrateur a désactivé votre compte");
 		}
-		ArrayList<Enchere> encheres = article.getEncheres();
-		//verif si l'enchere actuel est superieur au precedent ou mise a prix 
-		if((encheres.size() > 0 && montant_enchere <= encheres.get(encheres.size()-1).getMontant_enchere()) 
-				|| (encheres.size() == 0 && montant_enchere <= article.getMiseAPrix() )) {
-			throw new BusinessException("Vous devez proposer un montant superieur");
-		}
+		
 		if(montant_enchere > utilisateur.getCredit()) {
 			throw new BusinessException("Vous n'avez pas assez de points");
 		}
 		
 		if(article.getVendeur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
 			throw new BusinessException("Vous ne pouvez pas encherir vos articles");
+		}
+		ArrayList<Enchere> encheres = article.getEncheres();
+		//verif si l'enchere actuel est superieur au precedent ou mise a prix 
+		if((encheres.size() > 0 && montant_enchere <= encheres.get(encheres.size()-1).getMontant_enchere()) 
+				|| (encheres.size() == 0 && montant_enchere <= article.getMiseAPrix() )) {
+			throw new BusinessException("Vous devez proposer un montant superieur");
+		}
+		//debiter l'utilisateur actuel
+		transfererPoints(utilisateur, -montant_enchere);
+		
+		//recrediter les points a l'enchereur precedent
+		if(encheres.size() > 0) {
+			Collections.sort(encheres);
+			String highestEnchereur = encheres.get(0).getUtilisateur().getPseudo();
+			if(highestEnchereur.equals(utilisateur.getPseudo())) {
+				System.out.println("Recrediter " + encheres.get(0).getMontant_enchere());
+				transfererPoints(utilisateur, encheres.get(0).getMontant_enchere());
+			} else {
+				Utilisateur tmp = dao.selectUtilisateurByLogin(highestEnchereur, highestEnchereur);
+				transfererPoints(tmp, encheres.get(0).getMontant_enchere());
+			}
 		}
 		
 		Enchere enchere = new Enchere();
@@ -121,24 +137,13 @@ public class EnchereManagerImpl implements EnchereManager{
 		if(!hasEncheres) {
 			dao.insertEnchere(enchere, article.getNoArticle(), utilisateur.getNoUtilisateur());
 		}
-		
-		//debiter l'utilisateur actuel
-		transfererPoints(utilisateur, -montant_enchere);
-		
-		//recrediter les points a l'enchereur precedent
-		if(encheres.size() > 0) {
-			Collections.sort(encheres);
-			String highestEnchereur = encheres.get(0).getUtilisateur().getPseudo();
-			Utilisateur tmp = dao.selectUtilisateurByLogin(highestEnchereur, highestEnchereur);
-			transfererPoints(tmp, montant_enchere);
-		}
 
 		return enchere;
 	}
 	
 	public void transfererPoints(Utilisateur utilisateur, int montant) throws BusinessException {
+		System.out.println("Transferer points chez " + utilisateur.getPseudo() + "  : " + montant);
 		utilisateur.transfererPoints(montant);
-		
 		dao.updateUtilisateur(utilisateur);
 	}
 

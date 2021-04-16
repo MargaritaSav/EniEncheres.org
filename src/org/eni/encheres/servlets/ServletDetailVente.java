@@ -97,7 +97,8 @@ public class ServletDetailVente extends HttpServlet {
 			ArticleVendu article = em.getArticleById(Integer.valueOf(request.getParameter("noArticle")));
 			em.faireEnchere(user, article, prix);
 			//update session user
-			user.transfererPoints(-prix);
+//			user.transfererPoints(-prix);
+			System.out.println("Session user credit : " + user.getCredit());
 			session.setAttribute("user", user);
 		} catch (BusinessException e) {
 			request.setAttribute("error", e.getMessage());
