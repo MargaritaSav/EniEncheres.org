@@ -225,6 +225,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			while(rs.next())
 			{
 				article = new ArticleVendu();
+				
 				article = mapArticle(rs, null);
 				
 			}
@@ -290,8 +291,9 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setBoolean(11, article.isRetraitEffectue());
 			stmt.setInt(12, article.getNoArticle());
 			stmt.executeUpdate();
-			
+			System.out.println("system out in update article : " + article);
 			if(article.getImage() != null) {
+				article.getImage().setArticle(article);
 				updateImageByArticle(article.getImage());
 			}
 			updateRetrait(article.getLieuRetrait(), article.getNoArticle());
@@ -388,8 +390,10 @@ public class EncheresDAOImpl implements EncheresDAO{
 		article.setMiseAPrix(rs.getInt("prix_initial"));
 		article.setPrixVente(rs.getInt("prix_vente"));
 		article.setCategorieArticle(new Categorie(rs.getInt("no_categorie"), rs.getString("libelle")));
-		article.setImage(selectImageByArticle(article.getNoArticle()));
-		
+		Image image = selectImageByArticle(article.getNoArticle());
+		if(image!=null) {
+			article.setImage(image);
+		}
 		if(utilisateur != null && rs.getInt("no_utilisateur") == utilisateur.getNoUtilisateur()) {
 			utilisateur.setPseudo(rs.getString("pseudo"));
 			article.setVendeur(utilisateur);
@@ -688,7 +692,6 @@ public class EncheresDAOImpl implements EncheresDAO{
 			{
 				image = new Image();
 				image.setPath(rs.getString("path"));;
-				
 				
 			}
 			return image;
