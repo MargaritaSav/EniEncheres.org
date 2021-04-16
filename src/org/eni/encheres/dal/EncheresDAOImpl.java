@@ -694,7 +694,7 @@ public class EncheresDAOImpl implements EncheresDAO{
 			return image;
 		} catch(Exception e) {
 			e.printStackTrace();
-			throw new BusinessException("Echec selection d'article by id");
+			throw new BusinessException("Echec selection d'image by id");
 		}	
 	}
 	
