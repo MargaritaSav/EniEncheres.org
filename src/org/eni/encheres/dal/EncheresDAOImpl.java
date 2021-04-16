@@ -291,7 +291,6 @@ public class EncheresDAOImpl implements EncheresDAO{
 			stmt.setBoolean(11, article.isRetraitEffectue());
 			stmt.setInt(12, article.getNoArticle());
 			stmt.executeUpdate();
-			System.out.println("system out in update article : " + article);
 			if(article.getImage() != null) {
 				article.getImage().setArticle(article);
 				updateImageByArticle(article.getImage());
