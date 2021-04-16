@@ -48,7 +48,7 @@
 		                <div class="col-md-6 mb-1 fw-bold border-bottom">Article</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.nomArticle}</div>
 		                <div class="col-md-6 fw-bold mb-1 border-bottom">Categorie</div>
-		                <div class="col-md-6 mb-1 border-bottom"><span class="badge bg-info">${article.categorieArticle.libelle}</span></div>
+		                <div class="col-md-6 mb-1 border-bottom"><span class="mb-2 badge bg-info">${article.categorieArticle.libelle}</span></div>
 		                <div class="col-md-6 fw-bold mb-1 border-bottom">Description</div>
 		                <div class="col-md-6 mb-1 border-bottom">${article.description}</div>
 		                <div class="col-md-6 fw-bold mb-1 border-bottom">Meilleur offre</div>
